@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --color-ink: #101828;
+  --color-ink-muted: #475467;
+  --color-paper: #f7f4ee;
+  --color-sand: #ece6db;
+  --color-line: #d9d1c3;
+  --color-accent: #c2410c;
+  --color-accent-dark: #9a3412;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100svh;
+}

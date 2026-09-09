@@ -1,0 +1,23 @@
+{
+  "name": "strefy-czasowe-jesien-2026",
+  "private": true,
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "workspaces": [
+    "sociale",
+    "festiwal"
+  ],
+  "scripts": {
+    "dev:sociale": "npm run dev -w sociale",
+    "dev:festiwal": "npm run dev -w festiwal",
+    "build:sociale": "npm run build -w sociale",
+    "build:festiwal": "npm run build -w festiwal",
+    "export:sociale": "npm run export -w sociale",
+    "export:festiwal": "npm run export -w festiwal",
+    "preview:sociale": "npm run preview -w sociale",
+    "preview:festiwal": "npm run preview -w festiwal",
+    "lint": "npm run lint -w sociale && npm run lint -w festiwal"
+  }
+}
