@@ -2,28 +2,56 @@
 
 @theme {
   --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
-  --color-ink: #101828;
-  --color-ink-muted: #475467;
-  --color-paper: #f7f4ee;
-  --color-sand: #ece6db;
-  --color-line: #d9d1c3;
-  --color-accent: #c2410c;
-  --color-accent-dark: #9a3412;
+  --font-classico: 'URW Classico', Palatino, 'Palatino Linotype', serif;
+  --font-grotesk: 'Akzidenz-Grotesk Next', Grotesk, 'Helvetica Neue', sans-serif;
+  --color-ink: #171a33;
+  --color-ink-muted: #5c4527;
+  --color-paper: #e8e8e8;
+  --color-sand: #f8f8f8;
+  --color-line: #d6d6d6;
+  --color-accent: #ff4f23;
 }
 
-html {
-  scroll-behavior: auto;
+@font-face {
+  font-family: 'URW Classico';
+  src: url('../public/fonts/URWClassico.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Akzidenz-Grotesk Next';
+  src: url('../public/fonts/AkzidGrtskNext.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  overflow: auto;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-}
-
-#root {
-  min-height: 100svh;
 }
