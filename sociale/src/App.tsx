@@ -1,7 +1,8 @@
 import { ControlPanel } from '@/components/ControlPanel'
 import { PreviewStage } from '@/components/PreviewStage'
 import { palette, type ContentType, type Format, type Season, type TextAlign, type TextVAlign } from '@/data/brand'
-import { getGrid, type GridId, type GridMaskId } from '@/data/grids'
+import { getGrid, type GridId } from '@/data/grids'
+import { artistShapeFiles, gradientUrl, gridShapeFiles, keepShape, linesShapeFiles } from '@/data/shapes'
 import { loadImage } from '@/lib/overlays'
 import { useEffect, useState } from 'react'
 
@@ -18,7 +19,7 @@ function App() {
   const [artistName, setArtistName] = useState('')
   const [description, setDescription] = useState('')
   const [bodyText, setBodyText] = useState('')
-  const [overlayIndex, setOverlayIndex] = useState(0)
+  const [overlayFile, setOverlayFile] = useState('')
   const [overlayColor, setOverlayColor] = useState('#FF562C')
   const [textColor, setTextColor] = useState('#2E202C')
   const [textAlign, setTextAlign] = useState<TextAlign>('center')
@@ -29,21 +30,34 @@ function App() {
   const [panX, setPanX] = useState(0)
   const [panY, setPanY] = useState(0)
   const [gridId, setGridId] = useState<GridId>('central-mask')
-  const [gridMaskId, setGridMaskId] = useState<GridMaskId>('triple-oval')
+  const [gridMaskFile, setGridMaskFile] = useState('')
+  const [textShapeFile, setTextShapeFile] = useState('')
   const [gridHeadline, setGridHeadline] = useState('')
   const [shapeColor, setShapeColor] = useState('#3E2D14')
   const [bodyColor, setBodyColor] = useState('#CCC12C')
-  const [shapeGlow, setShapeGlow] = useState(true)
+  const [shapeGlow, setShapeGlow] = useState(false)
   const [glowColor, setGlowColor] = useState('#FF562C')
-  const [showLines, setShowLines] = useState(true)
+  const [showLines, setShowLines] = useState(false)
   const [linesColor, setLinesColor] = useState('#FF562C')
   const [linesPanX, setLinesPanX] = useState(0)
   const [linesPanY, setLinesPanY] = useState(0)
+  const [typeSizeFactor, setTypeSizeFactor] = useState(1)
+  const [linesFile, setLinesFile] = useState('')
+  const [gradientFile, setGradientFile] = useState('')
+  const [gradient, setGradient] = useState<HTMLImageElement | null>(null)
 
   useEffect(() => {
     void document.fonts.load('140px "URW Classico"')
     void document.fonts.load('50px "Akzidenz-Grotesk Next"')
+    void document.fonts.load('90px "URW Classico"')
+    void document.fonts.load('italic 90px "URW Palladio"')
+    void document.fonts.load('40px "Hanken Grotesk"')
+    void document.fonts.load('700 40px "Hanken Grotesk"')
   }, [])
+
+  const overlayFileSafe = keepShape(overlayFile, artistShapeFiles(format, 1))
+  const gridMaskFileSafe = keepShape(gridMaskFile, gridShapeFiles())
+  const linesFileSafe = keepShape(linesFile, linesShapeFiles())
 
   return (
     <div className="flex min-h-svh flex-col overflow-auto md:grid md:h-svh md:grid-cols-[minmax(260px,40%)_1fr] md:overflow-hidden">
@@ -55,7 +69,7 @@ function App() {
         artistName={artistName}
         description={description}
         bodyText={bodyText}
-        overlayIndex={overlayIndex}
+        overlayFile={overlayFileSafe}
         overlayColor={overlayColor}
         textColor={textColor}
         textAlign={textAlign}
@@ -78,7 +92,7 @@ function App() {
         onArtistName={setArtistName}
         onDescription={setDescription}
         onBodyText={setBodyText}
-        onOverlayIndex={setOverlayIndex}
+        onOverlayFile={setOverlayFile}
         onOverlayColor={setOverlayColor}
         onTextColor={setTextColor}
         onTextAlign={setTextAlign}
@@ -88,6 +102,8 @@ function App() {
           const url = URL.createObjectURL(file)
           void loadImage(url).then((image) => {
             setPhoto(image)
+            setGradient(null)
+            setGradientFile('')
             setScale(1)
             setPanX(0)
             setPanY(0)
@@ -100,7 +116,8 @@ function App() {
           setPanY(0)
         }}
         gridId={gridId}
-        gridMaskId={gridMaskId}
+        gridMaskFile={gridMaskFileSafe}
+        textShapeFile={textShapeFile}
         gridHeadline={gridHeadline}
         shapeColor={shapeColor}
         bodyColor={bodyColor}
@@ -114,7 +131,8 @@ function App() {
           setTextAlign(grid.defaultAlign)
           setTextVAlign(grid.defaultVAlign)
         }}
-        onGridMaskId={setGridMaskId}
+        onGridMaskFile={setGridMaskFile}
+        onTextShapeFile={setTextShapeFile}
         onGridHeadline={setGridHeadline}
         onShapeColor={setShapeColor}
         onBodyColor={setBodyColor}
@@ -122,6 +140,25 @@ function App() {
         onGlowColor={setGlowColor}
         onShowLines={setShowLines}
         onLinesColor={setLinesColor}
+        typeSizeFactor={typeSizeFactor}
+        onTypeSizeFactor={setTypeSizeFactor}
+        linesFile={linesFileSafe}
+        onLinesFile={setLinesFile}
+        gradientFile={gradientFile}
+        onGradientFile={(file) => {
+          setGradientFile(file)
+          if (!file) {
+            setGradient(null)
+            return
+          }
+          void loadImage(gradientUrl(file)).then((image) => {
+            setGradient(image)
+            setPhoto(null)
+            setScale(1)
+            setPanX(0)
+            setPanY(0)
+          })
+        }}
       />
       <PreviewStage
         format={format}
@@ -129,7 +166,7 @@ function App() {
         artistName={artistName}
         description={description}
         bodyText={bodyText}
-        overlayIndex={overlayIndex}
+        overlayFile={overlayFileSafe}
         overlayColor={overlayColor}
         textColor={textColor}
         textAlign={textAlign}
@@ -146,7 +183,8 @@ function App() {
         }}
         onScale={setScale}
         gridId={gridId}
-        gridMaskId={gridMaskId}
+        gridMaskFile={gridMaskFileSafe}
+        textShapeFile={textShapeFile}
         gridHeadline={gridHeadline}
         shapeColor={shapeColor}
         bodyColor={bodyColor}
@@ -160,6 +198,9 @@ function App() {
           setLinesPanX(x)
           setLinesPanY(y)
         }}
+        typeSizeFactor={typeSizeFactor}
+        linesFile={linesFileSafe}
+        gradient={gradient}
       />
     </div>
   )

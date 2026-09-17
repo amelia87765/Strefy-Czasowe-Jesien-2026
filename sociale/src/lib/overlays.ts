@@ -1,20 +1,28 @@
-import { overlayFolder, SHAPE_FILES, type Format } from '@/data/brand'
-import { gridMaskUrl, LINES_SVG_URL, type GridMaskId } from '@/data/grids'
+import type { Format } from '@/data/brand'
+import {
+  artistShapeUrl,
+  gridShapeUrl,
+  keepShape,
+  linesShapeFiles,
+  linesShapeUrl,
+  textShapeUrl,
+} from '@/data/shapes'
 
 const cache = new Map<string, HTMLImageElement>()
 
-export function overlayUrl(format: Format, lines: 1 | 2, index: number): string {
-  const file = SHAPE_FILES[index] ?? SHAPE_FILES[0]
-  return `${overlayFolder(format, lines)}/${file}`
+export function overlayUrl(format: Format, lines: 1 | 2, file: string): string {
+  return artistShapeUrl(format, lines, file)
 }
 
 export async function loadOverlay(
   format: Format,
   lines: 1 | 2,
-  index: number,
+  file: string,
   color: string,
-): Promise<HTMLImageElement> {
-  const href = overlayUrl(format, lines, index)
+): Promise<HTMLImageElement | null> {
+  const href = overlayUrl(format, lines, file)
+  if (!href) return null
+
   const key = `${href}|${color}`
   const hit = cache.get(key)
   if (hit) return hit
@@ -45,6 +53,14 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
   })
 }
 
+function tintSvg(raw: string, color: string): string {
+  return raw
+    .replace(/\sfilter="url\([^)]+\)"/gi, '')
+    .replace(/fill="(?!none|url\()([^"]*)"/gi, `fill="${color}"`)
+    .replace(/stroke="(?!none)([^"]*)"/gi, `stroke="${color}"`)
+    .replace(/stop-color="[^"]*"/gi, `stop-color="${color}"`)
+}
+
 async function loadColoredSvg(href: string, color: string): Promise<HTMLImageElement> {
   const key = `${href}|${color}`
   const hit = cache.get(key)
@@ -55,9 +71,7 @@ async function loadColoredSvg(href: string, color: string): Promise<HTMLImageEle
     throw new Error(`Nie udało się wczytać ${href}`)
   }
   const raw = await response.text()
-  const colored = raw
-    .replace(/\sfilter="url\([^)]+\)"/gi, '')
-    .replace(/fill="(?!none)([^"]*)"/gi, `fill="${color}"`)
+  const colored = tintSvg(raw, color)
   const blob = new Blob([colored], { type: 'image/svg+xml' })
   const objectUrl = URL.createObjectURL(blob)
   const image = await loadImage(objectUrl)
@@ -66,12 +80,45 @@ async function loadColoredSvg(href: string, color: string): Promise<HTMLImageEle
   return image
 }
 
-export async function loadGridMask(id: GridMaskId, color: string): Promise<HTMLImageElement> {
-  return loadColoredSvg(gridMaskUrl(id), color)
+export async function loadGridMask(file: string, color: string): Promise<HTMLImageElement | null> {
+  if (!file) return null
+  return loadColoredSvg(gridShapeUrl(file), color)
 }
 
-export async function loadLines(color: string): Promise<HTMLImageElement> {
-  return loadColoredSvg(LINES_SVG_URL, color)
+export async function loadTextShape(file: string, color: string): Promise<HTMLImageElement | null> {
+  if (!file) return null
+  return loadColoredSvg(textShapeUrl(file), color)
+}
+
+export async function loadLines(color: string, fileName?: string): Promise<HTMLImageElement | null> {
+  const file = keepShape(fileName ?? '', linesShapeFiles())
+  if (!file) return null
+  return loadColoredSvg(linesShapeUrl(file), color)
+}
+
+export function drawContainedShape(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  box: { x: number; y: number; width: number; height: number },
+  glow = false,
+) {
+  const srcW = image.naturalWidth || image.width
+  const srcH = image.naturalHeight || image.height
+  const scale = Math.min(box.width / srcW, box.height / srcH)
+  const width = srcW * scale
+  const height = srcH * scale
+  const x = box.x + (box.width - width) / 2
+  const y = box.y + (box.height - height) / 2
+  if (glow) {
+    ctx.save()
+    ctx.filter = 'blur(42px)'
+    ctx.globalAlpha = 0.9
+    const pad = 36
+    ctx.drawImage(image, x - pad, y - pad, width + pad * 2, height + pad * 2)
+    ctx.restore()
+    return
+  }
+  ctx.drawImage(image, x, y, width, height)
 }
 
 export function coverDraw(
@@ -92,3 +139,17 @@ export function coverDraw(
   ctx.drawImage(photo, x, y, w, h)
 }
 
+export function containDraw(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  box: { x: number; y: number; width: number; height: number },
+) {
+  const srcW = image.naturalWidth || image.width
+  const srcH = image.naturalHeight || image.height
+  const scale = Math.min(box.width / srcW, box.height / srcH)
+  const width = srcW * scale
+  const height = srcH * scale
+  const x = box.x + (box.width - width) / 2
+  const y = box.y + (box.height - height) / 2
+  ctx.drawImage(image, x, y, width, height)
+}

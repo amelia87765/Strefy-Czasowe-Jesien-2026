@@ -5,6 +5,8 @@ export type TextAlign = 'left' | 'center' | 'right'
 export type TextVAlign = 'top' | 'center' | 'bottom'
 
 export const CLASSICO = '"URW Classico", Palatino, "Palatino Linotype", serif'
+export const PALLADIO = '"URW Palladio", Palatino, "Palatino Linotype", serif'
+export const HANKEN = '"Hanken Grotesk", "Helvetica Neue", sans-serif'
 export const GROTESK = '"Akzidenz-Grotesk Next", Grotesk, "Helvetica Neue", sans-serif'
 
 export const seasons: { id: Season; label: string }[] = [
@@ -61,16 +63,6 @@ export const universalColors = [
 export function palette(season: Season): string[] {
   return [...seasonAccents[season], ...universalColors]
 }
-
-export const SHAPE_FILES = [
-  'Subtract.svg',
-  'Subtract-1.svg',
-  'Subtract-2.svg',
-  'Subtract-3.svg',
-  'Subtract-4.svg',
-  'Subtract-5.svg',
-  'Subtract-6.svg',
-] as const
 
 export function canvasSize(format: Format): { width: number; height: number } {
   return format === 'post' ? { width: 1080, height: 1350 } : { width: 1080, height: 1920 }

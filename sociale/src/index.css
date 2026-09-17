@@ -3,6 +3,8 @@
 @theme {
   --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-classico: 'URW Classico', Palatino, 'Palatino Linotype', serif;
+  --font-palladio: 'URW Palladio', Palatino, 'Palatino Linotype', serif;
+  --font-hanken: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
   --font-grotesk: 'Akzidenz-Grotesk Next', Grotesk, 'Helvetica Neue', sans-serif;
   --color-ink: #171a33;
   --color-ink-muted: #5c4527;
@@ -16,6 +18,22 @@
   font-family: 'URW Classico';
   src: url('../public/fonts/URWClassico.ttf') format('truetype');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'URW Palladio';
+  src: url('../public/fonts/URWPalladio.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: url('../public/fonts/HankenGrotesk.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }

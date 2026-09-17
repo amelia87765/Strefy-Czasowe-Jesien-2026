@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { fileURLToPath, URL } from 'node:url'
 import type { IndexHtmlTransformContext } from 'vite'
 import { defineConfig } from 'vite'
+import { svgShapesPlugin } from './svg-shapes-plugin.ts'
 
 const securityHeaders = {
   'X-Content-Type-Options': 'nosniff',
@@ -28,8 +29,10 @@ function htmlSecurity() {
   }
 }
 
+const projectRoot = fileURLToPath(new URL('.', import.meta.url))
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), htmlSecurity()],
+  plugins: [react(), tailwindcss(), htmlSecurity(), svgShapesPlugin(projectRoot)],
   base: './',
   resolve: {
     alias: {

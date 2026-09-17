@@ -8,17 +8,6 @@ export type GridId =
   | 'editorial'
   | 'full-mask'
 
-export type GridMaskId =
-  | 'triple-oval'
-  | 'double-blob'
-  | 'wave'
-  | 'dual-oval'
-  | 'soft-circle'
-  | 'union-triple'
-  | 'union-wave'
-  | 'union-glow-warm'
-  | 'union-glow-cool'
-
 export type GridFitMode = 'contained' | 'background'
 
 export type GridTextRole = 'headline' | 'body' | 'main'
@@ -43,26 +32,6 @@ export type GridTemplate = {
   defaultAlign: TextAlign
   defaultVAlign: TextVAlign
 }
-
-export type GridMask = {
-  id: GridMaskId
-  label: string
-  file: string
-  folder: 'grids' | 'elements'
-  capacity: 'large' | 'medium' | 'small' | 'decorative'
-}
-
-export const gridMasks: GridMask[] = [
-  { id: 'triple-oval', label: 'Triple oval', file: 'triple-oval.svg', folder: 'grids', capacity: 'large' },
-  { id: 'double-blob', label: 'Double blob', file: 'double-blob.svg', folder: 'grids', capacity: 'large' },
-  { id: 'wave', label: 'Wave', file: 'wave.svg', folder: 'grids', capacity: 'medium' },
-  { id: 'dual-oval', label: 'Dual oval', file: 'dual-oval.svg', folder: 'grids', capacity: 'medium' },
-  { id: 'soft-circle', label: 'Soft circle', file: 'soft-circle.svg', folder: 'grids', capacity: 'decorative' },
-  { id: 'union-triple', label: 'Union triple', file: 'Union (1).svg', folder: 'elements', capacity: 'large' },
-  { id: 'union-wave', label: 'Union wave', file: 'Union (2).svg', folder: 'elements', capacity: 'medium' },
-  { id: 'union-glow-warm', label: 'Union glow warm', file: 'Union.svg', folder: 'elements', capacity: 'large' },
-  { id: 'union-glow-cool', label: 'Union glow cool', file: 'Union (3).svg', folder: 'elements', capacity: 'large' },
-]
 
 export const gridTemplates: GridTemplate[] = [
   {
@@ -177,10 +146,6 @@ export function getGrid(id: GridId): GridTemplate {
   return gridTemplates.find((grid) => grid.id === id) ?? gridTemplates[0]!
 }
 
-export function getGridMask(id: GridMaskId): GridMask {
-  return gridMasks.find((mask) => mask.id === id) ?? gridMasks[0]!
-}
-
 export function regionPx(region: NormRect, width: number, height: number): Rect {
   return {
     x: region.x * width,
@@ -189,13 +154,3 @@ export function regionPx(region: NormRect, width: number, height: number): Rect 
     height: region.height * height,
   }
 }
-
-export function gridMaskUrl(id: GridMaskId): string {
-  const mask = getGridMask(id)
-  if (mask.folder === 'elements') {
-    return `./${encodeURI('svg elements')}/${encodeURIComponent(mask.file)}`
-  }
-  return `./media/grids/${mask.file}`
-}
-
-export const LINES_SVG_URL = `./${encodeURI('svg elements')}/${encodeURIComponent('lines.svg')}`

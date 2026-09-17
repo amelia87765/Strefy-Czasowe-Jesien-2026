@@ -1,5 +1,6 @@
 import { canvasSize, type ContentType, type Format, type TextAlign, type TextVAlign } from '@/data/brand'
-import type { GridId, GridMaskId } from '@/data/grids'
+import type { GridId } from '@/data/grids'
+import { linesShapeFiles } from '@/data/shapes'
 import { compose } from '@/lib/compose'
 import { downloadCanvas } from '@/lib/exportImage'
 import { useEffect, useRef } from 'react'
@@ -10,7 +11,7 @@ type PreviewStageProps = {
   artistName: string
   description: string
   bodyText: string
-  overlayIndex: number
+  overlayFile: string
   overlayColor: string
   textColor: string
   textAlign: TextAlign
@@ -24,7 +25,8 @@ type PreviewStageProps = {
   onPan: (x: number, y: number) => void
   onScale: (scale: number) => void
   gridId: GridId
-  gridMaskId: GridMaskId
+  gridMaskFile: string
+  textShapeFile: string
   gridHeadline: string
   shapeColor: string
   bodyColor: string
@@ -35,12 +37,15 @@ type PreviewStageProps = {
   linesPanX: number
   linesPanY: number
   onLinesPan: (x: number, y: number) => void
+  typeSizeFactor: number
+  linesFile: string
+  gradient: HTMLImageElement | null
 }
 
 export function PreviewStage(props: PreviewStageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const drag = useRef<{
-    kind: 'photo' | 'lines'
+    kind: 'photo' | 'lines' | 'gradient'
     x: number
     y: number
     panX: number
@@ -52,9 +57,14 @@ export function PreviewStage(props: PreviewStageProps) {
     propsRef.current = props
   }, [props])
   const { width, height } = canvasSize(props.format)
-  const canPanLines = props.contentType === 'grids' && props.showLines
-  const canPanPhoto = props.photo !== null
-  const canPan = canPanLines || canPanPhoto
+  const isText = props.contentType === 'small' || props.contentType === 'large'
+  const canPanLines =
+    props.showLines &&
+    linesShapeFiles().length > 0 &&
+    (props.contentType === 'grids' || isText)
+  const canPanGradient = isText && props.gradient !== null && !props.showLines && props.format === 'post'
+  const canPanPhoto = props.photo !== null && !canPanLines
+  const canPan = canPanLines || canPanGradient || canPanPhoto
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -68,7 +78,7 @@ export function PreviewStage(props: PreviewStageProps) {
       artistName: props.artistName,
       description: props.description,
       bodyText: props.bodyText,
-      overlayIndex: props.overlayIndex,
+      overlayFile: props.overlayFile,
       overlayColor: props.overlayColor,
       textColor: props.textColor,
       textAlign: props.textAlign,
@@ -80,7 +90,8 @@ export function PreviewStage(props: PreviewStageProps) {
       panX: props.panX,
       panY: props.panY,
       gridId: props.gridId,
-      gridMaskId: props.gridMaskId,
+      gridMaskFile: props.gridMaskFile,
+      textShapeFile: props.textShapeFile,
       gridHeadline: props.gridHeadline,
       shapeColor: props.shapeColor,
       bodyColor: props.bodyColor,
@@ -90,6 +101,9 @@ export function PreviewStage(props: PreviewStageProps) {
       linesColor: props.linesColor,
       linesPanX: props.linesPanX,
       linesPanY: props.linesPanY,
+      typeSizeFactor: props.typeSizeFactor,
+      linesFile: props.linesFile,
+      gradient: props.gradient,
     }).then(() => {
       if (cancelled) return
     })
@@ -124,7 +138,7 @@ export function PreviewStage(props: PreviewStageProps) {
       artistName: props.artistName,
       description: props.description,
       bodyText: props.bodyText,
-      overlayIndex: props.overlayIndex,
+      overlayFile: props.overlayFile,
       overlayColor: props.overlayColor,
       textColor: props.textColor,
       textAlign: props.textAlign,
@@ -136,7 +150,8 @@ export function PreviewStage(props: PreviewStageProps) {
       panX: props.panX,
       panY: props.panY,
       gridId: props.gridId,
-      gridMaskId: props.gridMaskId,
+      gridMaskFile: props.gridMaskFile,
+      textShapeFile: props.textShapeFile,
       gridHeadline: props.gridHeadline,
       shapeColor: props.shapeColor,
       bodyColor: props.bodyColor,
@@ -146,6 +161,9 @@ export function PreviewStage(props: PreviewStageProps) {
       linesColor: props.linesColor,
       linesPanX: props.linesPanX,
       linesPanY: props.linesPanY,
+      typeSizeFactor: props.typeSizeFactor,
+      linesFile: props.linesFile,
+      gradient: props.gradient,
     }).then(() => {
       const ext = type === 'image/png' ? 'png' : 'jpg'
       downloadCanvas(out, `strefy-${props.format}-${width}x${height}.${ext}`, type)
@@ -166,7 +184,7 @@ export function PreviewStage(props: PreviewStageProps) {
           onPointerDown={(event) => {
             if (!canPan) return
             event.currentTarget.setPointerCapture(event.pointerId)
-            const kind = canPanLines ? 'lines' : 'photo'
+            const kind = canPanLines ? 'lines' : canPanGradient ? 'gradient' : 'photo'
             drag.current = {
               kind,
               x: event.clientX,
@@ -185,6 +203,7 @@ export function PreviewStage(props: PreviewStageProps) {
             const nextX = drag.current.panX + (event.clientX - drag.current.x) * sx
             const nextY = drag.current.panY + (event.clientY - drag.current.y) * sy
             if (drag.current.kind === 'lines') props.onLinesPan(nextX, nextY)
+            else if (drag.current.kind === 'gradient') props.onPan(0, nextY)
             else props.onPan(nextX, nextY)
           }}
           onPointerUp={() => {

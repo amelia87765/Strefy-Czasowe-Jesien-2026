@@ -9,8 +9,9 @@ import {
 } from '@/data/layout'
 import { composeGrid, drawGridGuides, type GridComposeFields } from '@/lib/composeGrid'
 import { grainCanvas } from '@/lib/grain'
-import { loadOverlay, coverDraw } from '@/lib/overlays'
-import { drawAlignedBlock, fitLines, measureWidth, wrapName } from '@/lib/textLayout'
+import { coverDraw, drawContainedShape, loadLines, loadOverlay, loadTextShape } from '@/lib/overlays'
+import { drawRichText, fitRichText, loadTypefaces } from '@/lib/richText'
+import { measureWidth, wrapName } from '@/lib/textLayout'
 
 export type ComposeInput = {
   format: Format
@@ -18,7 +19,7 @@ export type ComposeInput = {
   artistName: string
   description: string
   bodyText: string
-  overlayIndex: number
+  overlayFile: string
   overlayColor: string
   textColor: string
   textAlign: TextAlign
@@ -29,6 +30,10 @@ export type ComposeInput = {
   scale: number
   panX: number
   panY: number
+  textShapeFile: string
+  typeSizeFactor: number
+  linesFile: string
+  gradient: HTMLImageElement | null
 } & GridComposeFields
 
 function setLetterSpacing(ctx: CanvasRenderingContext2D, value: string) {
@@ -108,10 +113,10 @@ export async function compose(ctx: CanvasRenderingContext2D, input: ComposeInput
     const overlay = await loadOverlay(
       input.format,
       linesCount,
-      input.overlayIndex,
+      input.overlayFile,
       input.overlayColor,
     )
-    ctx.drawImage(overlay, 0, 0, width, height)
+    if (overlay) ctx.drawImage(overlay, 0, 0, width, height)
 
     if (name) {
       ctx.fillStyle = input.textColor
@@ -126,30 +131,47 @@ export async function compose(ctx: CanvasRenderingContext2D, input: ComposeInput
   } else {
     if (input.photo) {
       coverDraw(ctx, input.photo, width, height, input.scale, input.panX, input.panY)
+    } else if (input.gradient) {
+      const panY = input.format === 'post' ? input.panY : 0
+      coverDraw(ctx, input.gradient, width, height, 1, 0, panY)
+    }
+    if (input.showLines) {
+      const lines = await loadLines(input.linesColor, input.linesFile)
+      if (lines) coverDraw(ctx, lines, width, height, 1, input.linesPanX, input.linesPanY)
+    }
+    if (input.textShapeFile) {
+      const box = {
+        x: width * 0.04,
+        y: height * 0.08,
+        width: width * 0.92,
+        height: height * 0.84,
+      }
+      if (input.shapeGlow) {
+        const glow = await loadTextShape(input.textShapeFile, input.glowColor)
+        if (glow) drawContainedShape(ctx, glow, box, true)
+      }
+      const shape = await loadTextShape(input.textShapeFile, input.shapeColor)
+      if (shape) drawContainedShape(ctx, shape, box, false)
     }
     const text = input.bodyText.trim()
     if (text) {
+      const kind = input.contentType === 'large' ? 'large' : 'small'
+      await loadTypefaces(kind)
       ctx.fillStyle = input.textColor
-      const max = input.contentType === 'large' ? 92 : 36
-      const min = input.contentType === 'large' ? 28 : 18
-      const fitted = fitLines(
+      const fitted = fitRichText(
         ctx,
-        text,
+        input.bodyText,
+        kind,
         layout.textSafe.width,
         layout.textSafe.height,
-        CLASSICO,
-        min,
-        max,
-        1.14,
-        input.contentType === 'large' ? 'title' : 'body',
+        kind === 'large' ? input.typeSizeFactor : 1,
       )
-      ctx.font = `${fitted.fontSize}px ${CLASSICO}`
-      drawAlignedBlock(
+      drawRichText(
         ctx,
         fitted.lines,
+        kind,
+        fitted.scale,
         layout.textSafe,
-        fitted.fontSize,
-        1.14,
         input.textAlign,
         input.textVAlign,
       )

@@ -1,11 +1,11 @@
 import { CLASSICO, GROTESK, type TextAlign, type TextVAlign } from '@/data/brand'
-import { getGrid, regionPx, type GridId, type GridMaskId } from '@/data/grids'
+import { getGrid, regionPx, type GridId } from '@/data/grids'
 import { coverDraw, loadGridMask, loadLines } from '@/lib/overlays'
 import { drawAlignedBlock, fitLines } from '@/lib/textLayout'
 
 export type GridComposeFields = {
   gridId: GridId
-  gridMaskId: GridMaskId
+  gridMaskFile: string
   gridHeadline: string
   shapeColor: string
   bodyColor: string
@@ -97,17 +97,19 @@ export async function composeGrid(
 
   if (input.showLines) {
     const lines = await loadLines(input.linesColor)
-    coverDraw(ctx, lines, width, height, 1, input.linesPanX, input.linesPanY)
+    if (lines) coverDraw(ctx, lines, width, height, 1, input.linesPanX, input.linesPanY)
   }
 
   const maskBox = regionPx(grid.mask, width, height)
   const editorial = grid.id === 'editorial'
-  if (input.shapeGlow) {
-    const glow = await loadGridMask(input.gridMaskId, input.glowColor)
-    drawShapeLayer(ctx, glow, maskBox, true, editorial)
+  if (input.shapeGlow && input.gridMaskFile) {
+    const glow = await loadGridMask(input.gridMaskFile, input.glowColor)
+    if (glow) drawShapeLayer(ctx, glow, maskBox, true, editorial)
   }
-  const shape = await loadGridMask(input.gridMaskId, input.shapeColor)
-  drawShapeLayer(ctx, shape, maskBox, false, editorial)
+  if (input.gridMaskFile) {
+    const shape = await loadGridMask(input.gridMaskFile, input.shapeColor)
+    if (shape) drawShapeLayer(ctx, shape, maskBox, false, editorial)
+  }
 
   for (const slot of grid.texts) {
     const text = slotText(slot.id, input)
