@@ -1,72 +1,60 @@
-# Smooth Sail Intranet
+# Smooth Sail Internal
 
-Kompletny projekt React + Tailwind CSS, uruchamiany i budowany przez Node.js. Zawiera aktualny ekran logowania Smooth Sail z pomarańczowymi akcentami, językami PL / EN, zapamiętywaniem języka i motywu, jasnym trybem kontrastowym oraz obrotowym logo.
+Wewnętrzna przestrzeń załogi: logowanie, kalendarz dostępności / wachty oraz osadzone Google Forms, arkusze i foldery Dysku. Wygląd ekranu logowania zostaje; po zalogowaniu jest ten sam szkielet (topbar, motyw, PL/EN).
 
-## Szybkie uruchomienie
+To **nie** jest hosting statyczny jak Sociale. Hasła i kalendarz żyją w procesie Node + pliku SQLite.
 
-Zainstaluj Node.js 24 LTS. Otwórz terminal w rozpakowanym folderze projektu.
+## Wymagania
 
-```sh
-npx pnpm@11.19.0 install --frozen-lockfile
-npx pnpm@11.19.0 dev
-```
-
-Otwórz adres pokazany w terminalu. Domyślnie: http://127.0.0.1:5173.
-
-Można również użyć `npm install` i `npm run dev`. Do odtwarzalnej instalacji z dołączonego pliku blokady używaj pnpm.
-
-## Gotowa wersja bez instalowania zależności
-
-Paczka zawiera zbudowany folder `dist`. Mając Node.js, uruchom:
+- Node.js **22.13+** (w repo `.nvmrc` = 22.23.2)
+- `npm install` z **korzenia** repozytorium (publiczny npm, bez pnpm i bez firmowego registry)
 
 ```sh
-node server.mjs
+nvm use
+npm install
+cp internal/.env.example internal/.env
 ```
 
-Otwórz http://127.0.0.1:3000. Serwer obsługuje gotowe pliki lokalnie. Do konfiguracji adresu nasłuchiwania służy zmienna `HOST`, a portu `PORT`.
+W `.env` ustaw e-mail i hasło pierwszego administratora (min. 10 znaków). Pliku `.env` nie commituj.
 
-Nie otwieraj `index.html` dwuklikiem. Moduły i zasoby strony wymagają serwera HTTP.
-
-## Budowanie i sprawdzanie
+## Uruchomienie
 
 ```sh
-npx pnpm@11.19.0 build
-npx pnpm@11.19.0 test
-npx pnpm@11.19.0 start
+npm run dev:internal
 ```
 
-`build` tworzy `dist`. `test` sprawdza kompletność tłumaczeń i serwer Node, w tym odmowę przyjmowania danych logowania. `start` serwuje wynik kompilacji.
+Frontend: http://127.0.0.1:5175 (proxy `/api` → Node na porcie 3000).
 
-## Pliki
+Produkcja na OVH (VPS albo hosting z Node, **nie** sam FTP):
 
-- `src/App.jsx`: ekran logowania, stan języka i motywu, walidacja formularza, okno pomocy.
-- `src/components/RotatingLogo.jsx`: pikselowe logo 64 px, grubość 5 px i ciągłe boki. W nagłówku jest powiększone dwukrotnie.
-- `src/components/Clock.jsx`: zegar w strefie Europe/Warsaw.
-- `src/translations.js`: wszystkie teksty PL / EN.
-- `src/styles.css`: Tailwind, palety kolorów, responsywność i animacja.
-- `public/assets/logo-pixel.png`: źródłowa grafika logo.
-- `public/assets/terminal.ttf`: lokalny font VT323.
-- `public/favicon.svg`: ikona strony.
-- `index.html`: punkt wejścia Vite.
-- `vite.config.js`: integracja Reacta i Tailwinda.
-- `server.mjs`: serwer plików w Node.js, bez dodatkowych zależności.
-- `package.json`, `pnpm-lock.yaml`: polecenia i wersje zależności.
-- `tests/project.test.mjs`: testy projektu.
-- `LICENSES/VT323-OFL.txt`: licencja użytego fontu.
-- `dist`: gotowa wersja strony do hostowania.
+```sh
+npm run export:internal
+npm run start:internal
+```
 
-## Logowanie
+`export` składa frontend do `internal/dist/`. `start` serwuje `dist` i API. Domyślnie http://127.0.0.1:3000 (`HOST` / `PORT` w `.env`).
 
-To działający prototyp interfejsu, a nie system uwierzytelniania. Przycisk logowania sprawdza pola i pokazuje komunikat o podglądzie. Hasła nie są wysyłane do serwera ani zapisywane w przeglądarce. Okno odzyskiwania dostępu pokazuje informację o kontakcie z administratorem, nie wysyła wiadomości.
+Na HTTPS ustaw `INTERNAL_SECURE=1`. Jeśli TLS kończy się na proxy: `INTERNAL_TRUST_PROXY=1`.
 
-Przed udostępnieniem rzeczywistego intranetu trzeba podłączyć logowanie, sesje, uprawnienia i odzyskiwanie hasła. Serwer Node w tej paczce udostępnia wyłącznie statyczne pliki. Samo wdrożenie folderu `dist` nie zapewnia prywatności ani kontroli dostępu.
+## Bezpieczeństwo
 
-## Wdrożenie
+- Hasła: `scrypt` + sól, nigdy w logach ani w `localStorage`
+- Sesja: ciasteczko `HttpOnly; SameSite=Strict`, w bazie tylko hash tokenu
+- Limit logowania: 5 prób / 15 min na IP + e-mail
+- Role `admin` / `member`; pierwsze logowanie wymusza zmianę hasła tymczasowego
+- Odzyskiwanie hasła: kontakt z administratorem (jak na ekranie logowania)
+- CSP, `noindex`, bez iframe-owania samej aplikacji
+- Baza: `internal/data/app.sqlite` (w `.gitignore`)
 
-Folder `dist` można umieścić na hostingu statycznym albo serwować przez `server.mjs`. Projekt zakłada wdrożenie pod główną ścieżką domeny, np. `https://intranet.example.com/`. Dla wdrożenia w podfolderze trzeba dostosować `base` w konfiguracji Vite i bezwzględne ścieżki zasobów.
+## Kalendarz i zasoby
 
-Źródła nie wymagają konta Sites. Archiwum nie zawiera historii Git, identyfikatorów prywatnego hostingu, tokenów ani folderu `node_modules`. Zależności są odtwarzane z pliku blokady.
+- Użytkownik zaznacza dostępność (dziś i przyszłość); potwierdzonego dnia nie cofa
+- Administrator potwierdza dzień pracy (inne oznaczenie) albo dodaje wydarzenie
+- Zespół widzi wydarzenia i **potwierdzone** dni; niepotwierdzoną dostępność widzi tylko właściciel i admin
+- Administrator dodaje URL osadzenia Google i przypisuje zasoby do kont. Aplikacja pokazuje iframe tylko uprawnionym osobom — udostępnienie po stronie Google nadal jest potrzebne.
 
-## Grafika i fonty
+## Testy
 
-Logo bazuje na dostarczonej grafice Smooth Sail, następnie opracowanej w wersji pikselowej. Font VT323 jest dołączony na warunkach SIL Open Font License. Zależności React, Vite i Tailwind zachowują swoje licencje w instalowanych pakietach.
+```sh
+npm test -w internal
+```

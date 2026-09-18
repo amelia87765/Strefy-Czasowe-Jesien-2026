@@ -5,3 +5,7 @@ node_modules/
 !.env.example
 .sites-runtime/
 *.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+data/*.sqlite

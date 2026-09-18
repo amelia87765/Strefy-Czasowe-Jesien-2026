@@ -7,17 +7,23 @@
   },
   "workspaces": [
     "sociale",
-    "festiwal"
+    "festiwal",
+    "internal"
   ],
   "scripts": {
     "dev:sociale": "npm run dev -w sociale",
     "dev:festiwal": "npm run dev -w festiwal",
+    "dev:internal": "npm run dev -w internal",
     "build:sociale": "npm run build -w sociale",
     "build:festiwal": "npm run build -w festiwal",
+    "build:internal": "npm run build -w internal",
     "export:sociale": "npm run export -w sociale",
     "export:festiwal": "npm run export -w festiwal",
+    "export:internal": "npm run export -w internal",
+    "start:internal": "npm run start -w internal",
     "preview:sociale": "npm run preview -w sociale",
     "preview:festiwal": "npm run preview -w festiwal",
+    "preview:internal": "npm run preview -w internal",
     "lint": "npm run lint -w sociale && npm run lint -w festiwal"
   }
 }
