@@ -97,8 +97,11 @@ export default function AdminView({ t, user }) {
         </div>
         <form className="admin-form" onSubmit={createUser}>
           <input
-            type="email"
+            type="text"
             required
+            minLength={2}
+            maxLength={254}
+            autoComplete="off"
             placeholder={t.email}
             value={form.email}
             onChange={(event) => setForm({ ...form, email: event.target.value })}

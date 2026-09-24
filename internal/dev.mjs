@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const cwd = fileURLToPath(new URL('.', import.meta.url));
@@ -41,7 +42,7 @@ run(fileURLToPath(new URL('./server.mjs', import.meta.url)), {
 
 let viteEntry;
 try {
-  viteEntry = require.resolve('vite/bin/vite.js');
+  viteEntry = join(dirname(require.resolve('vite/package.json')), 'bin', 'vite.js');
 } catch {
   console.error('Vite is not installed. Run npm install from the repository root.');
   stop(1);

@@ -1,16 +1,393 @@
-function App() {
+import { LineField } from '@/components/LineField'
+import { ShapeMenu } from '@/components/ShapeMenu'
+import { VideoPeek } from '@/components/VideoPeek'
+import { CalendarBar } from '@/components/CalendarBar'
+import {
+  LINKS,
+  SHAPE_ROW_1,
+  SHAPE_ROW_2,
+  TEXT_MENU,
+  TICKETS_URL,
+  copy,
+  type Lang,
+} from '@/data/site'
+import { nextClockChange, remainingParts } from '@/lib/dst'
+import { useEffect, useRef, useState } from 'react'
+
+function asset(path: string) {
+  return `${import.meta.env.BASE_URL}${path}`
+}
+
+const SHRINK_MS = 900
+const FADE_MS = 180
+const TITLE_MS = SHRINK_MS + FADE_MS
+const TITLE_SCALE = 3.15 / 23.4
+const CROSS_AT = SHRINK_MS - FADE_MS
+const DRIFT_REM = 26
+const DRIFT_DELAY = SHRINK_MS * 0.3
+const DRIFT_MS = SHRINK_MS * 0.7
+
+export default function App() {
+  const [lang, setLang] = useState<Lang>('pl')
+  const [ready, setReady] = useState(false)
+  const [compact, setCompact] = useState(false)
+  const [videoOpen, setVideoOpen] = useState(false)
+  const [now, setNow] = useState(() => new Date())
+  const [lift, setLift] = useState(0)
+  const compactRef = useRef(false)
+  const busyRef = useRef(false)
+  const footerRef = useRef<HTMLElement>(null)
+  const t = copy[lang]
+  const change = nextClockChange(now)
+  const left = remainingParts(change.at, now)
+
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
+  useEffect(() => {
+    const done = () => setReady(true)
+    void document.fonts.ready.then(done)
+    const fallback = window.setTimeout(done, 1200)
+    return () => window.clearTimeout(fallback)
+  }, [])
+
+  useEffect(() => {
+    const tick = window.setInterval(() => setNow(new Date()), 1000)
+    return () => window.clearInterval(tick)
+  }, [])
+
+  useEffect(() => {
+    const dock = () => {
+      const top = footerRef.current?.getBoundingClientRect().top
+      if (top === undefined) return
+      setLift(Math.max(0, window.innerHeight - top))
+    }
+    dock()
+    window.addEventListener('scroll', dock, { passive: true })
+    window.addEventListener('resize', dock)
+    return () => {
+      window.removeEventListener('scroll', dock)
+      window.removeEventListener('resize', dock)
+    }
+  }, [])
+
+  useEffect(() => {
+    let timer = 0
+    let frame = 0
+
+    const drift = () =>
+      DRIFT_REM * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 10)
+
+    const glide = (to: number, delay: number) => {
+      const from = window.scrollY
+      if (Math.abs(to - from) < 1) return
+      const startAt = performance.now() + delay
+      window.cancelAnimationFrame(frame)
+      const step = (stamp: number) => {
+        const p = Math.min(1, Math.max(0, (stamp - startAt) / DRIFT_MS))
+        const eased = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
+        window.scrollTo(0, from + (to - from) * eased)
+        if (p < 1) frame = window.requestAnimationFrame(step)
+      }
+      frame = window.requestAnimationFrame(step)
+    }
+
+    const play = (toCompact: boolean) => {
+      if (busyRef.current || compactRef.current === toCompact) return
+      busyRef.current = true
+      compactRef.current = toCompact
+      setCompact(toCompact)
+      glide(toCompact ? drift() : 0, toCompact ? DRIFT_DELAY : 0)
+      window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        busyRef.current = false
+      }, TITLE_MS)
+    }
+
+    const nearTop = () => window.scrollY <= drift() + 2
+
+    if (window.scrollY > 4) {
+      compactRef.current = true
+      setCompact(true)
+    }
+
+    const onWheel = (event: WheelEvent) => {
+      if (busyRef.current) {
+        event.preventDefault()
+        return
+      }
+      if (!compactRef.current) {
+        if (event.deltaY > 0) {
+          event.preventDefault()
+          play(true)
+        }
+        return
+      }
+      if (event.deltaY < 0 && nearTop()) {
+        event.preventDefault()
+        play(false)
+      }
+    }
+
+    const onScroll = () => {
+      if (busyRef.current) return
+      if (!compactRef.current && window.scrollY > 4) play(true)
+      else if (compactRef.current && window.scrollY <= 1) play(false)
+    }
+
+    let touchY = 0
+    const onTouchStart = (event: TouchEvent) => {
+      touchY = event.touches[0]?.clientY ?? 0
+    }
+    const onTouchMove = (event: TouchEvent) => {
+      const y = event.touches[0]?.clientY ?? touchY
+      const delta = touchY - y
+      touchY = y
+      if (busyRef.current) {
+        event.preventDefault()
+        return
+      }
+      if (!compactRef.current) {
+        event.preventDefault()
+        if (delta > 10) play(true)
+        return
+      }
+      if (delta < -10 && nearTop()) {
+        event.preventDefault()
+        play(false)
+      }
+    }
+
+    const onKey = (event: KeyboardEvent) => {
+      if (busyRef.current) {
+        event.preventDefault()
+        return
+      }
+      const down = event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' '
+      const up = event.key === 'ArrowUp' || event.key === 'PageUp'
+      if (down && !compactRef.current) {
+        event.preventDefault()
+        play(true)
+      } else if (up && compactRef.current && nearTop()) {
+        event.preventDefault()
+        play(false)
+      }
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('touchstart', onTouchStart, { passive: false })
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.clearTimeout(timer)
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('wheel', onWheel)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [])
+
   return (
-    <main className="mx-auto flex min-h-svh max-w-3xl flex-col justify-center px-6 py-16">
-      <p className="text-xs font-semibold tracking-[0.2em] text-muted uppercase">
-        One-pager
-      </p>
-      <h1 className="mt-3 text-4xl font-semibold tracking-tight">Festiwal</h1>
-      <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
-        Osobna strona, niezależny eksport. Tu wejdzie one-pager festiwalu — bez
-        powiązania z narzędziem Sociali.
-      </p>
-    </main>
+    <div
+      className={`relative min-h-svh overflow-x-hidden bg-ground text-[#EFE6D9] transition-[filter] duration-700 ${
+        ready ? 'blur-none' : 'blur-2xl'
+      }`}
+    >
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'linear-gradient(180deg, #2C1D12 71.16%, #FF562C 100%)' }}
+      />
+      <LineField />
+
+      <img
+        src={asset('svg/Logo.svg')}
+        alt="Strefy Czasowe"
+        className="fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-30 h-[5.6rem] w-auto"
+        style={{
+          opacity: compact ? 1 : 0,
+          pointerEvents: compact ? 'auto' : 'none',
+          transition: `opacity ${FADE_MS}ms linear ${compact ? CROSS_AT : 0}ms`,
+        }}
+      />
+
+      <div className="page-frame relative z-10 pb-[22rem]">
+        <header className="relative flex h-[48.5rem] justify-end px-[6.55rem] pt-[6.3rem]">
+          <div
+            className="relative z-30 mt-[0.2rem] flex shrink-0 gap-[1rem]"
+            style={{
+              opacity: videoOpen ? 0 : 1,
+              pointerEvents: videoOpen ? 'none' : 'auto',
+              transition: 'opacity 180ms ease',
+            }}
+          >
+            <LangButton active={lang === 'en'} onClick={() => setLang('en')}>
+              ENG
+            </LangButton>
+            <LangButton active={lang === 'pl'} onClick={() => setLang('pl')}>
+              PL
+            </LangButton>
+          </div>
+          <h1
+            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left leading-[0.9] text-[#EFE6D9] will-change-transform"
+            style={{
+              fontSize: '23.4rem',
+              transform: compact ? `scale(${TITLE_SCALE})` : 'scale(1)',
+              opacity: compact ? 0 : 1,
+              transition: `transform ${SHRINK_MS}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${FADE_MS}ms linear ${compact ? CROSS_AT : 0}ms`,
+            }}
+          >
+            {t.title.split(' ').map((word) => (
+              <span key={word} className="block">
+                {word}
+              </span>
+            ))}
+          </h1>
+        </header>
+
+        <main className="relative z-10">
+          <section className="mt-[2.4rem] flex items-start justify-between gap-[2rem] px-[6.55rem]">
+            <p className="font-classico max-w-[44.5rem] text-[2.4rem] leading-[0.9] text-[#FF562C]">
+              {t.description}
+              <em className="font-palladio italic">{t.descriptionEm}</em>
+              {t.descriptionEnd}
+            </p>
+            <p className="font-classico max-w-[40.8rem] text-[2.4rem] leading-none text-sand-muted">
+              {change.to === 'winter' ? t.winterLeft : t.summerLeft} {left.days} {t.days} {left.hours}{' '}
+              {t.hours} {left.seconds} {t.seconds}
+            </p>
+            <VideoPeek caption={t.previous} onOpenChange={setVideoOpen} />
+          </section>
+
+          <section className="mt-[1.6rem] flex items-center gap-[1.27rem] px-[6.55rem]">
+            <a
+              href={TICKETS_URL || undefined}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-[#FF562C] px-[1.22rem] text-[2.14rem] leading-none text-[#17212F]"
+            >
+              {t.tickets}
+            </a>
+            <div className="font-hanken inline-flex h-[4.18rem] items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-sand-muted">
+              <span>{t.date}</span>
+              <span>{t.venue}</span>
+            </div>
+          </section>
+
+          <div className="mx-[6.55rem] mt-[2.4rem] border-t-2 border-[#EFE6D9]" />
+
+          <div className="mt-[12rem]">
+            <ShapeMenu row1={SHAPE_ROW_1} row2={SHAPE_ROW_2} lang={lang} />
+          </div>
+
+          <nav className="mt-[12rem] px-[5.3rem]">
+            {TEXT_MENU.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className="font-classico block border-b-2 border-[#FF562C] py-[1.4rem] text-[7.54rem] leading-[0.9] text-[#FF562C] transition-colors duration-300 hover:text-[#5C7FFF]"
+              >
+                {item.label[lang]}
+              </a>
+            ))}
+          </nav>
+
+          <p className="font-classico mx-auto mt-[22rem] mb-[29.8rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-[#FF562C]">
+            {t.followLead}
+            <em className="font-palladio italic">{t.followLeadEm}</em>
+            {t.followLeadEnd}
+            <br />
+            <span className="whitespace-nowrap">{t.follow}</span>
+          </p>
+
+          <footer
+            ref={footerRef}
+            className="relative mx-[9.47rem] box-border flex h-[101.54rem] w-[151.91rem] max-w-[calc(100%-18.94rem)] flex-col rounded-[7.1rem] bg-[#5C7FFF] px-[7.73rem] pt-[7.82rem] text-[#2C1D12]"
+          >
+            <div className="flex items-start justify-between gap-[2rem]">
+              <p className="font-classico text-[4.08rem] leading-[0.9]">{t.contact}</p>
+              <div className="flex flex-wrap gap-x-[3.6rem] gap-y-[1rem]">
+                <a className="font-classico text-[4.08rem] leading-[0.9]" href={LINKS.email}>
+                  {t.email}
+                </a>
+                <a
+                  className="font-classico text-[4.08rem] leading-[0.9]"
+                  href={LINKS.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t.instagram}
+                </a>
+                <a
+                  className="font-classico text-[4.08rem] leading-[0.9]"
+                  href={LINKS.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t.facebook}
+                </a>
+              </div>
+            </div>
+            <div className="mt-[4.15rem] border-t border-[#2C1D12] pt-[4.15rem]">
+              <p className="font-classico text-[4.08rem] leading-[0.9]">{t.copyright}</p>
+              <div className="mt-[3.2rem] flex items-start justify-between gap-[2.4rem]">
+                <p className="font-classico shrink-0 text-[3.93rem] leading-none">
+                  <span className="whitespace-nowrap">{t.orgTitle}</span>
+                  <br />
+                  <span className="whitespace-nowrap">
+                    {t.orgName}{' '}
+                    <a href={LINKS.smoothSail} target="_blank" rel="noreferrer noopener">
+                      {t.orgHandle}
+                    </a>
+                  </span>
+                </p>
+                <p className="font-classico shrink-0 text-[3.93rem] leading-none">
+                  <span className="whitespace-nowrap">{t.brandTitle}</span>
+                  <br />
+                  {t.brandName}
+                </p>
+                <p className="font-classico shrink-0 text-[3.93rem] leading-none">
+                  <span className="whitespace-nowrap">{t.webTitle}</span>
+                  <br />
+                  {t.webName}
+                </p>
+              </div>
+            </div>
+            <img
+              src={asset('svg/Logo_Big.svg')}
+              alt=""
+              className="mt-auto mb-[4.8rem] h-[52.88rem] w-[138.15rem] max-w-full object-contain object-left"
+            />
+          </footer>
+        </main>
+      </div>
+
+      <CalendarBar lang={lang} lift={lift} />
+    </div>
   )
 }
 
-export default App
+function LangButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean
+  onClick: () => void
+  children: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`font-hanken h-[4.18rem] min-w-[9.14rem] cursor-pointer rounded-[1.17rem] px-[1.2rem] text-[2.14rem] ${
+        active ? 'bg-[#3E2D14] text-sand-muted' : 'bg-sand-muted text-[#3E2D14]'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}

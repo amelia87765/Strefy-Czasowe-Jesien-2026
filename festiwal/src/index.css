@@ -1,22 +1,81 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
-  --color-ink: #111827;
-  --color-muted: #4b5563;
-  --color-paper: #fffbeb;
-  --color-line: #e5e7eb;
+  --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-classico: 'URW Classico', Palatino, 'Palatino Linotype', serif;
+  --font-palladio: 'URW Palladio', Palatino, 'Palatino Linotype', serif;
+  --font-hanken: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+  --color-ground: #2c1d12;
+  --color-sand-muted: #a99d88;
+}
+
+@font-face {
+  font-family: 'URW Classico';
+  src: url('../public/fonts/URWClassico.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'URW Palladio';
+  src: url('../public/fonts/URWPalladio.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: url('../public/fonts/HankenGrotesk.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --frame: 172.8rem;
+  --scale: min(100vw / 1728px, 1);
+  --gutter: max(0px, calc((100vw - min(100vw, 1728px)) / 2));
+}
+
+html {
+  font-size: calc(10px * var(--scale));
+}
+
+.page-frame {
+  width: min(100%, var(--frame));
+  margin-inline: auto;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: #2c1d12;
+  color: #efe6d9;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-#root {
-  min-height: 100svh;
+button,
+a {
+  cursor: pointer;
+}
+
+em,
+i {
+  font-family: var(--font-palladio);
+  font-style: italic;
+  font-synthesis: none;
+}
+
+::selection {
+  background: #ff562c;
+  color: #2c1d12;
 }

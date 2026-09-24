@@ -2,7 +2,7 @@ import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { hashPassword } from './auth.mjs';
-import { normalizeEmail } from './util.mjs';
+import { isLogin, normalizeLogin } from './util.mjs';
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS users (
@@ -69,9 +69,8 @@ export function openDatabase(dbPath) {
 export async function bootstrapAdmin(db, email, password, name = 'Admin') {
   const count = db.prepare('SELECT COUNT(*) AS n FROM users').get().n;
   if (count > 0) return false;
-  const normalized = normalizeEmail(email);
-  if (!normalized || !password) return false;
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized) || password.length < 10 || password.length > 200) {
+  const normalized = normalizeLogin(email);
+  if (!isLogin(normalized) || password.length < 10 || password.length > 200) {
     return false;
   }
   const password_hash = await hashPassword(password);
@@ -87,7 +86,7 @@ export function purgeSessions(db) {
 }
 
 export function getUserByEmail(db, email) {
-  return db.prepare('SELECT * FROM users WHERE email = ?').get(normalizeEmail(email)) ?? null;
+  return db.prepare('SELECT * FROM users WHERE email = ?').get(normalizeLogin(email)) ?? null;
 }
 
 export function getUserById(db, id) {

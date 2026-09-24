@@ -1,0 +1,6 @@
+# Strefy Czasowe
+
+User-agent: *
+Disallow: /
+
+This site does not allow automated scraping, AI training, or bulk fetching.

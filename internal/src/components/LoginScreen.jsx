@@ -14,7 +14,8 @@ export default function LoginScreen({ t, onSuccess, setMessageKey, messageKey })
   async function submit(event) {
     event.preventDefault();
     setInvalid('');
-    if (!emailRef.current.validity.valid) {
+    const login = email.trim();
+    if (login.length < 2 || login.length > 254 || /\s/.test(login)) {
       setInvalid('email');
       setMessageKey('invalidEmail');
       emailRef.current.focus();
@@ -74,10 +75,12 @@ export default function LoginScreen({ t, onSuccess, setMessageKey, messageKey })
                 ref={emailRef}
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 autoComplete="username"
                 placeholder={t.placeholder}
                 required
+                minLength={2}
+                maxLength={254}
                 spellCheck={false}
                 aria-describedby="message"
                 aria-invalid={invalid === 'email' || undefined}

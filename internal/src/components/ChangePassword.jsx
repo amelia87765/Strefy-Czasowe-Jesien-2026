@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { api } from '../lib/api.js';
 
 export default function ChangePassword({ t, onSuccess }) {
-  const [currentPassword, setCurrent] = useState('');
   const [newPassword, setNext] = useState('');
   const [visible, setVisible] = useState(false);
   const [messageKey, setMessageKey] = useState('mustChange');
@@ -10,7 +9,7 @@ export default function ChangePassword({ t, onSuccess }) {
 
   async function submit(event) {
     event.preventDefault();
-    if (newPassword.length < 10) {
+    if (newPassword.length < 10 || newPassword.length > 200) {
       setMessageKey('passwordInvalid');
       return;
     }
@@ -18,13 +17,12 @@ export default function ChangePassword({ t, onSuccess }) {
     try {
       const data = await api('/api/password', {
         method: 'POST',
-        body: { currentPassword, newPassword },
+        body: { newPassword },
       });
-      setCurrent('');
       setNext('');
       onSuccess(data.user);
     } catch (error) {
-      setMessageKey(error.code === 'invalid_credentials' ? 'invalidCredentials' : error.code === 'password_invalid' ? 'passwordInvalid' : 'requestFailed');
+      setMessageKey(error.code === 'password_invalid' ? 'passwordInvalid' : 'requestFailed');
     } finally {
       setBusy(false);
     }
@@ -51,21 +49,8 @@ export default function ChangePassword({ t, onSuccess }) {
         </div>
         <form onSubmit={submit}>
           <div className="field">
-            <label htmlFor="current-password">
-              01 <span>{t.currentPassword}</span>
-            </label>
-            <input
-              id="current-password"
-              type={visible ? 'text' : 'password'}
-              autoComplete="current-password"
-              value={currentPassword}
-              onChange={(event) => setCurrent(event.target.value)}
-              required
-            />
-          </div>
-          <div className="field">
             <label htmlFor="new-password">
-              02 <span>{t.newPassword}</span>
+              01 <span>{t.newPassword}</span>
             </label>
             <div className="password-wrap relative">
               <input

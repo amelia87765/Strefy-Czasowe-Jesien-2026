@@ -75,15 +75,18 @@ export function clientIp(request, trustProxy) {
   return request.socket.remoteAddress || 'unknown';
 }
 
-export function normalizeEmail(value) {
+export function normalizeLogin(value) {
   return String(value ?? '')
     .trim()
     .toLowerCase();
 }
 
-export function isEmail(value) {
-  if (!value || value.length > EMAIL_MAX) return false;
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+export const normalizeEmail = normalizeLogin;
+
+export function isLogin(value) {
+  if (!value || value.length < 2 || value.length > EMAIL_MAX) return false;
+  if (/\s/.test(value)) return false;
+  return true;
 }
 
 export function isIsoDate(value) {
@@ -107,7 +110,7 @@ export function publicUser(row) {
     email: row.email,
     name: row.name,
     role: row.role,
-    mustChangePassword: Boolean(row.must_change_password),
+    mustChangePassword: Number(row.must_change_password) !== 0,
     active: row.active === undefined ? true : Boolean(row.active),
   };
 }

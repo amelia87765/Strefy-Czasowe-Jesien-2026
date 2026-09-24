@@ -15,7 +15,7 @@ npm install
 cp internal/.env.example internal/.env
 ```
 
-W `.env` ustaw e-mail i hasło pierwszego administratora (min. 10 znaków). Pliku `.env` nie commituj.
+W `.env` ustaw login i hasło pierwszego administratora (min. 10 znaków; login może, ale nie musi, być e-mailem). Pliku `.env` nie commituj.
 
 ## Uruchomienie
 
@@ -40,8 +40,8 @@ Na HTTPS ustaw `INTERNAL_SECURE=1`. Jeśli TLS kończy się na proxy: `INTERNAL_
 
 - Hasła: `scrypt` + sól, nigdy w logach ani w `localStorage`
 - Sesja: ciasteczko `HttpOnly; SameSite=Strict`, w bazie tylko hash tokenu
-- Limit logowania: 5 prób / 15 min na IP + e-mail
-- Role `admin` / `member`; pierwsze logowanie wymusza zmianę hasła tymczasowego
+- Limit logowania: 5 prób / 15 min na IP + login
+- Role `admin` / `member`; pierwsze logowanie wymusza zmianę hasła tymczasowego (wystarczy nowe hasło, bez powtórzenia tymczasowego)
 - Odzyskiwanie hasła: kontakt z administratorem (jak na ekranie logowania)
 - CSP, `noindex`, bez iframe-owania samej aplikacji
 - Baza: `internal/data/app.sqlite` (w `.gitignore`)
@@ -51,7 +51,7 @@ Na HTTPS ustaw `INTERNAL_SECURE=1`. Jeśli TLS kończy się na proxy: `INTERNAL_
 - Użytkownik zaznacza dostępność (dziś i przyszłość); potwierdzonego dnia nie cofa
 - Administrator potwierdza dzień pracy (inne oznaczenie) albo dodaje wydarzenie
 - Zespół widzi wydarzenia i **potwierdzone** dni; niepotwierdzoną dostępność widzi tylko właściciel i admin
-- Administrator dodaje URL osadzenia Google i przypisuje zasoby do kont. Aplikacja pokazuje iframe tylko uprawnionym osobom — udostępnienie po stronie Google nadal jest potrzebne.
+- Administrator dodaje URL osadzenia Google i przypisuje zasoby do kont. Aplikacja pokazuje iframe tylko uprawnionym osobom. Dostęp do formularza / arkusza / dysku zależy od konta Google w iframe (albo od udostępnienia „każdy z linkiem”), nie od loginu w intranetcie.
 
 ## Testy
 

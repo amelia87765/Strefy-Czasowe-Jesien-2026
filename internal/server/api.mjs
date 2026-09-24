@@ -27,10 +27,10 @@ import {
   TITLE_MAX,
   clientIp,
   isAllowedEmbedUrl,
-  isEmail,
   isIsoDate,
+  isLogin,
   json,
-  normalizeEmail,
+  normalizeLogin,
   publicUser,
   readJson,
   RESOURCE_TYPES,
@@ -149,7 +149,7 @@ export async function handleApi(request, response, { db, trustProxy }) {
   if (method === 'POST' && path === '/api/login') {
     const data = await body(request, response);
     if (!data) return true;
-    const email = normalizeEmail(data.email);
+    const email = normalizeLogin(data.email);
     const password = typeof data.password === 'string' ? data.password : '';
     const ip = clientIp(request, trustProxy);
     const key = rateKey(ip, email || ip);
@@ -157,7 +157,7 @@ export async function handleApi(request, response, { db, trustProxy }) {
       error(response, 429, 'rate_limited');
       return true;
     }
-    const user = isEmail(email) ? getUserByEmail(db, email) : null;
+    const user = isLogin(email) ? getUserByEmail(db, email) : null;
     const ok = user && user.active && password && (await verifyPassword(password, user.password_hash));
     if (!ok) {
       error(response, 401, 'invalid_credentials');
@@ -201,7 +201,8 @@ export async function handleApi(request, response, { db, trustProxy }) {
       error(response, 400, 'password_invalid');
       return true;
     }
-    if (!(await verifyPassword(current, user.password_hash))) {
+    const forced = Number(user.must_change_password) !== 0;
+    if (!forced && !(await verifyPassword(current, user.password_hash))) {
       error(response, 401, 'invalid_credentials');
       return true;
     }
@@ -209,7 +210,7 @@ export async function handleApi(request, response, { db, trustProxy }) {
       await hashPassword(next),
       user.id,
     );
-    json(response, 200, { user: publicUser({ ...user, must_change_password: 0 }) });
+    json(response, 200, { user: publicUser({ ...getUserById(db, user.id), must_change_password: 0 }) });
     return true;
   }
 
@@ -416,12 +417,12 @@ export async function handleApi(request, response, { db, trustProxy }) {
     if (!admin) return true;
     const data = await body(request, response);
     if (!data) return true;
-    const email = normalizeEmail(data.email);
+    const email = normalizeLogin(data.email);
     const name = String(data.name ?? '').trim();
     const password = typeof data.password === 'string' ? data.password : '';
     const role = data.role == null ? 'member' : String(data.role);
     const resourceIds = parseResourceIds(data.resourceIds);
-    if (!isEmail(email) || !name || name.length > NAME_MAX || !validNewPassword(password) || !ROLES.has(role) || !resourceIds) {
+    if (!isLogin(email) || !name || name.length > NAME_MAX || !validNewPassword(password) || !ROLES.has(role) || !resourceIds) {
       error(response, 400, 'invalid_user');
       return true;
     }

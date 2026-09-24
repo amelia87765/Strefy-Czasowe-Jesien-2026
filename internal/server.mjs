@@ -7,7 +7,7 @@ import { handleApi } from './server/api.mjs';
 import { validNewPassword } from './server/auth.mjs';
 import { bootstrapAdmin, openDatabase } from './server/db.mjs';
 import { loadEnvFile } from './server/env.mjs';
-import { isEmail, json } from './server/util.mjs';
+import { isLogin, json } from './server/util.mjs';
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 loadEnvFile(rootDir);
@@ -62,7 +62,7 @@ export function createAppServer(options = {}) {
         else if (db.prepare('SELECT COUNT(*) AS n FROM users').get().n === 0) {
           const email = process.env.INTERNAL_BOOTSTRAP_EMAIL;
           const password = process.env.INTERNAL_BOOTSTRAP_PASSWORD;
-          if (!email || !password || !isEmail(email) || !validNewPassword(password)) {
+          if (!email || !password || !isLogin(email) || !validNewPassword(password)) {
             console.warn(
               'Smooth Sail: empty database. Set INTERNAL_BOOTSTRAP_EMAIL and INTERNAL_BOOTSTRAP_PASSWORD (min. 10 characters) in .env',
             );
@@ -147,7 +147,24 @@ export function createAppServer(options = {}) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const port = Number(process.env.PORT || 3000);
   const host = process.env.HOST || '127.0.0.1';
-  createAppServer().listen(port, host, () => {
+  const server = createAppServer();
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(
+        `Smooth Sail: ${host}:${port} is already in use. Stop the other Node process or set PORT in internal/.env.`,
+      );
+      process.exit(1);
+    }
+    console.error(err);
+    process.exit(1);
+  });
+  server.listen(port, host, async () => {
     console.log(`Smooth Sail: http://${host}:${port}`);
+    if (process.env.INTERNAL_API_ONLY === '1') return;
+    try {
+      await stat(resolve(rootDir, 'dist', 'index.html'));
+    } catch {
+      console.warn('Smooth Sail: internal/dist is missing. Run npm run export:internal before npm run start:internal.');
+    }
   });
 }

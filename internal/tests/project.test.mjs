@@ -190,3 +190,50 @@ test('Resources are assigned per account and embed URLs are restricted to Google
     await close(server);
   }
 });
+
+test('Login accepts a username without @; first login can set a new password without the temporary one', async () => {
+  const { server, base, db } = await setup();
+  try {
+    const admin = await login(base, 'admin@test.com', 'admin-pass-1');
+    const created = await fetch(`${base}/api/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Cookie: admin.cookie },
+      body: JSON.stringify({
+        email: 'kormoran',
+        name: 'Kormoran',
+        password: 'temporary1',
+        role: 'member',
+        resourceIds: [],
+      }),
+    });
+    assert.equal(created.status, 201);
+    const account = await created.json();
+    assert.equal(account.user.email, 'kormoran');
+    assert.equal(account.user.mustChangePassword, true);
+
+    const first = await login(base, 'kormoran', 'temporary1');
+    assert.equal(first.response.status, 200);
+    assert.equal(first.data.user.mustChangePassword, true);
+
+    const changed = await fetch(`${base}/api/password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Cookie: first.cookie },
+      body: JSON.stringify({ newPassword: 'own-secret-1' }),
+    });
+    assert.equal(changed.status, 200);
+    const after = await changed.json();
+    assert.equal(after.user.mustChangePassword, false);
+
+    const me = await fetch(`${base}/api/me`, { headers: { Cookie: first.cookie } });
+    assert.equal((await me.json()).user.mustChangePassword, false);
+
+    const again = await login(base, 'Kormoran', 'own-secret-1');
+    assert.equal(again.response.status, 200);
+    assert.equal(again.data.user.email, 'kormoran');
+
+    const row = db.prepare('SELECT must_change_password FROM users WHERE email = ?').get('kormoran');
+    assert.equal(Number(row.must_change_password), 0);
+  } finally {
+    await close(server);
+  }
+});
