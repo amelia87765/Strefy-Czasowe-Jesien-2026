@@ -2,6 +2,7 @@ import { canvasSize, type ContentType, type Format, type TextAlign, type TextVAl
 import type { GridId } from '@/data/grids'
 import { linesShapeFiles } from '@/data/shapes'
 import { compose } from '@/lib/compose'
+import { contentContrastOk } from '@/lib/contrast'
 import { downloadCanvas } from '@/lib/exportImage'
 import { useEffect, useRef } from 'react'
 
@@ -65,6 +66,14 @@ export function PreviewStage(props: PreviewStageProps) {
   const canPanGradient = isText && props.gradient !== null && !props.showLines && props.format === 'post'
   const canPanPhoto = props.photo !== null && !canPanLines
   const canPan = canPanLines || canPanGradient || canPanPhoto
+  const contrastOk = contentContrastOk({
+    contentType: props.contentType,
+    gridId: props.gridId,
+    textShapeFile: props.textShapeFile,
+    textColor: props.textColor,
+    shapeColor: props.shapeColor,
+    overlayColor: props.overlayColor,
+  })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -127,6 +136,7 @@ export function PreviewStage(props: PreviewStageProps) {
   }, [])
 
   const exportFrame = (type: 'image/png' | 'image/jpeg') => {
+    if (!contrastOk) return
     const out = document.createElement('canvas')
     out.width = width
     out.height = height
@@ -217,18 +227,33 @@ export function PreviewStage(props: PreviewStageProps) {
         </span>
         <button
           type="button"
-          className="min-h-9 rounded-full bg-ink px-4 py-2 text-xs font-medium text-white"
+          disabled={!contrastOk}
+          className={`min-h-9 rounded-full px-4 py-2 text-xs font-medium ${
+            contrastOk
+              ? 'bg-ink text-white'
+              : 'cursor-not-allowed bg-[#D6D6D6] text-white'
+          }`}
           onClick={() => exportFrame('image/png')}
         >
           PNG
         </button>
         <button
           type="button"
-          className="min-h-9 rounded-full border border-line bg-white px-4 py-2 text-xs font-medium"
+          disabled={!contrastOk}
+          className={`min-h-9 rounded-full border px-4 py-2 text-xs font-medium ${
+            contrastOk
+              ? 'border-line bg-white'
+              : 'cursor-not-allowed border-[#E0E0E0] bg-[#EFEFEF] text-[#9A9A9A]'
+          }`}
           onClick={() => exportFrame('image/jpeg')}
         >
           JPG
         </button>
+        {!contrastOk ? (
+          <span className="max-w-44 text-left text-[11px] leading-snug text-[#DC2626]">
+            Fix contrast to export
+          </span>
+        ) : null}
       </div>
     </section>
   )

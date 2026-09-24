@@ -1,3 +1,6 @@
+import type { ContentType } from '@/data/brand'
+import { gridTemplates, type GridId } from '@/data/grids'
+
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const raw = hex.trim().replace('#', '')
   const value = raw.length === 3 ? raw.split('').map((ch) => ch + ch).join('') : raw
@@ -37,4 +40,34 @@ export function contrastPasses(
   const ratio = contrastRatio(foreground, background)
   if (ratio === null) return false
   return ratio >= (largeText ? 3 : 4.5)
+}
+
+export function contrastBackground(input: {
+  contentType: ContentType
+  gridId: GridId
+  textShapeFile: string
+  shapeColor: string
+  overlayColor: string
+}): string {
+  if (input.contentType === 'grids') {
+    const contained = gridTemplates.find((grid) => grid.id === input.gridId)?.fitMode === 'contained'
+    return contained ? input.shapeColor : input.overlayColor
+  }
+  if (input.contentType !== 'artist' && input.textShapeFile) return input.shapeColor
+  return input.overlayColor
+}
+
+export function contentContrastOk(input: {
+  contentType: ContentType
+  gridId: GridId
+  textShapeFile: string
+  textColor: string
+  shapeColor: string
+  overlayColor: string
+}): boolean {
+  return contrastPasses(
+    input.textColor,
+    contrastBackground(input),
+    input.contentType !== 'small',
+  )
 }

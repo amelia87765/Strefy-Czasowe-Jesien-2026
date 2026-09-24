@@ -30,7 +30,7 @@ import {
 import { Children, useState, type ReactNode } from 'react'
 import { RichTextField } from '@/components/RichTextField'
 import { LARGE_SIZE_MIN_FACTOR, LARGE_SIZE_STEP } from '@/data/typography'
-import { contrastPasses } from '@/lib/contrast'
+import { contentContrastOk } from '@/lib/contrast'
 
 type ControlPanelProps = {
   season: Season
@@ -313,14 +313,14 @@ export function ControlPanel(props: ControlPanelProps) {
   const textFiles = textShapeFiles()
   const lineFiles = linesShapeFiles()
   const gradientList = gradientFiles()
-  const largeText = props.contentType !== 'small'
-  const contrastBg =
-    grids && gridTemplates.find((grid) => grid.id === props.gridId)?.fitMode === 'contained'
-      ? props.shapeColor
-      : !artist && !grids && props.textShapeFile
-        ? props.shapeColor
-        : props.overlayColor
-  const contrastOk = contrastPasses(props.textColor, contrastBg, largeText)
+  const contrastOk = contentContrastOk({
+    contentType: props.contentType,
+    gridId: props.gridId,
+    textShapeFile: props.textShapeFile,
+    textColor: props.textColor,
+    shapeColor: props.shapeColor,
+    overlayColor: props.overlayColor,
+  })
 
   return (
     <aside className="flex min-h-0 flex-col gap-5 overflow-y-auto border-b border-line bg-white px-5 py-5 md:h-full md:border-r md:border-b-0">
