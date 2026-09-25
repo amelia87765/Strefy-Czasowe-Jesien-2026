@@ -1,20 +1,12 @@
 import { MONTHS, type Lang } from '@/data/site'
 import { rotatedMonthIndex } from '@/lib/dst'
 
-export function CalendarBar({ lang, lift }: { lang: Lang; lift: number }) {
+export function CalendarBar({ lang }: { lang: Lang }) {
   const start = rotatedMonthIndex()
   const months = [...MONTHS.slice(start), ...MONTHS.slice(0, start)]
 
   return (
-    <div
-      className="pointer-events-none fixed z-40 px-[4.2rem] pb-[1.6rem]"
-      style={{
-        bottom: `${lift}px`,
-        left: 'var(--gutter)',
-        right: 'var(--gutter)',
-        height: '10.5rem',
-      }}
-    >
+    <div className="pointer-events-none sticky bottom-0 z-40 h-[10.5rem] px-[4.2rem] pb-[1.6rem]">
       <div className="relative flex h-full items-end justify-between">
         {months.map((month) => (
           <span key={month.id} className="relative flex flex-col items-center">

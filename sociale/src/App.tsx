@@ -24,7 +24,7 @@ function App() {
   const [textColor, setTextColor] = useState('#2E202C')
   const [textAlign, setTextAlign] = useState<TextAlign>('center')
   const [textVAlign, setTextVAlign] = useState<TextVAlign>('center')
-  const [applyGrain, setApplyGrain] = useState(false)
+  const applyGrain = true
   const [photo, setPhoto] = useState<HTMLImageElement | null>(null)
   const [scale, setScale] = useState(1)
   const [panX, setPanX] = useState(0)
@@ -97,7 +97,6 @@ function App() {
         onTextColor={setTextColor}
         onTextAlign={setTextAlign}
         onTextVAlign={setTextVAlign}
-        onApplyGrain={setApplyGrain}
         onPhoto={(file) => {
           const url = URL.createObjectURL(file)
           void loadImage(url).then((image) => {

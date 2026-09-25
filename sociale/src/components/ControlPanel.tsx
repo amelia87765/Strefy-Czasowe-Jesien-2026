@@ -59,7 +59,6 @@ type ControlPanelProps = {
   onTextColor: (value: string) => void
   onTextAlign: (value: TextAlign) => void
   onTextVAlign: (value: TextVAlign) => void
-  onApplyGrain: (value: boolean) => void
   onPhoto: (file: File) => void
   onClearPhoto: () => void
   gridId: GridId
@@ -324,7 +323,7 @@ export function ControlPanel(props: ControlPanelProps) {
 
   return (
     <aside className="flex min-h-0 flex-col gap-5 overflow-y-auto border-b border-line bg-white px-5 py-5 md:h-full md:border-r md:border-b-0">
-      <h1 className="font-classico text-lg tracking-tight">Strefy Czasowe</h1>
+      <h1 className="font-classico text-lg tracking-tight">STREFY CZASOWE</h1>
 
       <Segmented label="Season" value={props.season} options={seasons} onChange={props.onSeason} />
 
@@ -677,11 +676,7 @@ export function ControlPanel(props: ControlPanelProps) {
       )}
 
       <label className="flex min-h-9 items-center gap-2 text-xs text-ink-muted">
-        <input
-          type="checkbox"
-          checked={props.applyGrain}
-          onChange={(event) => props.onApplyGrain(event.target.checked)}
-        />
+        <input type="checkbox" checked={props.applyGrain} readOnly disabled />
         Apply grain
       </label>
 

@@ -33,10 +33,8 @@ export default function App() {
   const [compact, setCompact] = useState(false)
   const [videoOpen, setVideoOpen] = useState(false)
   const [now, setNow] = useState(() => new Date())
-  const [lift, setLift] = useState(0)
   const compactRef = useRef(false)
   const busyRef = useRef(false)
-  const footerRef = useRef<HTMLElement>(null)
   const t = copy[lang]
   const change = nextClockChange(now)
   const left = remainingParts(change.at, now)
@@ -55,21 +53,6 @@ export default function App() {
   useEffect(() => {
     const tick = window.setInterval(() => setNow(new Date()), 1000)
     return () => window.clearInterval(tick)
-  }, [])
-
-  useEffect(() => {
-    const dock = () => {
-      const top = footerRef.current?.getBoundingClientRect().top
-      if (top === undefined) return
-      setLift(Math.max(0, window.innerHeight - top))
-    }
-    dock()
-    window.addEventListener('scroll', dock, { passive: true })
-    window.addEventListener('resize', dock)
-    return () => {
-      window.removeEventListener('scroll', dock)
-      window.removeEventListener('resize', dock)
-    }
   }, [])
 
   useEffect(() => {
@@ -193,7 +176,7 @@ export default function App() {
 
   return (
     <div
-      className={`relative min-h-svh overflow-x-hidden bg-ground text-[#EFE6D9] transition-[filter] duration-700 ${
+      className={`relative min-h-svh overflow-x-clip bg-ground text-[#EFE6D9] transition-[filter] duration-700 ${
         ready ? 'blur-none' : 'blur-2xl'
       }`}
     >
@@ -214,7 +197,7 @@ export default function App() {
         }}
       />
 
-      <div className="page-frame relative z-10 pb-[22rem]">
+      <div className="page-frame relative z-10 pb-[11rem]">
         <header className="relative flex h-[48.5rem] justify-end px-[6.55rem] pt-[6.3rem]">
           <div
             className="relative z-30 mt-[0.2rem] flex shrink-0 gap-[1rem]"
@@ -295,7 +278,7 @@ export default function App() {
             ))}
           </nav>
 
-          <p className="font-classico mx-auto mt-[22rem] mb-[29.8rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-[#FF562C]">
+          <p className="font-classico mx-auto mt-[22rem] mb-[19.3rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-[#FF562C]">
             {t.followLead}
             <em className="font-palladio italic">{t.followLeadEm}</em>
             {t.followLeadEnd}
@@ -303,8 +286,9 @@ export default function App() {
             <span className="whitespace-nowrap">{t.follow}</span>
           </p>
 
+          <CalendarBar lang={lang} />
+
           <footer
-            ref={footerRef}
             className="relative mx-[9.47rem] box-border flex h-[101.54rem] w-[151.91rem] max-w-[calc(100%-18.94rem)] flex-col rounded-[7.1rem] bg-[#5C7FFF] px-[7.73rem] pt-[7.82rem] text-[#2C1D12]"
           >
             <div className="flex items-start justify-between gap-[2rem]">
@@ -364,8 +348,6 @@ export default function App() {
           </footer>
         </main>
       </div>
-
-      <CalendarBar lang={lang} lift={lift} />
     </div>
   )
 }
