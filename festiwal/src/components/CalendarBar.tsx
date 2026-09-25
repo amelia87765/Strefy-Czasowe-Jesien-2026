@@ -1,4 +1,4 @@
-import { MONTHS, type Lang } from '@/data/site'
+import { LINKS, MONTHS, type Lang } from '@/data/site'
 import { rotatedMonthIndex } from '@/lib/dst'
 
 export function CalendarBar({ lang }: { lang: Lang }) {
@@ -11,12 +11,20 @@ export function CalendarBar({ lang }: { lang: Lang }) {
         {months.map((month) => (
           <span key={month.id} className="relative flex flex-col items-center">
             {month.id === 'paz' ? (
-              <img
-                src={`${import.meta.env.BASE_URL}svg/Logo_Zima.svg`}
-                alt=""
-                className="pointer-events-none absolute bottom-[5.4rem] h-[4.65rem] w-auto drop-shadow"
+              <a
+                href={LINKS.instagram}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Instagram"
+                className="pointer-events-auto absolute bottom-[5.4rem]"
                 style={{ transform: 'translateX(7.2rem)' }}
-              />
+              >
+                <img
+                  src={`${import.meta.env.BASE_URL}svg/Logo_Zima.svg`}
+                  alt=""
+                  className="h-[4.65rem] w-auto drop-shadow"
+                />
+              </a>
             ) : null}
             {month.id === 'kwi' ? (
               <img

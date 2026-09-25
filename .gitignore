@@ -15,6 +15,11 @@ dist-ssr
 *.sqlite-shm
 *.sqlite-wal
 
+# Originals of photos and video - only compressed files in public/ go to the repo
+media/
+*.mov
+*.MOV
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -11,14 +11,45 @@ type Box = { top: number; left: number; width: number; height: number }
 const FULL: Box = { top: 4, left: 4, width: 92, height: 92 }
 const EXPAND_MS = 720
 
+type Connection = { saveData?: boolean; effectiveType?: string }
+
+function heavyMediaAllowed() {
+  const link = (navigator as Navigator & { connection?: Connection }).connection
+  if (!link) return true
+  if (link.saveData) return false
+  return link.effectiveType === undefined || link.effectiveType.includes('4g')
+}
+
 export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
   const thumbRef = useRef<HTMLDivElement>(null)
+  const loopRef = useRef<HTMLVideoElement>(null)
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [locked, setLocked] = useState(false)
   const [from, setFrom] = useState<Box | null>(null)
+  const [loopArmed, setLoopArmed] = useState(false)
+  const [loopReady, setLoopReady] = useState(false)
+  const [fullArmed, setFullArmed] = useState(false)
+  const [fullReady, setFullReady] = useState(false)
+  const [broken, setBroken] = useState(false)
+  const startAt = useRef(0)
   const onOpenChangeRef = useRef(onOpenChange)
   onOpenChangeRef.current = onOpenChange
+
+  const base = import.meta.env.BASE_URL
+  const loopSrc = `${base}festiwal_foto/poprzednia-loop.mp4`
+  const fullSrc = `${base}festiwal_foto/poprzednia.mp4`
+
+  useEffect(() => {
+    if (!heavyMediaAllowed()) return
+    const idle = window.requestIdleCallback
+    if (!idle) {
+      const timer = window.setTimeout(() => setLoopArmed(true), 2000)
+      return () => window.clearTimeout(timer)
+    }
+    const handle = idle(() => setLoopArmed(true), { timeout: 4000 })
+    return () => window.cancelIdleCallback(handle)
+  }, [])
 
   const closeRef = useRef(() => {})
   closeRef.current = () => {
@@ -47,20 +78,24 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  const src = `${import.meta.env.BASE_URL}festiwal_foto/poprzednia.mp4`
-  const poster = `${import.meta.env.BASE_URL}festiwal_foto/poprzednia.jpg`
-
   const box = open && from ? (expanded ? FULL : from) : null
+
+  const syncStart = (video: HTMLVideoElement) => {
+    if (startAt.current > 0 && startAt.current < video.duration) {
+      video.currentTime = startAt.current
+    }
+  }
 
   return (
     <div className="flex max-w-[44rem] items-start gap-[1.6rem]">
       <div
         ref={thumbRef}
-        className="relative h-[9.18rem] w-[14.2rem] shrink-0 cursor-pointer"
+        className="relative h-[9.18rem] w-[14.2rem] shrink-0 cursor-pointer overflow-hidden rounded-[1.7rem] bg-[#3E2D14]"
         onMouseEnter={() => {
           if (locked || open) return
           const rect = thumbRef.current?.getBoundingClientRect()
           if (!rect) return
+          startAt.current = loopRef.current?.currentTime ?? 0
           const vw = window.innerWidth
           const vh = window.innerHeight
           setFrom({
@@ -69,15 +104,29 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
             width: (rect.width / vw) * 100,
             height: (rect.height / vh) * 100,
           })
+          setFullArmed(true)
           setOpen(true)
           onOpenChangeRef.current?.(true)
         }}
       >
-        <Media
-          src={src}
-          poster={poster}
-          className={`h-full w-full rounded-[1.7rem] object-cover ${open ? 'invisible' : ''}`}
-        />
+        {loopArmed && !broken ? (
+          <video
+            ref={loopRef}
+            src={loopSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            disablePictureInPicture
+            disableRemotePlayback
+            preload="auto"
+            onCanPlayThrough={() => setLoopReady(true)}
+            onError={() => setBroken(true)}
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+              loopReady ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ) : null}
       </div>
       <p className="font-classico whitespace-pre-line text-[2.4rem] leading-none text-sand-muted">
         {caption}
@@ -85,7 +134,7 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
       {open && box
         ? createPortal(
             <div
-              className="fixed z-[400] overflow-hidden shadow-[0_2.4rem_8rem_rgba(0,0,0,0.45)]"
+              className="fixed z-[400] overflow-hidden bg-[#3E2D14] shadow-[0_2.4rem_8rem_rgba(0,0,0,0.45)]"
               style={{
                 top: `${box.top}vh`,
                 left: `${box.left}vw`,
@@ -101,7 +150,40 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
                 ].join(', '),
               }}
             >
-              <Media src={src} poster={poster} className="h-full w-full object-cover" />
+              {loopArmed && !broken ? (
+                <video
+                  src={loopSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  preload="auto"
+                  onLoadedMetadata={(event) => syncStart(event.currentTarget)}
+                  className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                    fullReady ? 'opacity-0' : 'opacity-100'
+                  }`}
+                />
+              ) : null}
+              {fullArmed && !broken ? (
+                <video
+                  src={fullSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  preload="auto"
+                  onLoadedMetadata={(event) => syncStart(event.currentTarget)}
+                  onCanPlayThrough={() => setFullReady(true)}
+                  onError={() => setBroken(true)}
+                  className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                    fullReady ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              ) : null}
               {expanded ? (
                 <button
                   type="button"
@@ -117,32 +199,5 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
           )
         : null}
     </div>
-  )
-}
-
-function Media({
-  src,
-  poster,
-  className,
-}: {
-  src: string
-  poster: string
-  className: string
-}) {
-  const [useVideo, setUseVideo] = useState(true)
-  if (!useVideo) {
-    return <img src={poster} alt="" className={className} />
-  }
-  return (
-    <video
-      className={className}
-      src={src}
-      poster={poster}
-      autoPlay
-      muted
-      loop
-      playsInline
-      onError={() => setUseVideo(false)}
-    />
   )
 }

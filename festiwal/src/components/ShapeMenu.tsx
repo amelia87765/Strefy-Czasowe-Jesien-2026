@@ -22,10 +22,11 @@ function Tile({
   onEnter: () => void
 }) {
   const [hover, setHover] = useState(false)
+  const [shown, setShown] = useState(false)
   const mask = stretchMask(item)
   return (
     <a
-      href={item.href}
+      href={asset(item.href)}
       className="relative block h-full min-w-0 cursor-pointer overflow-hidden"
       style={{
         flex: `${share} 1 0`,
@@ -50,7 +51,20 @@ function Tile({
           WebkitMaskPosition: 'center',
         }}
       >
-        <img src={asset(item.photo)} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0" style={{ background: item.inner }} />
+        <img
+          src={asset(item.photo)}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onLoad={(event) => {
+            void event.currentTarget.decode?.().catch(() => {})
+            setShown(true)
+          }}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            shown ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
         <svg
           className="pointer-events-none absolute inset-0 h-full w-full"
           viewBox={item.viewBox}

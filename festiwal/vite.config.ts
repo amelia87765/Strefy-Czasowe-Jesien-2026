@@ -22,5 +22,15 @@ export default defineConfig({
     emptyOutDir: true,
     assetsDir: 'assets',
     target: 'es2022',
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL('./index.html', import.meta.url)),
+        artysci: fileURLToPath(new URL('./artysci/index.html', import.meta.url)),
+        'o-festiwalu': fileURLToPath(new URL('./o-festiwalu/index.html', import.meta.url)),
+        sklep: fileURLToPath(new URL('./sklep/index.html', import.meta.url)),
+        wolontariusze: fileURLToPath(new URL('./wolontariusze/index.html', import.meta.url)),
+        faq: fileURLToPath(new URL('./faq/index.html', import.meta.url)),
+      },
+    },
   },
 })

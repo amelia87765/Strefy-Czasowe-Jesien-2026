@@ -5,7 +5,7 @@ Jedno repozytorium, **trzy osobne strony** — nie są podstronami siebie. Każd
 | Folder | Co to jest | Export / start |
 | --- | --- | --- |
 | `sociale/` | Narzędzie wymiarów postów / rolek / relacji | `npm run export:sociale` → `sociale/dist/` |
-| `festiwal/` | One-pager festiwalu (baza pod dalszą pracę) | `npm run export:festiwal` → `festiwal/dist/` |
+| `festiwal/` | Strona festiwalu z podstronami — skrypty, treść i zasady w `festiwal/README.md` | `npm run export:festiwal` → `festiwal/dist/` |
 | `internal/` | Intranet Smooth Sail (logowanie, kalendarz, Google) | `npm run export:internal` + `npm run start:internal` |
 
 Wymaga **Node.js 20+** (w repo `.nvmrc` = 22.23.2). Intranet wymaga **22.13+** i działającego procesu Node — sam upload `dist` nie trzyma sesji ani haseł.

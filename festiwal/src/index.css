@@ -1,17 +1,23 @@
 @import 'tailwindcss';
 
+/* Kolory edycji. Zmiana tych dwóch wartości przestawia całą stronę.
+   Zima: #FF562C / #5C7FFF — Lato: #A4F782 / #FCA0EB */
 @theme {
   --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
   --font-classico: 'URW Classico', Palatino, 'Palatino Linotype', serif;
   --font-palladio: 'URW Palladio', Palatino, 'Palatino Linotype', serif;
   --font-hanken: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+  --color-primary: #ff562c;
+  --color-secondary: #5c7fff;
   --color-ground: #2c1d12;
+  --color-sand: #efe6d9;
   --color-sand-muted: #a99d88;
+  --color-accent-pink: #fca0eb;
 }
 
 @font-face {
   font-family: 'URW Classico';
-  src: url('../public/fonts/URWClassico.ttf') format('truetype');
+  src: url('./fonts/URWClassico.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -19,7 +25,7 @@
 
 @font-face {
   font-family: 'URW Palladio';
-  src: url('../public/fonts/URWPalladio.ttf') format('truetype');
+  src: url('./fonts/URWPalladio.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -27,7 +33,7 @@
 
 @font-face {
   font-family: 'Hanken Grotesk';
-  src: url('../public/fonts/HankenGrotesk.ttf') format('truetype');
+  src: url('./fonts/HankenGrotesk.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -76,6 +82,6 @@ i {
 }
 
 ::selection {
-  background: #ff562c;
-  color: #2c1d12;
+  background: var(--color-primary);
+  color: var(--color-ground);
 }

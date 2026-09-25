@@ -8,6 +8,9 @@
     "build": "tsc -b && vite build",
     "export": "npm run build",
     "lint": "oxlint",
+    "media": "node scripts/media.mjs",
+    "media:photos": "node scripts/media.mjs --photos",
+    "masks": "node scripts/announcement-masks.mjs",
     "preview": "vite preview --port 4174"
   },
   "dependencies": {
@@ -20,6 +23,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.1.0",
+    "ffmpeg-static": "^5.3.0",
     "oxlint": "^1.79.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",

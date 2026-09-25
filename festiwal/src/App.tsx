@@ -12,6 +12,8 @@ import {
   type Lang,
 } from '@/data/site'
 import { nextClockChange, remainingParts } from '@/lib/dst'
+import { readLang, saveLang } from '@/lib/lang'
+import { useFontsReady } from '@/lib/useFontsReady'
 import { useEffect, useRef, useState } from 'react'
 
 function asset(path: string) {
@@ -28,10 +30,11 @@ const DRIFT_DELAY = SHRINK_MS * 0.3
 const DRIFT_MS = SHRINK_MS * 0.7
 
 export default function App() {
-  const [lang, setLang] = useState<Lang>('pl')
-  const [ready, setReady] = useState(false)
+  const [lang, setLang] = useState<Lang>(readLang)
+  const ready = useFontsReady()
   const [compact, setCompact] = useState(false)
   const [videoOpen, setVideoOpen] = useState(false)
+  const [emailShown, setEmailShown] = useState(false)
   const [now, setNow] = useState(() => new Date())
   const compactRef = useRef(false)
   const busyRef = useRef(false)
@@ -41,14 +44,8 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.lang = lang
+    saveLang(lang)
   }, [lang])
-
-  useEffect(() => {
-    const done = () => setReady(true)
-    void document.fonts.ready.then(done)
-    const fallback = window.setTimeout(done, 1200)
-    return () => window.clearTimeout(fallback)
-  }, [])
 
   useEffect(() => {
     const tick = window.setInterval(() => setNow(new Date()), 1000)
@@ -182,7 +179,10 @@ export default function App() {
     >
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'linear-gradient(180deg, #2C1D12 71.16%, #FF562C 100%)' }}
+        style={{
+          background:
+            'linear-gradient(180deg, var(--color-ground) 71.16%, var(--color-primary) 100%)',
+        }}
       />
       <LineField />
 
@@ -233,13 +233,15 @@ export default function App() {
 
         <main className="relative z-10">
           <section className="mt-[2.4rem] flex items-start justify-between gap-[2rem] px-[6.55rem]">
-            <p className="font-classico max-w-[44.5rem] text-[2.4rem] leading-[0.9] text-[#FF562C]">
+            <p className="font-classico max-w-[44.5rem] text-[2.4rem] leading-[0.9] text-primary">
               {t.description}
               <em className="font-palladio italic">{t.descriptionEm}</em>
               {t.descriptionEnd}
             </p>
             <p className="font-classico max-w-[40.8rem] text-[2.4rem] leading-none text-sand-muted">
-              {change.to === 'winter' ? t.winterLeft : t.summerLeft} {left.days} {t.days} {left.hours}{' '}
+              {change.to === 'winter' ? t.winterLeft : t.summerLeft}
+              {lang === 'en' ? <br /> : ' '}
+              {left.days} {t.days} {left.hours}{' '}
               {t.hours} {left.seconds} {t.seconds}
             </p>
             <VideoPeek caption={t.previous} onOpenChange={setVideoOpen} />
@@ -250,7 +252,7 @@ export default function App() {
               href={TICKETS_URL || undefined}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-[#FF562C] px-[1.22rem] text-[2.14rem] leading-none text-[#17212F]"
+              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-primary px-[1.22rem] text-[2.14rem] leading-none text-[#17212F]"
             >
               {t.tickets}
             </a>
@@ -270,35 +272,53 @@ export default function App() {
             {TEXT_MENU.map((item) => (
               <a
                 key={item.id}
-                href={item.href}
-                className="font-classico block border-b-2 border-[#FF562C] py-[1.4rem] text-[7.54rem] leading-[0.9] text-[#FF562C] transition-colors duration-300 hover:text-[#5C7FFF]"
+                href={asset(item.href)}
+                className="font-classico block border-b-2 border-primary py-[1.4rem] text-[7.54rem] leading-[0.9] text-primary transition-colors duration-300 hover:text-secondary"
               >
                 {item.label[lang]}
               </a>
             ))}
           </nav>
 
-          <p className="font-classico mx-auto mt-[22rem] mb-[19.3rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-[#FF562C]">
+          <p className="font-classico mx-auto mt-[22rem] mb-[19.3rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-primary">
             {t.followLead}
             <em className="font-palladio italic">{t.followLeadEm}</em>
             {t.followLeadEnd}
             <br />
-            <span className="whitespace-nowrap">{t.follow}</span>
+            <a
+              href={LINKS.instagram}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="whitespace-nowrap"
+            >
+              {t.follow}
+            </a>
           </p>
 
           <CalendarBar lang={lang} />
 
           <footer
-            className="relative mx-[9.47rem] box-border flex h-[101.54rem] w-[151.91rem] max-w-[calc(100%-18.94rem)] flex-col rounded-[7.1rem] bg-[#5C7FFF] px-[7.73rem] pt-[7.82rem] text-[#2C1D12]"
+            className="relative mx-[9.47rem] box-border flex h-[84rem] w-[151.91rem] max-w-[calc(100%-18.94rem)] flex-col rounded-[7.1rem] bg-secondary px-[7.73rem] pt-[7.82rem] text-ground"
           >
             <div className="flex items-start justify-between gap-[2rem]">
-              <p className="font-classico text-[4.08rem] leading-[0.9]">{t.contact}</p>
-              <div className="flex flex-wrap gap-x-[3.6rem] gap-y-[1rem]">
-                <a className="font-classico text-[4.08rem] leading-[0.9]" href={LINKS.email}>
-                  {t.email}
-                </a>
+              <p className="font-classico text-[3.4rem] leading-[0.9]">{t.contact}</p>
+              <div className="flex flex-wrap items-baseline gap-x-[3.6rem] gap-y-[1rem]">
+                <span className="flex items-baseline gap-[1.6rem]">
+                  {emailShown ? (
+                    <span className="font-classico text-[3.4rem] leading-[0.9] select-all">
+                      {LINKS.email}
+                    </span>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="font-classico border-0 bg-transparent p-0 text-[3.4rem] leading-[0.9] text-[#2C1D12]"
+                    onClick={() => setEmailShown(true)}
+                  >
+                    {t.email}
+                  </button>
+                </span>
                 <a
-                  className="font-classico text-[4.08rem] leading-[0.9]"
+                  className="font-classico text-[3.4rem] leading-[0.9]"
                   href={LINKS.instagram}
                   target="_blank"
                   rel="noreferrer"
@@ -306,7 +326,7 @@ export default function App() {
                   {t.instagram}
                 </a>
                 <a
-                  className="font-classico text-[4.08rem] leading-[0.9]"
+                  className="font-classico text-[3.4rem] leading-[0.9]"
                   href={LINKS.facebook}
                   target="_blank"
                   rel="noreferrer"
@@ -316,9 +336,9 @@ export default function App() {
               </div>
             </div>
             <div className="mt-[4.15rem] border-t border-[#2C1D12] pt-[4.15rem]">
-              <p className="font-classico text-[4.08rem] leading-[0.9]">{t.copyright}</p>
+              <p className="font-classico text-[3.4rem] leading-[0.9]">{t.copyright}</p>
               <div className="mt-[3.2rem] flex items-start justify-between gap-[2.4rem]">
-                <p className="font-classico shrink-0 text-[3.93rem] leading-none">
+                <p className="font-classico shrink-0 text-[3.3rem] leading-none">
                   <span className="whitespace-nowrap">{t.orgTitle}</span>
                   <br />
                   <span className="whitespace-nowrap">
@@ -328,12 +348,12 @@ export default function App() {
                     </a>
                   </span>
                 </p>
-                <p className="font-classico shrink-0 text-[3.93rem] leading-none">
+                <p className="font-classico shrink-0 text-[3.3rem] leading-none">
                   <span className="whitespace-nowrap">{t.brandTitle}</span>
                   <br />
                   {t.brandName}
                 </p>
-                <p className="font-classico shrink-0 text-[3.93rem] leading-none">
+                <p className="font-classico shrink-0 text-[3.3rem] leading-none">
                   <span className="whitespace-nowrap">{t.webTitle}</span>
                   <br />
                   {t.webName}
@@ -343,7 +363,7 @@ export default function App() {
             <img
               src={asset('svg/Logo_Big.svg')}
               alt=""
-              className="mt-auto mb-[4.8rem] h-[52.88rem] w-[138.15rem] max-w-full object-contain object-left"
+              className="mt-auto mb-[4.8rem] h-[42rem] w-[109.7rem] max-w-full self-center object-contain object-center"
             />
           </footer>
         </main>
