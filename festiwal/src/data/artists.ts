@@ -123,6 +123,14 @@ const STARAKIEWICZ_BIO = {
     "Winner of the Ars Quaerendi award, a scholarship holder of KPO for Culture, MKiDN and a recipient of the Young Poland scholarship. She developed the educational program Pociąg do Opowieści, on visual and literary narration. Speaker at events related to design and visual culture, including Digital Cultures, UX Poland, Gdynia Design Days and the Non-Congress of Culture Animators.",
   ],
 };
+const SLUSARCZYK_BIO = {
+  pl: [
+    "Artystka wizualna i rzeźbiarka. Swobodnie łączy rzeźbę, instalację i grafikę, poszukując świeżych środków wyrazu. Bawi się językiem i ciałem. Na STREFACH zobaczymy jej pracę, w której ludzkie ciało spotyka się z ciałem maszyny, w niekonwencjonalnej odsłonie erotyki.",
+  ],
+  en: [
+    "Visual artist and sculptress. She freely combines sculpture, installation and graphics, seeking fresh means of expression. She plays with language and the body. At STREFY we will see her work, in which the human body meets the body of a machine, in an unconventional take on eroticism.",
+  ],
+};
 export const ARTISTS: Artist[] = [
   {
     id: "renia-maj",
@@ -200,5 +208,16 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/majastarakiewicz",
     background: "var(--color-deep-plum)",
     text: "var(--color-primary)",
+  },
+  {
+    id: "slusarczyk",
+    name: "Maja Ślusarczyk",
+    role: VISUAL_ARTIST,
+    photo: "/artysci/slusarczyk.jpg",
+    mask: "announcement-5",
+    description: SLUSARCZYK_BIO,
+    instagram: "https://www.instagram.com/mimimimimimmimimm",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-cream)",
   },
 ];
