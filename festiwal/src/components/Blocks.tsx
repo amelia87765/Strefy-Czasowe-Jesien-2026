@@ -1,35 +1,39 @@
-import { FadeImg } from '@/components/FadeImg'
-import type { Block, Section, Text } from '@/data/pages'
-import { TICKETS_URL, type Lang } from '@/data/site'
-import { useState, type ReactNode } from 'react'
+import { FadeImg } from "@/components/FadeImg";
+import type { Block, Section, Text } from "@/data/pages";
+import { TICKETS_URL, type Lang } from "@/data/site";
+import { useState, type ReactNode } from "react";
 
 function asset(path: string) {
-  return `${import.meta.env.BASE_URL}${path}`
+  return `${import.meta.env.BASE_URL}${path}`;
 }
 
-const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g
+const INLINE = /\[([^\]]+)\]\(([^)\s]+)\)|\*([^*]+)\*/g;
 
 function Rich({ text }: { text: string }) {
-  const parts: ReactNode[] = []
-  let last = 0
-  for (const match of text.matchAll(LINK)) {
-    const at = match.index ?? 0
-    if (at > last) parts.push(text.slice(last, at))
+  const parts: ReactNode[] = [];
+  let last = 0;
+  for (const match of text.matchAll(INLINE)) {
+    const at = match.index ?? 0;
+    if (at > last) parts.push(text.slice(last, at));
     parts.push(
-      <a
-        key={at}
-        href={match[2]}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="underline decoration-1 underline-offset-[0.18em] transition-opacity hover:opacity-70"
-      >
-        {match[1]}
-      </a>,
-    )
-    last = at + match[0].length
+      match[1] ? (
+        <a
+          key={at}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-1 underline-offset-[0.18em] transition-opacity hover:opacity-70"
+        >
+          {match[1]}
+        </a>
+      ) : (
+        <em key={at}>{match[3]}</em>
+      ),
+    );
+    last = at + match[0].length;
   }
-  parts.push(text.slice(last))
-  return <>{parts}</>
+  parts.push(text.slice(last));
+  return <>{parts}</>;
 }
 
 function Paragraphs({ items }: { items: string[] }) {
@@ -41,24 +45,27 @@ function Paragraphs({ items }: { items: string[] }) {
         </p>
       ))}
     </div>
-  )
+  );
 }
 
 function Faq({
   items,
   lang,
 }: {
-  items: { question: Text; answer: Record<Lang, string[]> }[]
-  lang: Lang
+  items: { question: Text; answer: Record<Lang, string[]> }[];
+  lang: Lang;
 }) {
-  const [open, setOpen] = useState<number | null>(null)
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
     <div className="flex flex-col">
       {items.map((item, index) => {
-        const isOpen = open === index
+        const isOpen = open === index;
         return (
-          <div key={index} className={index > 0 ? 'border-t border-current' : ''}>
+          <div
+            key={index}
+            className={index > 0 ? "border-t border-current" : ""}
+          >
             <button
               type="button"
               aria-expanded={isOpen}
@@ -70,7 +77,7 @@ function Faq({
               <span
                 aria-hidden
                 className="shrink-0 transition-transform duration-300"
-                style={{ transform: isOpen ? 'rotate(45deg)' : 'none' }}
+                style={{ transform: isOpen ? "rotate(45deg)" : "none" }}
               >
                 +
               </span>
@@ -79,7 +86,7 @@ function Faq({
               id={`faq-${index}`}
               inert={!isOpen}
               className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
+              style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
             >
               <div className="overflow-hidden">
                 <div className="pb-[4.4rem]">
@@ -88,25 +95,29 @@ function Faq({
               </div>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 function BlockView({ block, lang }: { block: Block; lang: Lang }) {
   switch (block.type) {
-    case 'heading':
-      return <h2 className="font-classico text-[12.8rem] leading-[0.9]">{block.text[lang]}</h2>
-    case 'text':
-      return <Paragraphs items={block.paragraphs[lang]} />
-    case 'statement':
+    case "heading":
+      return (
+        <h2 className="font-classico text-[12.8rem] leading-[0.9]">
+          {block.text[lang]}
+        </h2>
+      );
+    case "text":
+      return <Paragraphs items={block.paragraphs[lang]} />;
+    case "statement":
       return (
         <p className="max-w-[128.4rem] font-classico text-[10rem] leading-none">
-          {block.text[lang]}
+          <Rich text={block.text[lang]} />
         </p>
-      )
-    case 'photos':
+      );
+    case "photos":
       return (
         <div className="flex gap-[4.4rem]">
           {block.photos.map((photo) => (
@@ -119,8 +130,8 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
             </div>
           ))}
         </div>
-      )
-    case 'links':
+      );
+    case "links":
       return (
         <div className="flex flex-col items-start gap-[2.6rem] font-classico text-[6.4rem] leading-[0.9]">
           {block.links.map((link, index) => (
@@ -135,8 +146,8 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
             </a>
           ))}
         </div>
-      )
-    case 'embed':
+      );
+    case "embed":
       return block.src ? (
         <iframe
           src={block.src}
@@ -152,22 +163,28 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
           rel="noopener noreferrer"
           className="self-start rounded-[2.4rem] border-[0.2rem] border-current px-[3.2rem] py-[2rem] font-classico text-[6.4rem] leading-[0.9] transition-opacity hover:opacity-70"
         >
-          {lang === 'pl' ? 'Kup bilet w Going' : 'Buy tickets on Going'}
+          {lang === "pl" ? "Kup bilet w Going" : "Buy tickets on Going"}
         </a>
-      )
-    case 'faq':
-      return <Faq items={block.items} lang={lang} />
+      );
+    case "faq":
+      return <Faq items={block.items} lang={lang} />;
   }
 }
 
-export function Blocks({ sections, lang }: { sections: Section[]; lang: Lang }) {
+export function Blocks({
+  sections,
+  lang,
+}: {
+  sections: Section[];
+  lang: Lang;
+}) {
   return (
     <>
       {sections.map((section, index) => (
         <section
           key={index}
           className={`flex flex-col gap-[5rem] py-[6rem] ${
-            index > 0 ? 'border-t-[0.2rem] border-current' : ''
+            index > 0 ? "border-t-[0.2rem] border-current" : ""
           }`}
         >
           {section.map((block, blockIndex) => (
@@ -176,5 +193,5 @@ export function Blocks({ sections, lang }: { sections: Section[]; lang: Lang }) 
         </section>
       ))}
     </>
-  )
+  );
 }

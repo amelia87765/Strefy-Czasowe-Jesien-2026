@@ -138,7 +138,7 @@ export const copy = {
     tickets: "TICKETS",
     date: "24.10.2026",
     venue: "SVERA Gdynia",
-    previous: "Previous edition\n2026 (+1) // Summer",
+    previous: "Previous edition\n2025 (-1)",
     followLead: "We change time ",
     followLeadEm: "(again)",
     followLeadEnd: ".",

@@ -1,39 +1,50 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Kolory edycji. Zmiana tych dwóch wartości przestawia całą stronę.
    Zima: #FF562C / #5C7FFF — Lato: #A4F782 / #FCA0EB */
 @theme {
-  --font-sans: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-classico: 'URW Classico', Palatino, 'Palatino Linotype', serif;
-  --font-palladio: 'URW Palladio', Palatino, 'Palatino Linotype', serif;
-  --font-hanken: 'Hanken Grotesk', 'Helvetica Neue', sans-serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-classico: "URW Classico", Palatino, "Palatino Linotype", serif;
+  --font-palladio: "URW Palladio", Palatino, "Palatino Linotype", serif;
+  --font-hanken: "Hanken Grotesk", "Helvetica Neue", sans-serif;
   --color-primary: #ff562c;
   --color-secondary: #5c7fff;
-  --color-ground: #2c1d12;
-  --color-sand: #efe6d9;
-  --color-sand-muted: #a99d88;
+  --color-ground: #2c1d12; /*dark umber*/
+  --color-cream: #efe6d9;
+  --color-warm-taupe: #a99d88;
   --color-accent-pink: #fca0eb;
+  --color-periwinkle: #98b5fc;
+  --color-chartreuse: #ccc12c;
+  --color-deep-plum: #2e202c;
+  --color-deep-navy: #17212f;
+  --color-amber-espresso: #3e2d14;
+  --color-deep-forest: #172420;
+  --color-universal-brown: #453b33;
+  --color-true-black: #0d0b0a;
+  --color-light-grey: #d3d3d3;
+  --color-mocha: #6c665b;
+  --color-sage-grey: #9ca3a0;
 }
 
 @font-face {
-  font-family: 'URW Classico';
-  src: url('./fonts/URWClassico.ttf') format('truetype');
+  font-family: "URW Classico";
+  src: url("./fonts/URWClassico.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'URW Palladio';
-  src: url('./fonts/URWPalladio.ttf') format('truetype');
+  font-family: "URW Palladio";
+  src: url("./fonts/URWPalladio.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Hanken Grotesk';
-  src: url('./fonts/HankenGrotesk.ttf') format('truetype');
+  font-family: "Hanken Grotesk";
+  src: url("./fonts/HankenGrotesk.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
