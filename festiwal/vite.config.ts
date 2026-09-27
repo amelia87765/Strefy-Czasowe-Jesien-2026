@@ -5,7 +5,9 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/strefyczasowe/',
+  base: process.env.GITHUB_PAGES === 'true'
+    ? '/Strefy-Czasowe-Jesien-2026/'
+    : '/strefyczasowe/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
