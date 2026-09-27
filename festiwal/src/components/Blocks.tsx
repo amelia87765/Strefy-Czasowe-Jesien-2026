@@ -51,9 +51,12 @@ function FitLine({
   className?: string;
 }) {
   const ref = useFitText<HTMLElement>(0.5, text);
+  const setRef = (element: HTMLElement | null) => {
+    ref.current = element;
+  };
   return (
     <Tag
-      ref={ref}
+      ref={setRef}
       className={`overflow-hidden whitespace-nowrap ${className ?? ""}`}
     >
       <Rich text={text} />
