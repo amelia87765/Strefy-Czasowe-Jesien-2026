@@ -59,7 +59,10 @@ export type Section = Block[];
 
 export const ABOUT_SECTIONS: Section[] = [
   [
-    { type: "heading", text: { pl: "Czym są STREFY CZASOWE?", en: "What is STREFY CZASOWE?" } },
+    {
+      type: "heading",
+      text: { pl: "Czym są STREFY CZASOWE?", en: "What is STREFY CZASOWE?" },
+    },
     {
       type: "text",
       nowrap: [0],
@@ -165,7 +168,6 @@ export const ABOUT_SECTIONS: Section[] = [
 ];
 
 export const SHOP_SECTIONS: Section[] = [
-  
   [{ type: "going" }],
   [
     {

@@ -64,12 +64,16 @@ function FitLine({
 function Paragraphs({
   items,
   nowrap = [],
+  textClassName = "text-[calc(6.4rem*var(--type))]",
 }: {
   items: string[];
   nowrap?: number[];
+  textClassName?: string;
 }) {
   return (
-    <div className="flex max-w-[128.4rem] flex-col gap-[5.76rem] font-classico text-[calc(6.4rem*var(--type))] leading-[0.9]">
+    <div
+      className={`flex max-w-[128.4rem] flex-col gap-[5.76rem] font-classico ${textClassName} leading-[0.9]`}
+    >
       {items.map((paragraph, index) =>
         nowrap.includes(index) ? (
           <FitLine key={index} text={paragraph} />
@@ -125,7 +129,10 @@ function Faq({
             >
               <div className="overflow-hidden">
                 <div className="pb-[4.4rem]">
-                  <Paragraphs items={item.answer[lang]} />
+                  <Paragraphs
+                    items={item.answer[lang]}
+                    textClassName="text-[calc(4.2rem*var(--type))]"
+                  />
                 </div>
               </div>
             </div>
