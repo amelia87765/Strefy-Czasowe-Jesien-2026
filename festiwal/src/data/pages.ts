@@ -1,4 +1,4 @@
-import type { Lang } from "@/data/site";
+import { LINKS, type Lang } from "@/data/site";
 
 export type SubpageId = "o-festiwalu" | "sklep" | "wolontariusze" | "faq";
 
@@ -25,12 +25,19 @@ export type Text = Record<Lang, string>;
  */
 export type Block =
   | { type: "heading"; text: Text }
-  | { type: "text"; paragraphs: Record<Lang, string[]> }
+  | { type: "text"; paragraphs: Record<Lang, string[]>; nowrap?: number[] }
   /**
    * Wpinka (iframe), np. widget sprzedaży Going. `height` w rem.
    * Pusty `src` pokazuje przycisk do strony biletów.
    */
   | { type: "embed"; src: string; height: number; title: Text }
+  /** Widget sprzedaży Going w języku strony (ustawienia w `src/data/tickets.ts`). */
+  | { type: "going" }
+  /**
+   * Zdjęcia produktów w rzędzie, z podpisem i kartą opisu po najechaniu.
+   * Zdjęcia: `media/sklep/` → `npm run media:photos` → `festiwal_foto/sklep/*.jpg`.
+   */
+  | { type: "gallery"; items: GalleryItem[] }
   /** Rozwijane pytania: otwarte jest zawsze najwyżej jedno. */
   | { type: "faq"; items: { question: Text; answer: Record<Lang, string[]> }[] }
   | { type: "statement"; text: Text }
@@ -39,13 +46,23 @@ export type Block =
   /** Pusty `href` wyświetla sam tekst bez linku. */
   | { type: "links"; links: { label: Text; href: string }[] };
 
+export type GalleryItem = {
+  id: string;
+  photo: string;
+  caption: Text;
+  description: Record<Lang, string[]>;
+  background: string;
+  text: string;
+};
+
 export type Section = Block[];
 
 export const ABOUT_SECTIONS: Section[] = [
   [
-    { type: "heading", text: { pl: "Czym są STREFY?", en: "What is STREFY?" } },
+    { type: "heading", text: { pl: "Czym są STREFY CZASOWE?", en: "What is STREFY CZASOWE?" } },
     {
       type: "text",
+      nowrap: [0],
       paragraphs: {
         pl: [
           "*Stworzyliśmy coś, co znacząco wymyka się poza percepcję czasu.*",
@@ -148,29 +165,80 @@ export const ABOUT_SECTIONS: Section[] = [
 ];
 
 export const SHOP_SECTIONS: Section[] = [
+  
+  [{ type: "going" }],
   [
     {
-      type: "text",
-      paragraphs: {
-        pl: ["Tekst o biletach i sklepie festiwalowym — do uzupełnienia."],
-        en: ["Text about tickets and the festival shop — to be added."],
-      },
+      type: "gallery",
+      items: [
+        {
+          id: "artwork1",
+          photo: "festiwal_foto/sklep/artwork1.jpg",
+          caption: { pl: "Artwork 1", en: "Artwork 1" },
+          description: {
+            pl: [
+              "Limitowany, ręcznie numerowany artwork z jesiennej zmiany czasu. \n50 x 70 cm, na wysokiej jakości papierze. \nNakład wyniósł 20 sztuk i się nie powtórzy.",
+              "100 zł.",
+              "Najniższa cena z 30 dni przed obniżką: 120 zł.",
+            ],
+            en: [
+              "A limited, hand-numbered artwork from the autumn time change.\n50 x 70 cm, on high-quality paper. \nThis run amounted to 20 pieces and will not be repeated.",
+              "100 PLN.",
+              "Lowest price in the 30 days before the reduction: 120 PLN.",
+            ],
+          },
+          background: "var(--color-ground)",
+          text: "var(--color-periwinkle)",
+        },
+        {
+          id: "skarpety",
+          photo: "festiwal_foto/sklep/skarpety.jpg",
+          caption: { pl: "Skarpety x HANSA", en: "Socks x HANSA" },
+          description: {
+            pl: [
+              "Wysokiej jakości skarpety uszyte we współpracy z Hansa Wear. \n\nFestiwalowy detal, który zostaje na dłużej niż jedną noc.",
+              "40 zł.",
+            ],
+            en: [
+              "High-quality socks made with Hansa Wear. \n\nA festival detail that lasts longer than one night.",
+              "40 PLN.",
+            ],
+          },
+          background: "var(--color-ground)",
+          text: "var(--color-periwinkle)",
+        },
+        {
+          id: "artwork2",
+          photo: "festiwal_foto/sklep/artwork2.jpg",
+          caption: { pl: "Artwork 2", en: "Artwork 2" },
+          description: {
+            pl: [
+              "Limitowany, ręcznie numerowany plakat artystyczny z letniej zmiany czasu. \n50 x 70 cm, na wysokiej jakości papierze. \nNakład wyniósł 20 sztuk i się nie powtórzy.",
+              "100 zł.",
+              "Najniższa cena z 30 dni przed obniżką: 120 zł.",
+            ],
+            en: [
+              "A limited, hand-numbered artwork from the spring time change. \n50 x 70 cm, on high-quality paper. \nThis run amounted to 20 pieces and will not be repeated.",
+              "100 PLN.",
+              "Lowest price in the 30 days before the reduction: 120 PLN.",
+            ],
+          },
+          background: "var(--color-ground)",
+          text: "var(--color-periwinkle)",
+        },
+      ],
     },
   ],
   [
     {
-      type: "embed",
-      src: "",
-      height: 80,
-      title: { pl: "Sprzedaż biletów Going", en: "Going ticket sales" },
-    },
-  ],
-  [
-    {
       type: "text",
       paragraphs: {
-        pl: ["Dalsza część tekstu — do uzupełnienia."],
-        en: ["More text — to be added."],
+        pl: [
+          `W celu zakupu skontaktuj się z nami, a będą Twoje.\n\n[@strefyczasowe](${LINKS.instagram}) albo [strefyczasowe@smoothsail.art](mailto:${LINKS.email})`,
+        ],
+        en: [
+          `In order to buy, contact us, and they will be yours.\n\n[@strefyczasowe](${LINKS.instagram}) or [strefyczasowe@smoothsail.art](mailto:${LINKS.email})`,
+        ],
       },
     },
   ],
@@ -182,10 +250,10 @@ export const VOLUNTEERS_SECTIONS: Section[] = [
       type: "text",
       paragraphs: {
         pl: [
-          "STREFY CZASOWE tworzymy razem. Zależy nam na przestrzeni do wspólnego przeżywania sztuki — otwartej i uważnej. Szukamy osób, które chcą współtworzyć z nami najbliższą edycję festiwalu.\n\nChcesz dołączyć do zespołu produkcyjnego?\n\nSkontaktuj się z nami lub wypełnij [formularz](https://docs.google.com/forms/d/e/1FAIpQLSe-zYxx5DaCgpR-jVlfGddWpz84_0pOWB_R1X5fzcSQqGLPmw/viewform)",
+          "STREFY CZASOWE tworzymy razem. Zależy nam na przestrzeni do wspólnego przeżywania sztuki — otwartej i uważnej. Szukamy osób, które chcą współtworzyć z nami najbliższą edycję festiwalu.\n\nChcesz dołączyć do zespołu produkcyjnego?\n\nSkontaktuj się z nami lub wypełnij [formularz](https://docs.google.com/forms/d/e/1FAIpQLSe-zYxx5DaCgpR-jVlfGddWpz84_0pOWB_R1X5fzcSQqGLPmw/viewform).",
         ],
         en: [
-          "STREFY CZASOWE are created together. We value the space for shared experience of art — open and attentive. We are looking for people who want to collaborate with us to create the next edition of the festival.\nDo you want to join the production team?\nContact us or fill out the [form](https://docs.google.com/forms/d/e/1FAIpQLSe-zYxx5DaCgpR-jVlfGddWpz84_0pOWB_R1X5fzcSQqGLPmw/viewform)",
+          "STREFY CZASOWE are created together. We value the space for shared experience of art — open and attentive. We are looking for people who want to collaborate with us to create the next edition of the festival.\nDo you want to join the production team?\nContact us or fill out the [form](https://docs.google.com/forms/d/e/1FAIpQLSe-zYxx5DaCgpR-jVlfGddWpz84_0pOWB_R1X5fzcSQqGLPmw/viewform).",
         ],
       },
     },

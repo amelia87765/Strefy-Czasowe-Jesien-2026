@@ -10,6 +10,8 @@ type Box = { top: number; left: number; width: number; height: number }
 
 const FULL: Box = { top: 4, left: 4, width: 92, height: 92 }
 const EXPAND_MS = 720
+/** Mnożnik głośności odtwarzacza (0–1). Końcowa głośność = to × głośność systemu. */
+const FULL_VOLUME = 0.28
 
 type Connection = { saveData?: boolean; effectiveType?: string }
 
@@ -23,6 +25,7 @@ function heavyMediaAllowed() {
 export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
   const thumbRef = useRef<HTMLDivElement>(null)
   const loopRef = useRef<HTMLVideoElement>(null)
+  const fullRef = useRef<HTMLVideoElement>(null)
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [locked, setLocked] = useState(false)
@@ -86,6 +89,18 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
     }
   }
 
+  const playWithSound = (video: HTMLVideoElement) => {
+    video.volume = FULL_VOLUME
+    video.muted = false
+    const attempt = video.play()
+    if (attempt) {
+      void attempt.catch(() => {
+        video.muted = true
+        void video.play()
+      })
+    }
+  }
+
   return (
     <div className="flex max-w-[44rem] items-start gap-[1.6rem]">
       <div
@@ -128,13 +143,17 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
           />
         ) : null}
       </div>
-      <p className="font-classico whitespace-pre-line text-[2.4rem] leading-none text-sand-muted">
+      <p className="font-classico whitespace-pre-line text-[2.4rem] leading-none text-warm-taupe">
         {caption}
       </p>
       {open && box
         ? createPortal(
             <div
               className="fixed z-[400] overflow-hidden bg-[#3E2D14] shadow-[0_2.4rem_8rem_rgba(0,0,0,0.45)]"
+              onPointerDown={() => {
+                const video = fullRef.current
+                if (video?.muted) playWithSound(video)
+              }}
               style={{
                 top: `${box.top}vh`,
                 left: `${box.left}vw`,
@@ -168,16 +187,19 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
               ) : null}
               {fullArmed && !broken ? (
                 <video
+                  ref={fullRef}
                   src={fullSrc}
                   autoPlay
-                  muted
                   loop
                   playsInline
                   disablePictureInPicture
                   disableRemotePlayback
                   preload="auto"
                   onLoadedMetadata={(event) => syncStart(event.currentTarget)}
-                  onCanPlayThrough={() => setFullReady(true)}
+                  onCanPlayThrough={(event) => {
+                    setFullReady(true)
+                    playWithSound(event.currentTarget)
+                  }}
                   onError={() => setBroken(true)}
                   className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
                     fullReady ? 'opacity-100' : 'opacity-0'

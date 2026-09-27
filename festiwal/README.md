@@ -49,12 +49,13 @@ Podstrona to lista sekcji oddzielonych kreską, a sekcja to lista klocków: `hea
 | `media/nazwa.jpg` | `public/festiwal_foto/nazwa.jpg` | `festiwal_foto/nazwa.jpg` |
 | `media/artysci/nazwa.jpg` | `public/festiwal_foto/artysci/nazwa.jpg` | `festiwal_foto/artysci/nazwa.jpg` |
 | `media/o-festiwalu/nazwa.jpg` | `public/festiwal_foto/o-festiwalu/nazwa.jpg` | `festiwal_foto/o-festiwalu/nazwa.jpg` |
+| `media/sklep/nazwa.jpg` | `public/festiwal_foto/sklep/nazwa.jpg` | `festiwal_foto/sklep/nazwa.jpg` |
 | `media/poprzednia-original.mp4` | `poprzednia-loop.mp4` (8 s, 480p) + `poprzednia.mp4` (1080p) | — |
 
 Zasady:
 
-- Zdjęcia: `.jpg`, `.jpeg` lub `.png`; wynik zawsze `.jpg`, dłuższy bok 1600 px.
-- **Nazwy plików małymi literami, bez spacji i polskich znaków** (`renia-maj.jpg`). Serwer rozróżnia wielkość liter — `Foto.JPG` i `foto.jpg` to dla niego dwa różne pliki.
+- Zdjęcia: `.jpg`, `.jpeg`, `.png` lub `.webp`; wynik zawsze `.jpg`, dłuższy bok 1600 px.
+- **Nazwy plików bez spacji i polskich znaków** (`renia-maj.jpg`). Skrypt zapisuje wynik małymi literami (`ZUK.JPG` → `zuk.jpg`), więc w kodzie zawsze wpisuj małe litery — serwer rozróżnia wielkość liter.
 - Skrypt przetwarza wszystkie pliki z `media/` za każdym razem i nadpisuje wyniki — to bezpieczne.
 - Po zmianie zdjęć uruchom `npm run media:photos -w festiwal`, po zmianie filmu `npm run media -w festiwal`.
 - Nowy podfolder na zdjęcia dopisz do `PHOTO_DIRS` w `scripts/media.mjs`.

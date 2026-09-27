@@ -1,6 +1,10 @@
 import { FadeImg } from "@/components/FadeImg";
+import { GoingWidget } from "@/components/GoingWidget";
+import { ShopGallery } from "@/components/ShopGallery";
 import type { Block, Section, Text } from "@/data/pages";
 import { TICKETS_URL, type Lang } from "@/data/site";
+import { fixOrphans } from "@/lib/typography";
+import { useFitText } from "@/lib/useFitText";
 import { useState, type ReactNode } from "react";
 
 function asset(path: string) {
@@ -9,7 +13,8 @@ function asset(path: string) {
 
 const INLINE = /\[([^\]]+)\]\(([^)\s]+)\)|\*([^*]+)\*/g;
 
-function Rich({ text }: { text: string }) {
+function Rich({ text: raw }: { text: string }) {
+  const text = fixOrphans(raw);
   const parts: ReactNode[] = [];
   let last = 0;
   for (const match of text.matchAll(INLINE)) {
@@ -36,14 +41,44 @@ function Rich({ text }: { text: string }) {
   return <>{parts}</>;
 }
 
-function Paragraphs({ items }: { items: string[] }) {
+function FitLine({
+  text,
+  as: Tag = "p",
+  className,
+}: {
+  text: string;
+  as?: "p" | "h2";
+  className?: string;
+}) {
+  const ref = useFitText<HTMLElement>(0.5, text);
   return (
-    <div className="flex max-w-[128.4rem] flex-col gap-[5.76rem] font-classico text-[6.4rem] leading-[0.9]">
-      {items.map((paragraph, index) => (
-        <p key={index} className="whitespace-pre-line">
-          <Rich text={paragraph} />
-        </p>
-      ))}
+    <Tag
+      ref={ref}
+      className={`overflow-hidden whitespace-nowrap ${className ?? ""}`}
+    >
+      <Rich text={text} />
+    </Tag>
+  );
+}
+
+function Paragraphs({
+  items,
+  nowrap = [],
+}: {
+  items: string[];
+  nowrap?: number[];
+}) {
+  return (
+    <div className="flex max-w-[128.4rem] flex-col gap-[5.76rem] font-classico text-[calc(6.4rem*var(--type))] leading-[0.9]">
+      {items.map((paragraph, index) =>
+        nowrap.includes(index) ? (
+          <FitLine key={index} text={paragraph} />
+        ) : (
+          <p key={index} className="whitespace-pre-line">
+            <Rich text={paragraph} />
+          </p>
+        ),
+      )}
     </div>
   );
 }
@@ -71,9 +106,9 @@ function Faq({
               aria-expanded={isOpen}
               aria-controls={`faq-${index}`}
               onClick={() => setOpen(isOpen ? null : index)}
-              className="flex w-full cursor-pointer items-start justify-between gap-[4rem] border-0 bg-transparent py-[3.2rem] text-left font-classico text-[6.4rem] leading-[0.9] text-inherit"
+              className="flex w-full cursor-pointer items-start justify-between gap-[4rem] border-0 bg-transparent py-[3.2rem] text-left font-classico text-[calc(6.4rem*var(--type))] leading-[0.9] text-inherit"
             >
-              <span>{item.question[lang]}</span>
+              <span>{fixOrphans(item.question[lang])}</span>
               <span
                 aria-hidden
                 className="shrink-0 transition-transform duration-300"
@@ -105,15 +140,19 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
   switch (block.type) {
     case "heading":
       return (
-        <h2 className="font-classico text-[12.8rem] leading-[0.9]">
-          {block.text[lang]}
-        </h2>
+        <FitLine
+          as="h2"
+          text={block.text[lang]}
+          className="font-classico text-[calc(12.8rem*var(--type))] leading-[0.9]"
+        />
       );
     case "text":
-      return <Paragraphs items={block.paragraphs[lang]} />;
+      return (
+        <Paragraphs items={block.paragraphs[lang]} nowrap={block.nowrap} />
+      );
     case "statement":
       return (
-        <p className="max-w-[128.4rem] font-classico text-[10rem] leading-none">
+        <p className="max-w-[128.4rem] font-classico text-[calc(10rem*var(--type))] leading-none">
           <Rich text={block.text[lang]} />
         </p>
       );
@@ -133,7 +172,7 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
       );
     case "links":
       return (
-        <div className="flex flex-col items-start gap-[2.6rem] font-classico text-[6.4rem] leading-[0.9]">
+        <div className="flex flex-col items-start gap-[2.6rem] font-classico text-[calc(6.4rem*var(--type))] leading-[0.9]">
           {block.links.map((link, index) => (
             <a
               key={index}
@@ -161,11 +200,15 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
           href={TICKETS_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="self-start rounded-[2.4rem] border-[0.2rem] border-current px-[3.2rem] py-[2rem] font-classico text-[6.4rem] leading-[0.9] transition-opacity hover:opacity-70"
+          className="self-start rounded-[2.4rem] border-[0.2rem] border-current px-[3.2rem] py-[2rem] font-classico text-[calc(6.4rem*var(--type))] leading-[0.9] transition-opacity hover:opacity-70"
         >
           {lang === "pl" ? "Kup bilet w Going" : "Buy tickets on Going"}
         </a>
       );
+    case "going":
+      return <GoingWidget lang={lang} />;
+    case "gallery":
+      return <ShopGallery items={block.items} lang={lang} />;
     case "faq":
       return <Faq items={block.items} lang={lang} />;
   }

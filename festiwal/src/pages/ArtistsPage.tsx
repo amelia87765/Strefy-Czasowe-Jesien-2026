@@ -3,10 +3,23 @@ import { ArtistPhoto } from '@/components/ArtistPhoto'
 import { LineField } from '@/components/LineField'
 import { ARTISTS, artistsCopy, type Artist } from '@/data/artists'
 import { readLang } from '@/lib/lang'
+import { useFitText } from '@/lib/useFitText'
 import { useFontsReady } from '@/lib/useFontsReady'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 
 const HOVER_INTENT_MS = 220
+
+function PillName({ name }: { name: string }) {
+  const ref = useFitText<HTMLSpanElement>(0.5, name)
+  return (
+    <span
+      ref={ref}
+      className="block w-full overflow-hidden px-[2.4rem] font-classico text-[4.32rem] leading-none whitespace-nowrap"
+    >
+      {name}
+    </span>
+  )
+}
 /** Po zamknięciu karty kafelek pod kursorem nie otwiera się od razu ponownie. */
 const REOPEN_COOLDOWN_MS = 450
 
@@ -50,7 +63,7 @@ export default function ArtistsPage() {
     <div className="relative min-h-svh overflow-x-clip bg-ground text-secondary">
       <a
         href={import.meta.env.BASE_URL}
-        className="absolute top-[4.84rem] left-[calc(var(--gutter)+4.1rem)] z-50 font-classico text-[8.2rem] leading-[0.9] text-secondary transition-opacity duration-500"
+        className="absolute top-[4.84rem] left-[calc(var(--gutter)+4.1rem)] z-50 font-classico text-[calc(8.2rem*var(--type))] leading-[0.9] text-secondary transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0 }}
       >
         STREFY CZASOWE
@@ -70,11 +83,11 @@ export default function ArtistsPage() {
 
         <main className="page-frame relative z-10 pt-[17.36rem] pb-[36.5rem]">
           <div className="mx-auto w-[131.9rem] max-w-[calc(100%-4rem)]">
-            <h1 className="ml-[0.7rem] font-classico text-[14.3rem] leading-[0.9]">
+            <h1 className="ml-[0.7rem] font-classico text-[calc(14.3rem*var(--type))] leading-[0.9]">
               {t.title}
             </h1>
             <div className="mt-[1.65rem] h-[0.2rem] bg-secondary" />
-            <p className="mt-[3.6rem] font-classico text-[5.63rem] leading-[0.9]">
+            <p className="mt-[3.6rem] font-classico text-[calc(5.63rem*var(--type))] leading-[0.9]">
               {t.categories}
             </p>
 
@@ -101,9 +114,7 @@ export default function ArtistsPage() {
                     style={{ background: artist.background, color: artist.text }}
                     {...trigger(artist)}
                   >
-                    <span className="font-classico text-[4.32rem] leading-none">
-                      {artist.name}
-                    </span>
+                    <PillName name={artist.name} />
                     <span className="font-hanken text-[2.05rem] leading-[0.9] uppercase">
                       {artist.role[lang]}
                     </span>

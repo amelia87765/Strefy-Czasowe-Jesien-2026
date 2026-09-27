@@ -238,7 +238,7 @@ export default function App() {
               <em className="font-palladio italic">{t.descriptionEm}</em>
               {t.descriptionEnd}
             </p>
-            <p className="font-classico max-w-[40.8rem] text-[2.4rem] leading-none text-sand-muted">
+            <p className="font-classico max-w-[40.8rem] text-[2.4rem] leading-none text-warm-taupe">
               {change.to === 'winter' ? t.winterLeft : t.summerLeft}
               {lang === 'en' ? <br /> : ' '}
               {left.days} {t.days} {left.hours}{' '}
@@ -256,7 +256,7 @@ export default function App() {
             >
               {t.tickets}
             </a>
-            <div className="font-hanken inline-flex h-[4.18rem] items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-sand-muted">
+            <div className="font-hanken inline-flex h-[4.18rem] items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe">
               <span>{t.date}</span>
               <span>{t.venue}</span>
             </div>
@@ -386,7 +386,7 @@ function LangButton({
       type="button"
       onClick={onClick}
       className={`font-hanken h-[4.18rem] min-w-[9.14rem] cursor-pointer rounded-[1.17rem] px-[1.2rem] text-[2.14rem] ${
-        active ? 'bg-[#3E2D14] text-sand-muted' : 'bg-sand-muted text-[#3E2D14]'
+        active ? 'bg-warm-taupe text-amber-espresso' : 'bg-amber-espresso text-warm-taupe'
       }`}
     >
       {children}

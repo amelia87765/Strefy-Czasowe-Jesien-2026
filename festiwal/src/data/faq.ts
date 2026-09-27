@@ -7,16 +7,17 @@ export const FAQ_SECTIONS: Section[] = [
   [
     {
       type: 'text',
+      nowrap: [0],
       paragraphs: {
         pl: [
           '24 października | SVERA, Gdynia | plac Konstytucji 2',
-          'SVERA znajduje się przy samym dworcu Gdynia Główna. Pociąg, SKM, autobus, trolejbus - dojedziesz czymkolwiek.',
-          'Muzyka, instalacje, performance i doświadczenia angażujące zmysły. Jeden wieczór, wiele sposobów odkrywania.',
+          'SVERA znajduje się przy samym dworcu Gdynia Główna. Pociąg, SKM, autobus, trolejbus — dojedziesz czymkolwiek.',
+          'Muzyka, instalacje, performans i doświadczenia angażujące zmysły. Jeden wieczór, wiele sposobów odkrywania.',
           `Bilety: [Going](${GOING}).`,
         ],
         en: [
           '24 October | SVERA, Gdynia | plac Konstytucji 2',
-          'SVERA is right next to Gdynia Główna, the main railway station. Train, SKM, bus or trolleybus - you can get here any way you like, it is as well connected as it gets.',
+          'SVERA is right next to Gdynia Główna, the main railway station. Train, SKM, bus or trolleybus — you can get here any way you like, it is as well connected as it gets.',
           'Music, installations, performance and experiences that engage the senses. One evening, many ways to discover.',
           `Tickets: [Going](${GOING}).`,
         ],
@@ -34,7 +35,7 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'To festiwal, na którym muzyka spotyka sztuki wizualne, instalacje i performance. Liczy się nie tylko to, co dzieje się na scenie, ale też przestrzeń wokół Ciebie: obrazy, światło, zapachy i detale, które składają się na wspólne doświadczenie. Możesz przyjść dla koncertów i odkryć po drodze coś, czego zupełnie się nie spodziewasz.',
+              'To festiwal, na którym muzyka spotyka sztuki wizualne, instalacje i performans. Liczy się nie tylko to, co dzieje się na scenie, ale też przestrzeń wokół Ciebie: obrazy, światło, zapachy i detale, które składają się na wspólne doświadczenie. Możesz przyjść dla koncertów i odkryć po drodze coś, czego zupełnie się nie spodziewasz.',
             ],
             en: [
               'It is a festival where music meets visual arts, installations and performance. What matters is not only what happens on stage, but also the space around you: images, light, scents and details that add up to a shared experience. You can come for the concerts and discover something you never expected along the way.',
@@ -104,7 +105,7 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Nie musisz przychodzić z przygotowaniem ani listą nazwisk do odhaczenia. Strefy są również po to, żeby odkrywać. Wystarczy ciekawość i otwartość na muzykę i formy, z którymi być może spotkasz się pierwszy raz.',
+              'Nie musisz przychodzić z przygotowaniem ani listą nazwisk do odhaczenia. Strefy są również po to, żeby odkrywać. Wystarczą ciekawość i otwartość na muzykę i formy, z którymi być może spotkasz się pierwszy raz.',
             ],
             en: [
               'You do not need any preparation or a list of names to tick off. Strefy is also about discovery. All you need is curiosity and openness to music and forms you may be encountering for the first time.',
@@ -160,12 +161,12 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Bilety są dostępne w Going. Aktualne ceny i dostępność sprawdzisz bezpośrednio na stronie wydarzenia:',
-              `[Strefy Czasowe 2026 (-1) // jesień - bilety](${GOING})`,
+              'Bilety są dostępne w Going oraz na bramkach wydarzenia. Aktualne ceny i dostępność sprawdzisz bezpośrednio na stronie wydarzenia:',
+              `[Strefy Czasowe 2026 (-1) // jesień — bilety](${GOING})`,
             ],
             en: [
-              'Tickets are available on Going. You can check current prices and availability directly on the event page:',
-              `[Strefy Czasowe 2026 (-1) // autumn - tickets](${GOING})`,
+              'Tickets are available on Going and at the event gates. You can check current prices and availability directly on the event page:',
+              `[Strefy Czasowe 2026 (-1) // autumn — tickets](${GOING})`,
             ],
           },
         },
@@ -190,10 +191,10 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Bilet obejmuje wszystkie aktywności w trakcie wydarzenia: koncerty, performansy, wystawy i dostęp do przestrzeni specjalnych. Osobno płatne są merch festiwalowy, napoje na barze, jedzenie w food truckach oraz szatnia.',
+              'Bilet obejmuje wszystkie aktywności w trakcie wydarzenia: koncerty, performansy, instalacje i dostęp do przestrzeni specjalnych. Osobno płatne są merch festiwalowy, napoje na barze, jedzenie w food truckach oraz szatnia.',
             ],
             en: [
-              'The ticket covers all activities during the event: concerts, performances, exhibitions and access to special spaces. Festival merch, drinks at the bar, food from the food trucks and the cloakroom are paid separately.',
+              'The ticket covers all activities during the event: concerts, performances, installations and access to special spaces. Festival merch, drinks at the bar, food from the food trucks and the cloakroom are paid separately.',
             ],
           },
         },
@@ -217,8 +218,8 @@ export const FAQ_SECTIONS: Section[] = [
             en: 'Is there a cloakroom?',
           },
           answer: {
-            pl: ['Tak. Szatnia kosztuje 8 zł, płatność kartą.'],
-            en: ['Yes. The cloakroom costs 8 PLN, card payment only.'],
+            pl: ['Tak. Szatnia jest prowadzona przez klub SVERA i kosztuje 8 zł, płatność kartą.'],
+            en: ['Yes. The cloakroom is run by SVERA and costs 8 PLN, paid by card.'],
           },
         },
         {
@@ -242,10 +243,10 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Performansy i wystawy zawierające intensywne bodźce lub światło stroboskopowe będą odpowiednio oznaczone. Zwróć uwagę na oznaczenia przed wejściem i wybierz to, co jest dla Ciebie komfortowe.',
+              'Performansy i instalacje zawierające intensywne bodźce lub światło stroboskopowe będą odpowiednio oznaczone. Zwróć uwagę na oznaczenia przed wejściem i wybierz to, co jest dla Ciebie komfortowe.',
             ],
             en: [
-              'Performances and exhibitions with intense stimuli or strobe lights will be clearly marked. Look out for the signs before entering and choose what feels comfortable for you.',
+              'Performances and installations with intense stimuli or strobe lights will be clearly marked. Look out for the signs before entering and choose what feels comfortable for you.',
             ],
           },
         },
@@ -256,7 +257,7 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Jedzenie kupisz u naszych partnerów w food truckach. Co do zasady nie można wnosić własnego jedzenia. Wyjątek dotyczy osób, które potrzebują go ze względów zdrowotnych, również w związku z przyjmowaniem leków.',
+              'Jedzenie kupisz u naszych partnerów w food truckach. Co do zasady nie można wnosić własnego jedzenia. Wyjątek dotyczy osób, które potrzebują go ze względów zdrowotnych, w tym ze względu na przyjmowane leki.',
             ],
             en: [
               'You can buy food from our partners’ food trucks. As a rule, you cannot bring your own food. The exception is people who need it for health reasons, including when taking medication.',
@@ -270,10 +271,10 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Nie wprowadzamy ograniczenia wieku. Osoby poniżej 18. roku życia mogą uczestniczyć w wydarzeniu pod opieką osoby dorosłej. Jeśli przychodzisz bez dorosłego opiekuna, zabierz ze sobą pisemną zgodę rodzica lub opiekuna prawnego na udział w wydarzeniu.',
+              'Nie ma dolnej granicy wieku. Osoby poniżej 18. roku życia mogą uczestniczyć pod opieką osoby dorosłej albo bez niej — wtedy potrzebna jest pisemna zgoda rodzica lub opiekuna prawnego na udział w wydarzeniu.',
             ],
             en: [
-              'There is no age limit. People under 18 can attend with an adult. If you are coming without an adult guardian, bring written consent from a parent or legal guardian to attend the event.',
+              'There is no lower age limit. People under 18 can attend with an adult, or without one if they bring written consent from a parent or legal guardian.',
             ],
           },
         },
@@ -294,19 +295,19 @@ export const FAQ_SECTIONS: Section[] = [
           },
           answer: {
             pl: [
-              'Tak, możesz wnieść aparat fotograficzny, robić zdjęcia i dzielić się nimi. Zachęcamy do oznaczania Stref Czasowych i @smoothsail_pl, chętnie zobaczymy festiwal z Twojej perspektywy.',
+              'Tak, możesz wnieść aparat fotograficzny, robić zdjęcia i dzielić się nimi. Zachęcamy do oznaczania @strefyczasowe i @smoothsail_pl, chętnie zobaczymy festiwal z Twojej perspektywy.',
               'Pamiętaj przy tym o prywatności innych osób, szczególnie podczas nocnej, imprezowej części wydarzenia. Zanim zrobisz komuś zdjęcie z bliska lub opublikujesz fotografię, na której jest głównym bohaterem, zapytaj, czy czuje się z tym komfortowo. Uszanuj odmowę.',
             ],
             en: [
-              'Yes, you can bring a camera, take photos and share them. We encourage you to tag Strefy Czasowe and @smoothsail_pl — we would love to see the festival from your perspective.',
+              'Yes, you can bring a camera, take photos and share them. We encourage you to tag @strefyczasowe and @smoothsail_pl — we would love to see the festival from your perspective.',
               'Please respect other people’s privacy, especially during the late-night party part of the event. Before taking a close-up of someone or posting a photo where they are the main subject, ask whether they are comfortable with it. Respect a no.',
             ],
           },
         },
         {
           question: {
-            pl: 'Nigdy nie byłem na STREFACH. Od czego zacząć?',
-            en: 'I have never been to STREFY. Where do I start?',
+            pl: 'Pierwszy raz na STREFACH. Od czego zacząć?',
+            en: 'First time at STREFY. Where do I start?',
           },
           answer: {
             pl: [

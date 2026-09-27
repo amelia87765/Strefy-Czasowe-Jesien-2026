@@ -1,22 +1,22 @@
-import { ArtistPhoto } from '@/components/ArtistPhoto'
-import type { Artist } from '@/data/artists'
+import { ShapePhoto } from '@/components/ArtistPhoto'
+import type { GalleryItem } from '@/data/pages'
 import type { Lang } from '@/data/site'
 import { fixOrphans } from '@/lib/typography'
 import { useFitText } from '@/lib/useFitText'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const FADE_MS = 240
-/** Kursor, który nie trafił na planszę przy otwarciu, zamyka ją dopiero po tym czasie. */
 const GRACE_MS = 400
 
 type Props = {
-  artist: Artist | null
+  item: GalleryItem | null
   lang: Lang
   onClose: () => void
 }
 
-export function ArtistCard({ artist, lang, onClose }: Props) {
-  const [current, setCurrent] = useState<Artist | null>(artist)
+export function ProductCard({ item, lang, onClose }: Props) {
+  const [current, setCurrent] = useState<GalleryItem | null>(item)
   const [visible, setVisible] = useState(false)
   const [fit, setFit] = useState(1)
   const backdropRef = useRef<HTMLDivElement>(null)
@@ -30,8 +30,8 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
   const descriptionRef = useFitText<HTMLDivElement>(0.55, fitKey)
 
   useEffect(() => {
-    if (artist) {
-      setCurrent(artist)
+    if (item) {
+      setCurrent(item)
       enteredRef.current = false
       openedAtRef.current = performance.now()
       const frame = requestAnimationFrame(() => setVisible(true))
@@ -40,7 +40,7 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
     setVisible(false)
     const timer = window.setTimeout(() => setCurrent(null), FADE_MS)
     return () => window.clearTimeout(timer)
-  }, [artist])
+  }, [item])
 
   useLayoutEffect(() => {
     if (!current) return
@@ -59,7 +59,7 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
   }, [current])
 
   useEffect(() => {
-    if (!artist) return
+    if (!item) return
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') closeRef.current()
     }
@@ -81,14 +81,14 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
       window.removeEventListener('keydown', onKey)
       window.removeEventListener('pointermove', onMove)
     }
-  }, [artist])
+  }, [item])
 
   if (!current) return null
 
-  return (
+  return createPortal(
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-40 box-border flex pt-[12.17rem] items-center justify-center backdrop-blur-[5rem]"
+      className="fixed inset-0 z-40 box-border flex items-center justify-center pt-[12.17rem] backdrop-blur-[5rem]"
       style={{
         background: 'color-mix(in srgb, var(--color-secondary) 2%, transparent)',
         opacity: visible ? 1 : 0,
@@ -103,8 +103,8 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
         ref={cardRef}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={`artist-${current.id}`}
-        className="relative h-[97.1rem] w-[137.2rem] max-w-[calc(100vw-4rem)] shrink-0 rounded-[6.8rem]"
+        aria-labelledby={`product-${current.id}`}
+        className="relative h-[48.55rem] w-[68.6rem] max-w-[calc(100vw-4rem)] shrink-0 rounded-[3.4rem]"
         style={{
           background: current.background,
           color: current.text,
@@ -118,39 +118,47 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
           if (event.pointerType === 'mouse' && enteredRef.current) onClose()
         }}
       >
-        <div className="absolute top-[8.96rem] left-[7.24rem] flex w-[44.87rem] flex-col items-center text-center">
-          <ArtistPhoto artist={current} className="h-[55.66rem] w-[44.87rem]" radius="5.5rem" />
+        <div className="absolute top-[4.48rem] left-[3.62rem] flex w-[22.44rem] flex-col items-center text-center">
+          <ShapePhoto
+            src={current.photo}
+            alt={current.caption[lang]}
+            mask="rounded"
+            className={`h-auto w-[22.44rem] ${
+              current.id === 'skarpety' ? 'aspect-[1600/1414]' : 'aspect-[50/70]'
+            }`}
+            radius="2.75rem"
+            fit={current.id === 'skarpety' ? 'cover' : 'contain'}
+          />
           <h2
             ref={nameRef}
-            id={`artist-${current.id}`}
-            className="mt-[5.4rem] max-h-[1.8em] w-full overflow-hidden font-classico text-[8.45rem] leading-[0.9]"
+            id={`product-${current.id}`}
+            className="mt-[2.7rem] max-h-[1.8em] w-full overflow-hidden font-classico text-[4.22rem] leading-[0.9]"
           >
-            {current.name}
+            {current.caption[lang]}
           </h2>
-          <p className="mt-[2.2rem] font-hanken text-[4rem] leading-[0.9] uppercase">
-            {current.role[lang]}
-          </p>
         </div>
 
-        <div className="absolute top-[6.5rem] right-[7.9rem] bottom-[10.8rem] left-[58.89rem] flex flex-col">
-          <div
-            ref={descriptionRef}
-            className="mb-[3rem] flex min-h-0 flex-1 flex-col gap-[0.9em] overflow-hidden font-classico text-[3.6rem] leading-[0.9]"
-          >
-            {current.description[lang].map((paragraph, index) => (
-              <p key={index}>{fixOrphans(paragraph)}</p>
-            ))}
-          </div>
-          <a
-            href={current.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-[25.8rem] shrink-0 border-b border-current pb-[1.3rem] font-hanken text-[4rem] leading-[0.9] transition-opacity hover:opacity-70"
-          >
-            INSTAGRAM
-          </a>
+        <div
+          ref={descriptionRef}
+          className="absolute top-[3.25rem] right-[3.95rem] bottom-[3.6rem] left-[29.45rem] flex min-h-0 flex-col gap-[0.9em] overflow-hidden pt-[0.9em] font-classico text-[2.4rem] leading-[0.9]"
+        >
+          {current.description[lang].map((paragraph, index) => {
+            const price = /^\d[\d\s]*(zł|pln)\.?$/i.test(paragraph.trim())
+            const note = /najniższa cena|lowest price/i.test(paragraph)
+            return (
+              <p
+                key={index}
+                className={`whitespace-pre-line${
+                  price ? ' text-[3.6rem]' : note ? ' mt-[-0.45em] text-[1.6rem]' : ''
+                }`}
+              >
+                {fixOrphans(paragraph)}
+              </p>
+            )
+          })}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

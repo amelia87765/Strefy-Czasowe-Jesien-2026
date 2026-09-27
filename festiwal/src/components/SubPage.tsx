@@ -18,6 +18,7 @@ export function SubPage({ id, children }: Props) {
   useEffect(() => {
     document.documentElement.lang = lang
     document.title = `${title} — STREFY CZASOWE`
+    document.documentElement.style.background = background
     document.body.style.background = background
   }, [lang, title, background])
 
@@ -25,7 +26,7 @@ export function SubPage({ id, children }: Props) {
     <div className="relative min-h-svh overflow-x-clip" style={{ background, color: text }}>
       <a
         href={import.meta.env.BASE_URL}
-        className="absolute top-[4.84rem] left-[calc(var(--gutter)+4.1rem)] z-50 font-classico text-[8.2rem] leading-[0.9] transition-opacity duration-500"
+        className="absolute top-[4.84rem] left-[calc(var(--gutter)+4.1rem)] z-50 font-classico text-[calc(8.2rem*var(--type))] leading-[0.9] transition-opacity duration-500"
         style={{ opacity: ready ? 1 : 0 }}
       >
         STREFY CZASOWE
@@ -37,7 +38,7 @@ export function SubPage({ id, children }: Props) {
         }`}
       >
         <div className="mr-[5.3rem] ml-[25.6rem]">
-          <h1 className="font-classico text-[14.3rem] leading-[0.9]">{title}</h1>
+          <h1 className="font-classico text-[calc(14.3rem*var(--type))] leading-[0.9]">{title}</h1>
           <div className="mt-[1.6rem] h-[0.22rem] bg-current" />
         </div>
         {children ? (

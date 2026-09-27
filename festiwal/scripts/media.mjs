@@ -22,20 +22,22 @@ function mb(file) {
   return `${(statSync(file).size / 1024 / 1024).toFixed(2)} MB`
 }
 
-const PHOTO_DIRS = ['', 'artysci', 'o-festiwalu']
+const PHOTO_DIRS = ['', 'artysci', 'o-festiwalu', 'sklep']
+const PHOTO_EXT = /\.(jpe?g|png|webp)$/i
 
 const photos = PHOTO_DIRS.flatMap((dir) => {
   const from = path.join(src, dir)
   try {
     return readdirSync(from)
-      .filter((name) => /\.(jpe?g|png)$/i.test(name))
+      .filter((name) => PHOTO_EXT.test(name))
       .map((name) => path.join(dir, name))
   } catch {
     return []
   }
 })
 for (const name of photos) {
-  const target = path.join(out, name.replace(/\.(jpe?g|png)$/i, '.jpg'))
+  const file = path.basename(name).replace(PHOTO_EXT, '.jpg').toLowerCase()
+  const target = path.join(out, path.dirname(name), file)
   mkdirSync(path.dirname(target), { recursive: true })
   run([
     '-i',
@@ -82,7 +84,6 @@ if (process.argv.includes('--photos')) {
   run([
     '-i',
     source,
-    '-an',
     '-vf',
     'scale=-2:1080',
     '-c:v',
@@ -93,6 +94,10 @@ if (process.argv.includes('--photos')) {
     '30',
     '-preset',
     'medium',
+    '-c:a',
+    'aac',
+    '-b:a',
+    '160k',
     '-movflags',
     '+faststart',
     full,
