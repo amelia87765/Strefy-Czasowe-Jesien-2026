@@ -4,11 +4,22 @@ import { createPortal } from 'react-dom'
 type VideoPeekProps = {
   caption: string
   onOpenChange?: (open: boolean) => void
+  /** `menu`: pozycja w menu tekstowym z filmem pod napisem, otwierana dotknięciem. */
+  variant?: 'peek' | 'menu'
+  className?: string
 }
 
 type Box = { top: number; left: number; width: number; height: number }
 
 const FULL: Box = { top: 4, left: 4, width: 92, height: 92 }
+
+function fullBox(): Box {
+  const vw = window.innerWidth
+  const vh = window.innerHeight
+  if (vw >= 768) return FULL
+  const height = ((vw * 0.92 * 9) / 16 / vh) * 100
+  return { top: (100 - height) / 2, left: 4, width: 92, height }
+}
 const EXPAND_MS = 720
 /** Mnożnik głośności odtwarzacza (0–1). Końcowa głośność = to × głośność systemu. */
 const FULL_VOLUME = 0.28
@@ -22,7 +33,12 @@ function heavyMediaAllowed() {
   return link.effectiveType === undefined || link.effectiveType.includes('4g')
 }
 
-export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
+export function VideoPeek({
+  caption,
+  onOpenChange,
+  variant = 'peek',
+  className = '',
+}: VideoPeekProps) {
   const thumbRef = useRef<HTMLDivElement>(null)
   const loopRef = useRef<HTMLVideoElement>(null)
   const fullRef = useRef<HTMLVideoElement>(null)
@@ -30,6 +46,7 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
   const [expanded, setExpanded] = useState(false)
   const [locked, setLocked] = useState(false)
   const [from, setFrom] = useState<Box | null>(null)
+  const [target, setTarget] = useState<Box>(FULL)
   const [loopArmed, setLoopArmed] = useState(false)
   const [loopReady, setLoopReady] = useState(false)
   const [fullArmed, setFullArmed] = useState(false)
@@ -81,7 +98,47 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  const box = open && from ? (expanded ? FULL : from) : null
+  const box = open && from ? (expanded ? target : from) : null
+
+  const openFromThumb = () => {
+    if (locked || open) return
+    const rect = thumbRef.current?.getBoundingClientRect()
+    if (!rect) return
+    startAt.current = loopRef.current?.currentTime ?? 0
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    setFrom({
+      top: (rect.top / vh) * 100,
+      left: (rect.left / vw) * 100,
+      width: (rect.width / vw) * 100,
+      height: (rect.height / vh) * 100,
+    })
+    setTarget(fullBox())
+    setLoopArmed(true)
+    setFullArmed(true)
+    setOpen(true)
+    onOpenChangeRef.current?.(true)
+  }
+
+  const loopVideo =
+    loopArmed && !broken ? (
+      <video
+        ref={loopRef}
+        src={loopSrc}
+        autoPlay
+        muted
+        loop
+        playsInline
+        disablePictureInPicture
+        disableRemotePlayback
+        preload="auto"
+        onCanPlayThrough={() => setLoopReady(true)}
+        onError={() => setBroken(true)}
+        className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+          loopReady ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+    ) : null
 
   const syncStart = (video: HTMLVideoElement) => {
     if (startAt.current > 0 && startAt.current < video.duration) {
@@ -102,50 +159,42 @@ export function VideoPeek({ caption, onOpenChange }: VideoPeekProps) {
   }
 
   return (
-    <div className="flex max-w-[44rem] items-start gap-[1.6rem]">
-      <div
-        ref={thumbRef}
-        className="relative h-[9.18rem] w-[14.2rem] shrink-0 cursor-pointer overflow-hidden rounded-[1.7rem] bg-[#3E2D14]"
-        onMouseEnter={() => {
-          if (locked || open) return
-          const rect = thumbRef.current?.getBoundingClientRect()
-          if (!rect) return
-          startAt.current = loopRef.current?.currentTime ?? 0
-          const vw = window.innerWidth
-          const vh = window.innerHeight
-          setFrom({
-            top: (rect.top / vh) * 100,
-            left: (rect.left / vw) * 100,
-            width: (rect.width / vw) * 100,
-            height: (rect.height / vh) * 100,
-          })
-          setFullArmed(true)
-          setOpen(true)
-          onOpenChangeRef.current?.(true)
-        }}
-      >
-        {loopArmed && !broken ? (
-          <video
-            ref={loopRef}
-            src={loopSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            disablePictureInPicture
-            disableRemotePlayback
-            preload="auto"
-            onCanPlayThrough={() => setLoopReady(true)}
-            onError={() => setBroken(true)}
-            className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-              loopReady ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-        ) : null}
-      </div>
-      <p className="font-classico whitespace-pre-line text-[2.4rem] leading-none text-warm-taupe">
-        {caption}
-      </p>
+    <div
+      className={
+        variant === 'menu'
+          ? `relative overflow-visible ${className}`
+          : `flex max-w-[44rem] items-start gap-[1.6rem] ${className}`
+      }
+    >
+      {variant === 'menu' ? (
+        <button
+          type="button"
+          onClick={openFromThumb}
+          className="flex w-full cursor-pointer flex-col items-start gap-[calc(8*var(--m))] border-0 bg-transparent p-0 text-left text-inherit [font:inherit]"
+        >
+          <span>{caption}</span>
+          <div
+            ref={thumbRef}
+            className="relative w-[calc(140*var(--m))] aspect-video overflow-hidden rounded-[calc(8*var(--m))] bg-[#3E2D14]"
+          >
+            {loopVideo}
+          </div>
+        </button>
+      ) : (
+        <>
+          <div
+            ref={thumbRef}
+            className="relative h-[9.18rem] w-[14.2rem] shrink-0 cursor-pointer overflow-hidden rounded-[1.7rem] bg-[#3E2D14]"
+            onMouseEnter={openFromThumb}
+            onClick={openFromThumb}
+          >
+            {loopVideo}
+          </div>
+          <p className="font-classico whitespace-pre-line text-[2.4rem] leading-none text-warm-taupe">
+            {caption}
+          </p>
+        </>
+      )}
       {open && box
         ? createPortal(
             <div

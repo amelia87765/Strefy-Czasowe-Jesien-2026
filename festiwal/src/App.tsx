@@ -14,7 +14,7 @@ import {
 import { nextClockChange, remainingParts } from '@/lib/dst'
 import { readLang, saveLang } from '@/lib/lang'
 import { useFontsReady } from '@/lib/useFontsReady'
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 function asset(path: string) {
   return `${import.meta.env.BASE_URL}${path}`
@@ -28,6 +28,12 @@ const CROSS_AT = SHRINK_MS - FADE_MS
 const DRIFT_REM = 26
 const DRIFT_DELAY = SHRINK_MS * 0.3
 const DRIFT_MS = SHRINK_MS * 0.7
+
+const MENU_ITEM =
+  'font-classico block border-b-2 border-primary py-[1.4rem] text-[7.54rem] leading-[0.9] text-primary transition-colors duration-300 hover:text-secondary max-md:py-[calc(6*var(--m))] max-md:text-[calc(24*var(--m))]'
+
+const M_TEXT = 'font-classico text-[calc(22.21*var(--m))] leading-[0.9]'
+const M_LINK = `${M_TEXT} self-start border-0 border-b-[0.7px] border-solid border-current bg-transparent p-0 pb-[calc(1.5*var(--m))] text-left`
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(readLang)
@@ -189,7 +195,7 @@ export default function App() {
       <img
         src={asset('svg/Logo.svg')}
         alt="Strefy Czasowe"
-        className="fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-30 h-[5.6rem] w-auto"
+        className="fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-30 h-[5.6rem] w-auto max-md:top-[calc(14*var(--m))] max-md:h-[calc(24*var(--m))]"
         style={{
           opacity: compact ? 1 : 0,
           pointerEvents: compact ? 'auto' : 'none',
@@ -198,9 +204,9 @@ export default function App() {
       />
 
       <div className="page-frame relative z-10 pb-[11rem]">
-        <header className="relative flex h-[48.5rem] justify-end px-[6.55rem] pt-[6.3rem]">
+        <header className="relative flex h-[48.5rem] justify-end px-[6.55rem] pt-[6.3rem] max-md:h-[calc(58*var(--m))]">
           <div
-            className="relative z-30 mt-[0.2rem] flex shrink-0 gap-[1rem]"
+            className="relative z-30 mt-[0.2rem] flex shrink-0 gap-[1rem] max-md:absolute max-md:top-[calc(64*var(--m))] max-md:right-[6.55rem] max-md:z-40 max-md:mt-0 max-md:gap-[calc(6*var(--m))]"
             style={{
               opacity: videoOpen ? 0 : 1,
               pointerEvents: videoOpen ? 'none' : 'auto',
@@ -215,17 +221,17 @@ export default function App() {
             </LangButton>
           </div>
           <h1
-            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left leading-[0.9] text-[#EFE6D9] will-change-transform"
+            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left text-[23.4rem] leading-[0.9] text-[#EFE6D9] will-change-transform max-md:top-[calc(14*var(--m))] max-md:max-w-none max-md:text-[calc(37*var(--m))] max-md:whitespace-nowrap"
             style={{
-              fontSize: '23.4rem',
               transform: compact ? `scale(${TITLE_SCALE})` : 'scale(1)',
               opacity: compact ? 0 : 1,
               transition: `transform ${SHRINK_MS}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${FADE_MS}ms linear ${compact ? CROSS_AT : 0}ms`,
             }}
           >
-            {t.title.split(' ').map((word) => (
-              <span key={word} className="block">
-                {word}
+            {t.title.split(' ').map((word, index) => (
+              <span key={word}>
+                {index > 0 ? ' ' : null}
+                <span className="block max-md:inline">{word}</span>
               </span>
             ))}
           </h1>
@@ -233,30 +239,30 @@ export default function App() {
 
         <main className="relative z-10">
           <section className="mt-[2.4rem] flex items-start justify-between gap-[2rem] px-[6.55rem]">
-            <p className="font-classico max-w-[44.5rem] text-[2.4rem] leading-[0.9] text-primary">
+            <p className="font-classico max-w-[44.5rem] text-[2.4rem] leading-[0.9] text-primary max-md:max-w-[calc(230*var(--m))] max-md:text-[calc(18*var(--m))] max-md:leading-[1.1]">
               {t.description}
               <em className="font-palladio italic">{t.descriptionEm}</em>
               {t.descriptionEnd}
             </p>
-            <p className="font-classico max-w-[40.8rem] text-[2.4rem] leading-none text-warm-taupe">
+            <p className="font-classico max-w-[40.8rem] text-[2.4rem] leading-none text-warm-taupe max-md:hidden">
               {change.to === 'winter' ? t.winterLeft : t.summerLeft}
               {lang === 'en' ? <br /> : ' '}
               {left.days} {t.days} {left.hours}{' '}
               {t.hours} {left.seconds} {t.seconds}
             </p>
-            <VideoPeek caption={t.previous} onOpenChange={setVideoOpen} />
+            <VideoPeek caption={t.previous} onOpenChange={setVideoOpen} className="max-md:hidden" />
           </section>
 
-          <section className="mt-[1.6rem] flex items-center gap-[1.27rem] px-[6.55rem]">
+          <section className="mt-[1.6rem] flex items-center gap-[1.27rem] px-[6.55rem] max-md:mt-[calc(14*var(--m))] max-md:gap-[calc(8*var(--m))]">
             <a
               href={TICKETS_URL || undefined}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-primary px-[1.22rem] text-[2.14rem] leading-none text-[#17212F]"
+              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-primary px-[1.22rem] text-[2.14rem] leading-none text-[#17212F] max-md:h-[calc(42*var(--m))] max-md:min-w-0 max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:text-[calc(18*var(--m))]"
             >
               {t.tickets}
             </a>
-            <div className="font-hanken inline-flex h-[4.18rem] items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe">
+            <div className="font-hanken inline-flex h-[4.18rem] items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe max-md:h-[calc(42*var(--m))] max-md:gap-[calc(14*var(--m))] max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:text-[calc(18*var(--m))] max-md:text-cream">
               <span>{t.date}</span>
               <span>{t.venue}</span>
             </div>
@@ -270,13 +276,19 @@ export default function App() {
 
           <nav className="mt-[12rem] px-[5.3rem]">
             {TEXT_MENU.map((item) => (
-              <a
-                key={item.id}
-                href={asset(item.href)}
-                className="font-classico block border-b-2 border-primary py-[1.4rem] text-[7.54rem] leading-[0.9] text-primary transition-colors duration-300 hover:text-secondary"
-              >
-                {item.label[lang]}
-              </a>
+              <Fragment key={item.id}>
+                <a href={asset(item.href)} className={MENU_ITEM}>
+                  {item.label[lang]}
+                </a>
+                {item.id === 'o-festiwalu' ? (
+                  <VideoPeek
+                    variant="menu"
+                    caption={t.previousMenu}
+                    onOpenChange={setVideoOpen}
+                    className={`${MENU_ITEM} md:hidden`}
+                  />
+                ) : null}
+              </Fragment>
             ))}
           </nav>
 
@@ -297,9 +309,7 @@ export default function App() {
 
           <CalendarBar lang={lang} />
 
-          <footer
-            className="relative mx-[9.47rem] box-border flex h-[84rem] w-[151.91rem] max-w-[calc(100%-18.94rem)] flex-col rounded-[7.1rem] bg-secondary px-[7.73rem] pt-[7.82rem] text-ground"
-          >
+          <footer className="relative mx-[9.47rem] box-border hidden h-[84rem] w-[151.91rem] max-w-[calc(100%-18.94rem)] flex-col rounded-[7.1rem] bg-secondary px-[7.73rem] pt-[7.82rem] text-ground md:flex">
             <div className="flex items-start justify-between gap-[2rem]">
               <p className="font-classico text-[3.4rem] leading-[0.9]">{t.contact}</p>
               <div className="flex flex-wrap items-baseline gap-x-[3.6rem] gap-y-[1rem]">
@@ -366,6 +376,55 @@ export default function App() {
               className="mt-auto mb-[4.8rem] h-[42rem] w-[109.7rem] max-w-full self-center object-contain object-center"
             />
           </footer>
+
+          <footer className="relative mx-[calc(24*var(--m))] mb-[calc(20*var(--m))] box-border flex min-h-[calc(560*var(--m))] flex-col rounded-[calc(39*var(--m))] bg-secondary px-[calc(32*var(--m))] pt-[calc(35*var(--m))] pb-[calc(28*var(--m))] text-ground md:hidden">
+            <p className={`${M_TEXT} text-cream`}>{t.contact}</p>
+            <div className="mt-[calc(12*var(--m))] flex flex-col items-start gap-[calc(10*var(--m))]">
+              <span className="flex flex-col items-start gap-[calc(6*var(--m))]">
+                {emailShown ? (
+                  <span className={`${M_TEXT} select-all`}>{LINKS.email}</span>
+                ) : null}
+                <button type="button" className={M_LINK} onClick={() => setEmailShown(true)}>
+                  {t.email}
+                </button>
+              </span>
+              <a className={M_LINK} href={LINKS.instagram} target="_blank" rel="noreferrer">
+                {t.instagram}
+              </a>
+              <a className={M_LINK} href={LINKS.facebook} target="_blank" rel="noreferrer">
+                {t.facebook}
+              </a>
+            </div>
+
+            <div className={`${M_TEXT} mt-[calc(40*var(--m))] text-periwinkle`}>
+              <p>{t.copyright}</p>
+              <p className="mt-[calc(12*var(--m))] text-[calc(21.35*var(--m))] leading-none">
+                {t.orgTitle}
+              </p>
+              <p className="mt-[calc(6*var(--m))] text-[calc(21.35*var(--m))] leading-none">
+                {t.orgName}{' '}
+                <a href={LINKS.smoothSail} target="_blank" rel="noreferrer noopener">
+                  {t.orgHandle}
+                </a>
+              </p>
+              <div className="mt-[calc(8*var(--m))] mb-[calc(10*var(--m))] h-px w-[calc(105*var(--m))] bg-periwinkle" />
+              <p className="text-[calc(21.35*var(--m))] leading-none">{t.brandTitle}</p>
+              <p className="mt-[calc(6*var(--m))] text-[calc(21.35*var(--m))] leading-none">
+                {t.brandName}
+              </p>
+              <div className="mt-[calc(8*var(--m))] mb-[calc(10*var(--m))] h-px w-[calc(129*var(--m))] bg-periwinkle" />
+              <p className="text-[calc(21.35*var(--m))] leading-none">{t.webTitle}</p>
+              <p className="mt-[calc(6*var(--m))] text-[calc(21.35*var(--m))] leading-none">
+                {t.webName}
+              </p>
+            </div>
+
+            <img
+              src={asset('svg/Logo_Big.svg')}
+              alt=""
+              className="mt-auto h-[calc(108*var(--m))] w-[calc(283*var(--m))] max-w-full self-start object-contain object-left"
+            />
+          </footer>
         </main>
       </div>
     </div>
@@ -385,7 +444,7 @@ function LangButton({
     <button
       type="button"
       onClick={onClick}
-      className={`font-hanken h-[4.18rem] min-w-[9.14rem] cursor-pointer rounded-[1.17rem] px-[1.2rem] text-[2.14rem] ${
+      className={`font-hanken h-[4.18rem] min-w-[9.14rem] cursor-pointer rounded-[1.17rem] px-[1.2rem] text-[2.14rem] max-md:h-[calc(36*var(--m))] max-md:min-w-[calc(56*var(--m))] max-md:rounded-[calc(9*var(--m))] max-md:px-[calc(12*var(--m))] max-md:text-[calc(16*var(--m))] ${
         active ? 'bg-warm-taupe text-amber-espresso' : 'bg-amber-espresso text-warm-taupe'
       }`}
     >

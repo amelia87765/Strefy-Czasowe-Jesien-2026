@@ -38,7 +38,7 @@ export function ShopGallery({ items, lang }: { items: GalleryItem[]; lang: Lang 
 
   return (
     <>
-      <ul className="ml-[-21.8rem] grid w-[calc(100vw-2*var(--gutter)-8.2rem)] grid-cols-[1fr_1.585fr_1fr] gap-x-[8.95rem] gap-y-[8.9rem]">
+      <ul className="ml-[-21.8rem] grid w-[calc(100vw-2*var(--gutter)-8.2rem)] grid-cols-[1fr_1.585fr_1fr] gap-x-[8.95rem] gap-y-[8.9rem] max-md:ml-0 max-md:w-full max-md:grid-cols-1 max-md:gap-y-[calc(28*var(--m))]">
         {items.map((item) => {
           const socks = item.id === 'skarpety'
           return (
@@ -55,7 +55,7 @@ export function ShopGallery({ items, lang }: { items: GalleryItem[]; lang: Lang 
                 <div className="absolute inset-x-[20%] inset-y-[14%] cursor-pointer" {...trigger(item)} />
               </div>
               <p
-                className="mt-[3.8rem] flex h-[10.51rem] w-full cursor-pointer items-center justify-center rounded-[4.44rem] px-[2.4rem] text-center font-classico text-[calc(4.32rem*var(--type))] leading-[0.9]"
+                className="mt-[3.8rem] flex h-[10.51rem] w-full cursor-pointer items-center justify-center rounded-[4.44rem] px-[2.4rem] text-center font-classico text-[calc(4.32rem*var(--type))] leading-[0.9] max-md:mt-[calc(12*var(--m))] max-md:h-[calc(58*var(--m))] max-md:rounded-[calc(16*var(--m))] max-md:px-[calc(12*var(--m))] max-md:text-[calc(20*var(--m))]"
                 style={{ background: item.background, color: item.text }}
                 {...trigger(item)}
               >

@@ -27,7 +27,7 @@ export function ProductCard({ item, lang, onClose }: Props) {
   closeRef.current = onClose
   const fitKey = `${current?.id ?? ''}-${lang}`
   const nameRef = useFitText<HTMLHeadingElement>(0.5, fitKey)
-  const descriptionRef = useFitText<HTMLDivElement>(0.55, fitKey)
+  const descriptionRef = useFitText<HTMLDivElement>(0.35, fitKey)
 
   useEffect(() => {
     if (item) {
@@ -48,6 +48,12 @@ export function ProductCard({ item, lang, onClose }: Props) {
       const backdrop = backdropRef.current
       const card = cardRef.current
       if (!backdrop || !card) return
+      if (window.innerWidth < 768) {
+        const byWidth = (window.innerWidth * 0.92) / card.offsetWidth
+        const byHeight = (window.innerHeight * 0.86) / card.offsetHeight
+        setFit(Math.min(byWidth, byHeight))
+        return
+      }
       const margin = parseFloat(getComputedStyle(document.documentElement).fontSize) * 3
       const band = parseFloat(getComputedStyle(backdrop).paddingTop)
       const room = backdrop.clientHeight - band - margin * 2
@@ -88,7 +94,7 @@ export function ProductCard({ item, lang, onClose }: Props) {
   return createPortal(
     <div
       ref={backdropRef}
-      className="fixed inset-0 z-40 box-border flex items-center justify-center pt-[12.17rem] backdrop-blur-[5rem]"
+      className="fixed inset-0 z-40 box-border flex items-center justify-center pt-[12.17rem] backdrop-blur-[5rem] max-md:pt-0"
       style={{
         background: 'color-mix(in srgb, var(--color-secondary) 2%, transparent)',
         opacity: visible ? 1 : 0,
@@ -104,7 +110,7 @@ export function ProductCard({ item, lang, onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={`product-${current.id}`}
-        className="relative h-[48.55rem] w-[68.6rem] max-w-[calc(100vw-4rem)] shrink-0 rounded-[3.4rem]"
+        className="relative h-[48.55rem] w-[68.6rem] max-w-[calc(100vw-4rem)] shrink-0 overflow-hidden rounded-[3.4rem]"
         style={{
           background: current.background,
           color: current.text,
@@ -118,12 +124,12 @@ export function ProductCard({ item, lang, onClose }: Props) {
           if (event.pointerType === 'mouse' && enteredRef.current) onClose()
         }}
       >
-        <div className="absolute top-[4.48rem] left-[3.62rem] flex w-[22.44rem] flex-col items-center text-center">
+        <div className="absolute top-[4.48rem] left-[3.62rem] flex w-[22.44rem] flex-col items-center overflow-hidden text-center max-md:bottom-[3.2rem]">
           <ShapePhoto
             src={current.photo}
             alt={current.caption[lang]}
             mask="rounded"
-            className={`h-auto w-[22.44rem] ${
+            className={`h-auto w-[22.44rem] max-md:min-h-0 max-md:w-full max-md:max-h-[calc(100%-11rem)] ${
               current.id === 'skarpety' ? 'aspect-[1600/1414]' : 'aspect-[50/70]'
             }`}
             radius="2.75rem"
@@ -132,7 +138,7 @@ export function ProductCard({ item, lang, onClose }: Props) {
           <h2
             ref={nameRef}
             id={`product-${current.id}`}
-            className="mt-[2.7rem] max-h-[1.8em] w-full overflow-hidden font-classico text-[4.22rem] leading-[0.9]"
+            className="mt-[2.7rem] max-h-[1.8em] w-full shrink-0 overflow-hidden font-classico text-[4.22rem] leading-[0.9] max-md:text-[5rem]"
           >
             {current.caption[lang]}
           </h2>
@@ -140,7 +146,7 @@ export function ProductCard({ item, lang, onClose }: Props) {
 
         <div
           ref={descriptionRef}
-          className="absolute top-[3.25rem] right-[3.95rem] bottom-[3.6rem] left-[29.45rem] flex min-h-0 flex-col gap-[0.9em] overflow-hidden pt-[0.9em] font-classico text-[2.4rem] leading-[0.9]"
+          className="absolute top-[3.25rem] right-[3.95rem] bottom-[3.6rem] left-[29.45rem] flex min-h-0 flex-col gap-[0.9em] overflow-hidden pt-[0.9em] font-classico text-[2.4rem] leading-[0.9] break-words max-md:text-[3.2rem] max-md:leading-[1]"
         >
           {current.description[lang].map((paragraph, index) => {
             const price = /^\d[\d\s]*(zł|pln)\.?$/i.test(paragraph.trim())
@@ -149,7 +155,7 @@ export function ProductCard({ item, lang, onClose }: Props) {
               <p
                 key={index}
                 className={`whitespace-pre-line${
-                  price ? ' text-[3.6rem]' : note ? ' mt-[-0.45em] text-[1.6rem]' : ''
+                  price ? ' text-[1.5em]' : note ? ' mt-[-0.45em] text-[0.67em]' : ''
                 }`}
               >
                 {fixOrphans(paragraph)}

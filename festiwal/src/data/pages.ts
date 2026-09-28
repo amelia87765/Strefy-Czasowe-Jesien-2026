@@ -179,7 +179,7 @@ export const SHOP_SECTIONS: Section[] = [
           caption: { pl: "Artwork 1", en: "Artwork 1" },
           description: {
             pl: [
-              "Limitowany, ręcznie numerowany artwork z jesiennej zmiany czasu. \n50 x 70 cm, na wysokiej jakości papierze. \nNakład wyniósł 20 sztuk i się nie powtórzy.",
+              "Limitowany, ręcznie numerowany plakat artystyczny z jesiennej zmiany czasu. \n50 x 70 cm, na wysokiej jakości papierze. \nNakład wyniósł 20 sztuk i się nie powtórzy.",
               "100 zł.",
               "Najniższa cena z 30 dni przed obniżką: 120 zł.",
             ],

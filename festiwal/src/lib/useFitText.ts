@@ -4,25 +4,30 @@ import { useLayoutEffect, useRef } from 'react'
  * Zmniejsza czcionkę elementu tylko wtedy, gdy tekst nie mieści się w jego ramce.
  * Rozmiar bazowy pochodzi z klasy CSS; `minRatio` to najmniejszy dopuszczalny ułamek tego rozmiaru.
  * Element musi mieć ograniczoną szerokość/wysokość i `overflow: hidden`.
+ * Dzieci z rozmiarem w `em` skalują się razem z ramką.
  */
-export function useFitText<T extends HTMLElement>(minRatio: number, key: string) {
+export function useFitText<T extends HTMLElement>(
+  minRatio: number,
+  key: string,
+  desktopOnly = false,
+) {
   const ref = useRef<T>(null)
 
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
-    // Przy ciasnej interlinii litery wystają poza linię o ułamek wysokości, to nie jest brak miejsca.
     const fits = () => {
-      const slack = parseFloat(getComputedStyle(el).fontSize) * 0.4
+      const slack = parseFloat(getComputedStyle(el).fontSize) * 0.35
       return el.scrollHeight <= el.clientHeight + slack && el.scrollWidth <= el.clientWidth + 1
     }
     const fit = () => {
       el.style.fontSize = ''
+      if (desktopOnly && window.matchMedia('(max-width: 767px)').matches) return
       if (fits()) return
       const max = parseFloat(getComputedStyle(el).fontSize)
       let lo = max * minRatio
       let hi = max
-      for (let step = 0; step < 10; step++) {
+      for (let step = 0; step < 12; step++) {
         const mid = (lo + hi) / 2
         el.style.fontSize = `${mid}px`
         if (fits()) lo = mid
@@ -34,7 +39,7 @@ export function useFitText<T extends HTMLElement>(minRatio: number, key: string)
     void document.fonts.ready.then(fit)
     window.addEventListener('resize', fit)
     return () => window.removeEventListener('resize', fit)
-  }, [minRatio, key])
+  }, [minRatio, key, desktopOnly])
 
   return ref
 }

@@ -56,6 +56,14 @@
   --gutter: max(0px, calc((100vw - min(100vw, 1728px)) / 2));
   /* Skala wszystkich napisów na podstronach (1 = rozmiary z projektu). */
   --type: 0.87;
+  /* Piksel projektu mobilnego (iPhone 393 px), z górnym limitem dla większych ekranów. */
+  --m: min(100vw / 393, 1.6px);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --type: 1.45;
+  }
 }
 
 html {
@@ -67,6 +75,14 @@ html {
 .page-frame {
   width: min(100%, var(--frame));
   margin-inline: auto;
+}
+
+@media (max-width: 767px) {
+  .calendar-edition-logo {
+    width: clamp(36px, 11vw, 52px);
+    height: auto;
+    max-width: none;
+  }
 }
 
 html,
