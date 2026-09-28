@@ -52,12 +52,19 @@
 
 :root {
   --frame: 172.8rem;
-  --scale: min(100vw / 1728px, 1);
-  --gutter: max(0px, calc((100vw - min(100vw, 1728px)) / 2));
+  --vw: 100vw;
+  --scale: min(var(--vw) / 1728px, 1);
+  --gutter: max(0px, calc((var(--vw) - min(var(--vw), 1728px)) / 2));
   /* Skala wszystkich napisów na podstronach (1 = rozmiary z projektu). */
   --type: 0.87;
   /* Piksel projektu mobilnego (iPhone 393 px), z górnym limitem dla większych ekranów. */
-  --m: min(100vw / 393, 1.6px);
+  --m: min(var(--vw) / 393, 1.6px);
+}
+
+@supports (width: 100svw) {
+  :root {
+    --vw: 100svw;
+  }
 }
 
 @media (max-width: 767px) {
@@ -69,7 +76,11 @@
 html {
   font-size: calc(10px * var(--scale));
   overscroll-behavior-y: none;
+  overflow-x: clip;
+  max-width: 100%;
   background: var(--color-ground);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .page-frame {
@@ -89,11 +100,12 @@ html,
 body,
 #root {
   min-height: 100%;
+  max-width: 100%;
 }
 
 body {
   margin: 0;
-  min-width: 320px;
+  overflow-x: clip;
   background: #2c1d12;
   color: #efe6d9;
   font-family: var(--font-sans);

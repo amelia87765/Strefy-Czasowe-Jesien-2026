@@ -214,9 +214,9 @@ export default function App() {
       />
 
       <div className="page-frame relative z-10 pb-[11rem]">
-        <header className="relative flex h-[48.5rem] justify-end px-[6.55rem] pt-[6.3rem] max-md:h-[calc(58*var(--m))]">
+        <header className="relative flex h-[48.5rem] justify-end px-[6.55rem] pt-[6.3rem] max-md:h-[calc(118*var(--m))] max-md:px-[calc(16*var(--m))] max-md:pt-[calc(14*var(--m))]">
           <div
-            className="relative z-30 mt-[0.2rem] flex shrink-0 gap-[1rem] max-md:absolute max-md:top-[calc(64*var(--m))] max-md:right-[6.55rem] max-md:z-40 max-md:mt-0 max-md:gap-[calc(6*var(--m))]"
+            className="relative z-30 mt-[0.2rem] flex shrink-0 gap-[1rem] max-md:absolute max-md:top-[calc(108*var(--m))] max-md:right-[calc(16*var(--m))] max-md:z-40 max-md:mt-0 max-md:gap-[calc(6*var(--m))]"
             style={{
               opacity: videoOpen ? 0 : 1,
               pointerEvents: videoOpen ? 'none' : 'auto',
@@ -231,7 +231,7 @@ export default function App() {
             </LangButton>
           </div>
           <h1
-            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left text-[23.4rem] leading-[0.9] text-[#EFE6D9] will-change-transform max-md:top-[calc(14*var(--m))] max-md:max-w-none max-md:text-[calc(37*var(--m))] max-md:whitespace-nowrap"
+            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left text-[23.4rem] leading-[0.9] text-[#EFE6D9] will-change-transform max-md:top-[calc(14*var(--m))] max-md:left-[calc(16*var(--m))] max-md:max-w-[calc(100%-32px)] max-md:text-[calc(42*var(--m))]"
             style={{
               transform: compact ? `scale(${TITLE_SCALE})` : 'scale(1)',
               opacity: compact ? 0 : 1,
@@ -241,14 +241,14 @@ export default function App() {
             {t.title.split(' ').map((word, index) => (
               <span key={word}>
                 {index > 0 ? ' ' : null}
-                <span className="block max-md:inline">{word}</span>
+                <span className="block">{word}</span>
               </span>
             ))}
           </h1>
         </header>
 
         <main className="relative z-10">
-          <section className="mt-[2.4rem] flex items-start justify-between gap-[2rem] px-[6.55rem]">
+          <section className="mt-[2.4rem] flex items-start justify-between gap-[2rem] px-[6.55rem] max-md:px-[calc(16*var(--m))]">
             <p className="font-classico max-w-[44.5rem] text-[2.4rem] leading-[0.9] text-primary max-md:max-w-[calc(230*var(--m))] max-md:text-[calc(18*var(--m))] max-md:leading-[1.1]">
               {t.description}
               <em className="font-palladio italic">{t.descriptionEm}</em>
@@ -263,7 +263,7 @@ export default function App() {
             <VideoPeek caption={t.previous} onOpenChange={setVideoOpen} className="max-md:hidden" />
           </section>
 
-          <section className="mt-[1.6rem] flex items-center gap-[1.27rem] px-[6.55rem] max-md:mt-[calc(14*var(--m))] max-md:gap-[calc(8*var(--m))]">
+          <section className="mt-[1.6rem] flex flex-wrap items-center gap-[1.27rem] px-[6.55rem] max-md:mt-[calc(14*var(--m))] max-md:gap-[calc(8*var(--m))] max-md:px-[calc(16*var(--m))]">
             <a
               href={TICKETS_URL || undefined}
               target="_blank"
@@ -272,19 +272,19 @@ export default function App() {
             >
               {t.tickets}
             </a>
-            <div className="font-hanken inline-flex h-[4.18rem] items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe max-md:h-[calc(42*var(--m))] max-md:gap-[calc(14*var(--m))] max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:text-[calc(18*var(--m))] max-md:text-cream">
+            <div className="font-hanken inline-flex h-[4.18rem] min-w-0 items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe max-md:h-auto max-md:min-h-[calc(42*var(--m))] max-md:flex-wrap max-md:gap-[calc(8*var(--m))] max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:py-[calc(10*var(--m))] max-md:text-[calc(18*var(--m))] max-md:text-cream">
               <span>{t.date}</span>
               <span>{t.venue}</span>
             </div>
           </section>
 
-          <div className="mx-[6.55rem] mt-[2.4rem] border-t-2 border-[#EFE6D9]" />
+          <div className="mx-[6.55rem] mt-[2.4rem] border-t-2 border-[#EFE6D9] max-md:mx-[calc(16*var(--m))]" />
 
-          <div className="mt-[12rem]">
+          <div className="mt-[12rem] max-md:mt-[calc(28*var(--m))]">
             <ShapeMenu row1={SHAPE_ROW_1} row2={SHAPE_ROW_2} lang={lang} />
           </div>
 
-          <nav className="mt-[12rem] px-[5.3rem]">
+          <nav className="mt-[12rem] px-[5.3rem] max-md:mt-[calc(28*var(--m))] max-md:px-[calc(16*var(--m))]">
             {TEXT_MENU.map((item) => (
               <Fragment key={item.id}>
                 <FittedMenuLink href={asset(item.href)} label={item.label[lang]} />

@@ -172,9 +172,17 @@ export function ShapeMenu({
   lang: Lang
 }) {
   return (
-    <div className="flex flex-col gap-[8.8rem] px-[6.55rem]">
-      <Row items={row1} lang={lang} className="flex h-[81.8rem] gap-[2.4rem]" />
-      <Row items={row2} lang={lang} className="flex h-[72.6rem] gap-[2.4rem]" />
+    <div className="flex flex-col gap-[8.8rem] px-[6.55rem] max-md:gap-[calc(16*var(--m))] max-md:px-[calc(16*var(--m))]">
+      <Row
+        items={row1}
+        lang={lang}
+        className="flex h-[81.8rem] gap-[2.4rem] max-md:h-[48vw] max-md:gap-[calc(8*var(--m))]"
+      />
+      <Row
+        items={row2}
+        lang={lang}
+        className="flex h-[72.6rem] gap-[2.4rem] max-md:h-[42vw] max-md:gap-[calc(8*var(--m))]"
+      />
     </div>
   )
 }

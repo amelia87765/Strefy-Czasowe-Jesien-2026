@@ -12,6 +12,7 @@ import {
   type SubpageId,
 } from './data/pages.ts'
 import './index.css'
+import './lib/viewport.ts'
 
 const SECTIONS: Record<SubpageId, Section[]> = {
   'o-festiwalu': ABOUT_SECTIONS,

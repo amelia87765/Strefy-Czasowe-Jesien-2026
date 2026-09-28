@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import ArtistsPage from './pages/ArtistsPage.tsx'
 import './index.css'
+import './lib/viewport.ts'
 
 const root = document.getElementById('root')
 if (!root) {

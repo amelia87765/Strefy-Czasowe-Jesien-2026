@@ -103,7 +103,7 @@ export default function ArtistsPage() {
 
       <a
         href={import.meta.env.BASE_URL}
-        className="absolute top-[4.84rem] left-[calc(var(--gutter)+4.1rem)] z-50 font-classico text-[calc(8.2rem*var(--type))] leading-[0.9] text-secondary transition-opacity duration-500"
+        className="absolute top-[4.84rem] left-[calc(var(--gutter)+4.1rem)] z-50 font-classico text-[calc(8.2rem*var(--type))] leading-[0.9] text-secondary transition-opacity duration-500 max-md:top-[calc(16*var(--m))] max-md:left-[calc(16*var(--m))] max-md:text-[calc(18*var(--m))]"
         style={{ opacity: ready ? 1 : 0 }}
       >
         STREFY CZASOWE
@@ -112,8 +112,8 @@ export default function ArtistsPage() {
       <div
         className={`relative min-h-svh transition-[filter] duration-700 ${ready ? 'blur-none' : 'blur-2xl'}`}
       >
-        <main className="page-frame relative z-10 pt-[17.36rem] pb-[36.5rem]">
-          <div className="mx-auto w-[131.9rem] max-w-[calc(100%-4rem)]">
+        <main className="page-frame relative z-10 pt-[17.36rem] pb-[36.5rem] max-md:pt-[calc(56*var(--m))] max-md:pb-[calc(48*var(--m))]">
+          <div className="mx-auto w-[131.9rem] max-w-[calc(100%-4rem)] max-md:max-w-[calc(100%-32px)]">
             <h1
               ref={titleRef}
               className="ml-[0.7rem] max-w-[calc(100%-0.7rem)] overflow-hidden pt-[0.1em] font-classico text-[calc(14.3rem*var(--type))] leading-[1.05] whitespace-nowrap"
