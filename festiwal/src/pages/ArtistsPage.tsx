@@ -3,6 +3,7 @@ import { ArtistPhoto } from '@/components/ArtistPhoto'
 import { LineField } from '@/components/LineField'
 import { ARTISTS, artistsCopy, type Artist } from '@/data/artists'
 import { readLang } from '@/lib/lang'
+import { useFitText } from '@/lib/useFitText'
 import { useFontsReady } from '@/lib/useFontsReady'
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
 
@@ -59,6 +60,7 @@ export default function ArtistsPage() {
   const intentRef = useRef(0)
   const closedAtRef = useRef(0)
   const t = artistsCopy[lang]
+  const titleRef = useFitText<HTMLHeadingElement>(0.5, t.title)
 
   useEffect(() => () => window.clearTimeout(intentRef.current), [])
 
@@ -112,7 +114,10 @@ export default function ArtistsPage() {
       >
         <main className="page-frame relative z-10 pt-[17.36rem] pb-[36.5rem]">
           <div className="mx-auto w-[131.9rem] max-w-[calc(100%-4rem)]">
-            <h1 className="ml-[0.7rem] font-classico text-[calc(14.3rem*var(--type))] leading-[0.9]">
+            <h1
+              ref={titleRef}
+              className="ml-[0.7rem] max-w-[calc(100%-0.7rem)] overflow-hidden pt-[0.1em] font-classico text-[calc(14.3rem*var(--type))] leading-[1.05] whitespace-nowrap"
+            >
               {t.title}
             </h1>
             <div className="mt-[1.65rem] h-[0.2rem] bg-secondary" />

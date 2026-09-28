@@ -13,6 +13,7 @@ import {
 } from '@/data/site'
 import { nextClockChange, remainingParts } from '@/lib/dst'
 import { readLang, saveLang } from '@/lib/lang'
+import { useFitText } from '@/lib/useFitText'
 import { useFontsReady } from '@/lib/useFontsReady'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
@@ -30,7 +31,16 @@ const DRIFT_DELAY = SHRINK_MS * 0.3
 const DRIFT_MS = SHRINK_MS * 0.7
 
 const MENU_ITEM =
-  'font-classico block border-b-2 border-primary py-[1.4rem] text-[7.54rem] leading-[0.9] text-primary transition-colors duration-300 hover:text-secondary max-md:py-[calc(6*var(--m))] max-md:text-[calc(24*var(--m))]'
+  'font-classico block w-full overflow-hidden border-b-2 border-primary py-[1.4rem] text-[7.54rem] leading-[1.05] text-primary whitespace-nowrap transition-colors duration-300 hover:text-secondary max-md:py-[calc(6*var(--m))] max-md:text-[calc(24*var(--m))]'
+
+function FittedMenuLink({ href, label }: { href: string; label: string }) {
+  const ref = useFitText<HTMLAnchorElement>(0.5, label)
+  return (
+    <a ref={ref} href={href} className={MENU_ITEM}>
+      {label}
+    </a>
+  )
+}
 
 const M_TEXT = 'font-classico text-[calc(22.21*var(--m))] leading-[0.9]'
 const M_LINK = `${M_TEXT} self-start border-0 border-b-[0.7px] border-solid border-current bg-transparent p-0 pb-[calc(1.5*var(--m))] text-left`
@@ -277,9 +287,7 @@ export default function App() {
           <nav className="mt-[12rem] px-[5.3rem]">
             {TEXT_MENU.map((item) => (
               <Fragment key={item.id}>
-                <a href={asset(item.href)} className={MENU_ITEM}>
-                  {item.label[lang]}
-                </a>
+                <FittedMenuLink href={asset(item.href)} label={item.label[lang]} />
                 {item.id === 'o-festiwalu' ? (
                   <VideoPeek
                     variant="menu"
@@ -292,7 +300,7 @@ export default function App() {
             ))}
           </nav>
 
-          <p className="font-classico mx-auto mt-[22rem] mb-[19.3rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-primary">
+          <p className="font-classico mx-auto mt-[22rem] mb-[19.3rem] px-[6.55rem] text-center text-[4.8rem] leading-[0.9] text-primary max-md:mt-[calc(48*var(--m))] max-md:mb-[calc(36*var(--m))] max-md:px-[calc(16*var(--m))] max-md:text-[calc(24*var(--m))] max-md:leading-[1.1]">
             {t.followLead}
             <em className="font-palladio italic">{t.followLeadEm}</em>
             {t.followLeadEnd}
@@ -301,7 +309,7 @@ export default function App() {
               href={LINKS.instagram}
               target="_blank"
               rel="noreferrer noopener"
-              className="whitespace-nowrap"
+              className="whitespace-nowrap max-md:whitespace-normal"
             >
               {t.follow}
             </a>

@@ -1,4 +1,5 @@
 import type { Lang, ShapeItem } from '@/data/site'
+import { useFitText } from '@/lib/useFitText'
 import { useState } from 'react'
 
 function asset(path: string) {
@@ -8,6 +9,20 @@ function asset(path: string) {
 function stretchMask(item: ShapeItem) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${item.viewBox}" preserveAspectRatio="none"><path fill="white" d="${item.path}"/></svg>`
   return `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`
+}
+
+function TileLabel({ text, hover }: { text: string; hover: boolean }) {
+  const ref = useFitText<HTMLSpanElement>(0.4, text)
+  return (
+    <span
+      ref={ref}
+      className={`pointer-events-none absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center overflow-hidden text-center font-classico text-[3.2rem] leading-[1.1] text-[#EFE6D9] uppercase whitespace-nowrap drop-shadow-[0_0.2rem_1.2rem_rgba(0,0,0,0.55)] transition-opacity duration-300 ${
+        hover ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      {text}
+    </span>
+  )
 }
 
 function Tile({
@@ -105,13 +120,7 @@ function Tile({
           }}
         />
       ) : null}
-      <span
-        className={`pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-[1.6rem] text-center font-classico text-[3.2rem] leading-none text-[#EFE6D9] uppercase drop-shadow-[0_0.2rem_1.2rem_rgba(0,0,0,0.55)] transition-opacity duration-300 ${
-          hover ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        {item.label[lang]}
-      </span>
+      <TileLabel text={item.label[lang]} hover={hover} />
     </a>
   )
 }

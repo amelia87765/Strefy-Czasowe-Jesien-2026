@@ -1,6 +1,7 @@
 import { SUBPAGE_COLORS, type SubpageId } from '@/data/pages'
 import { TEXT_MENU, type Lang } from '@/data/site'
 import { readLang } from '@/lib/lang'
+import { useFitText } from '@/lib/useFitText'
 import { useFontsReady } from '@/lib/useFontsReady'
 import { useEffect, useState, type ReactNode } from 'react'
 
@@ -14,6 +15,7 @@ export function SubPage({ id, children }: Props) {
   const [lang] = useState(readLang)
   const { background, text } = SUBPAGE_COLORS[id]
   const title = TEXT_MENU.find((item) => item.id === id)?.label[lang] ?? ''
+  const titleRef = useFitText<HTMLHeadingElement>(0.5, title)
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -38,7 +40,12 @@ export function SubPage({ id, children }: Props) {
         }`}
       >
         <div className="mr-[5.3rem] ml-[25.6rem]">
-          <h1 className="font-classico text-[calc(14.3rem*var(--type))] leading-[0.9]">{title}</h1>
+          <h1
+            ref={titleRef}
+            className="w-full overflow-hidden pt-[0.1em] font-classico text-[calc(14.3rem*var(--type))] leading-[1.05] whitespace-nowrap"
+          >
+            {title}
+          </h1>
           <div className="mt-[1.6rem] h-[0.22rem] bg-current" />
         </div>
         {children ? (
