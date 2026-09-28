@@ -53,12 +53,12 @@
 :root {
   --frame: 172.8rem;
   --vw: 100vw;
-  --scale: min(var(--vw) / 1728px, 1);
+  --scale: min(calc(var(--vw) / 1728px), 1);
   --gutter: max(0px, calc((var(--vw) - min(var(--vw), 1728px)) / 2));
   /* Skala wszystkich napisów na podstronach (1 = rozmiary z projektu). */
   --type: 0.87;
   /* Piksel projektu mobilnego (iPhone 393 px), z górnym limitem dla większych ekranów. */
-  --m: min(var(--vw) / 393, 1.6px);
+  --m: min(calc(var(--vw) / 393), 1.6px);
 }
 
 @supports (width: 100svw) {
@@ -74,12 +74,17 @@
 }
 
 html {
-  font-size: calc(10px * var(--scale));
+  /* 10px, gdy szerokość ≥ 1728; niżej proporcjonalnie. min() dwóch długości,
+     bo Firefox odrzuca min(liczba, 1) i wtedy pada na domyślne 16px. */
+  font-size: 10px;
+  font-size: min(10px, calc(var(--vw, 100vw) / 172.8));
   overscroll-behavior-y: none;
+  overflow-x: hidden;
   overflow-x: clip;
   max-width: 100%;
   background: var(--color-ground);
   -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
@@ -105,6 +110,7 @@ body,
 
 body {
   margin: 0;
+  overflow-x: hidden;
   overflow-x: clip;
   background: #2c1d12;
   color: #efe6d9;
