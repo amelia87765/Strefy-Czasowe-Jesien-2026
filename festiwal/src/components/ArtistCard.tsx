@@ -131,7 +131,7 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
           <h2
             ref={nameRef}
             id={`artist-${current.id}`}
-            className="mt-[5.4rem] max-h-[1.8em] w-full overflow-hidden pt-[0.12em] font-classico text-[8.45rem] leading-[1.05] max-md:mt-[calc(12*var(--m))] max-md:pt-0 max-md:text-[calc(22*var(--m))]"
+            className="mt-[5.4rem] max-h-[2.3em] w-full overflow-hidden pt-[0.12em] font-classico text-[8.45rem] leading-[1.05] max-md:mt-[calc(12*var(--m))] max-md:max-h-[2.2em] max-md:pt-0 max-md:text-[calc(22*var(--m))]"
           >
             {current.name}
           </h2>
