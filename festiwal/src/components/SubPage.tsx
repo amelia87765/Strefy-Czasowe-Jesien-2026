@@ -19,7 +19,7 @@ export function SubPage({ id, children }: Props) {
 
   useEffect(() => {
     document.documentElement.lang = lang
-    document.title = `${title} — STREFY CZASOWE`
+    document.title = `${title} — STREFY CZASOWE 2026 (-1)`
     document.documentElement.style.background = background
     document.body.style.background = background
   }, [lang, title, background])

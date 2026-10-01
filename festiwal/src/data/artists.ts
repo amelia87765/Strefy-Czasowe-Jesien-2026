@@ -39,12 +39,12 @@ export const artistsCopy: Record<
     title: "ARTYŚCI",
     categories:
       "Kurator, Muzyka, Sztuki Wizualne, Węch, Dźwięk, Smak, Performance",
-    pageTitle: "ARTYŚCI — STREFY CZASOWE",
+    pageTitle: "ARTYŚCI — STREFY CZASOWE 2026 (-1)",
   },
   en: {
     title: "ARTISTS",
     categories: "Curator, Music, Visual Arts, Smell, Sound, Taste, Performance",
-    pageTitle: "ARTISTS — STREFY CZASOWE",
+    pageTitle: "ARTISTS — STREFY CZASOWE 2026 (-1)",
   },
 };
 

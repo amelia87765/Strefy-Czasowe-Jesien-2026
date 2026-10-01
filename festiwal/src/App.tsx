@@ -60,6 +60,7 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.lang = lang
+    document.title = 'STREFY CZASOWE 2026 (-1)'
     saveLang(lang)
   }, [lang])
 
