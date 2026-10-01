@@ -53,6 +53,7 @@ const PERFOCURATOR = { pl: "Perfokuratorka", en: "Curator and performer" };
 const VISUAL_ARTIST = { pl: "Artystka wizualna", en: "Visual artist" };
 const PERFORMER = { pl: "Performance", en: "Performance" };
 const DJ = { pl: "DJ SET", en: "DJ SET" };
+const AMBIENT_DJ = { pl: "Ambient DJ SET", en: "Ambient DJ SET" };
 const RENIA_BIO = {
   pl: [
     "Projektantka grafiki, artystka wizualna, kuratorka festiwalu STREFY CZASOWE. Głównymi obszarami jej zainteresowań są sztuka publiczna, detal architektoniczny, kształtowanie krajobrazu oraz identyfikacja wizualna miejsc. W Strefach wykorzystuje tę perspektywę, kładąc nacisk na lokalność i rolę przestrzeni w budowaniu narracji wydarzenia.",
@@ -106,11 +107,11 @@ const DIV4_BIO = {
 const MIROWSKA_BIO = {
   pl: [
     "Artystka wizualna, edukatorka, aktywistka. W swojej praktyce łączy fotografię, rzeźbę i grafikę, czerpiąc inspirację z badań naukowych i doświadczeń aktywistycznych. Tworzy spekulatywne struktury ochronne, organizmy i formy opieki, badając możliwości przyszłych przemian.",
-    "Interesują ją procesy podtrzymujące życie: adaptacja, regeneracja i ewolucja. Te procesy łączą jej praktykę z zimową odsłoną STREF - zapadaniem w produktywny letarg i przygotowaniem do kolejnego cyklu.",
+    "Interesują ją procesy podtrzymujące życie: adaptacja, regeneracja i ewolucja. Te procesy łączą jej praktykę z zimową odsłoną STREF CZASOWYCH - zapadaniem w produktywny letarg i przygotowaniem do kolejnego cyklu.",
   ],
   en: [
     "Visual artist, educator, activist. In her practice she combines photography, sculpture and graphics, drawing inspiration from scientific research and activist experiences. She creates speculative protective structures, organisms and forms of care, exploring the possibilities of future transformations.",
-    "She is interested in life-sustaining processes: adaptation, regeneration and evolution. These processes connect her practice with the winter edition of STREFY - hibernating into a productive lethargy and preparing for the next cycle.",
+    "She is interested in life-sustaining processes: adaptation, regeneration and evolution. These processes connect her practice with the winter edition of STREFY CZASOWE - hibernating into a productive lethargy and preparing for the next cycle.",
   ],
 };
 const STARAKIEWICZ_BIO = {
@@ -126,11 +127,31 @@ const STARAKIEWICZ_BIO = {
 const SLUSARCZYK_BIO = {
   pl: [
     "Artystka wizualna i rzeźbiarka. Swobodnie łączy rzeźbę, instalację i grafikę, poszukując świeżych środków wyrazu. Bawi się językiem i ciałem.",
-    "Na STREFACH zobaczymy jej pracę, w której ludzkie ciało spotyka się z ciałem maszyny, w niekonwencjonalnej odsłonie erotyki.",
+    "Na STREFACH CZASOWYCH zobaczymy jej pracę, w której ludzkie ciało spotyka się z ciałem maszyny, w niekonwencjonalnej odsłonie erotyki.",
   ],
   en: [
     "Visual artist and sculptress. She freely combines sculpture, installation and graphics, seeking fresh means of expression. She plays with language and the body.",
-    "At STREFY we will see her work, in which the human body meets the body of a machine, in an unconventional take on eroticism.",
+    "At STREFY CZASOWE we will see her work, in which the human body meets the body of a machine, in an unconventional take on eroticism.",
+  ],
+};
+const KOLODZIEJ_BIO = {
+  pl: [
+    "Artystka wizualna z Gdyni, absolwentka ASP w Warszawie. Projektuje sensoryczne doświadczenia inspirowane snami i procesami natury.",
+    "Na STREFACH CZASOWYCH zabierze nas do znajomego świata pełnego widm wyobrażonych istot.",
+  ],
+  en: [
+    "Visual artist from Gdynia, graduate of the Academy of Fine Arts in Warsaw. She designs sensory experiences inspired by dreams and natural processes.",
+    "At STREFY CZASOWE she will take us to a familiar world full of specters of imagined beings.",
+  ],
+};
+const VIOLANTE_BIO = {
+  pl: [
+    "Włoska DJ-ka i producentka, mieszkającą i pracującą w Sztokholmie, założycielka radia Internet Libero. Tworzy gęste pejzaże dźwiękowe, pełne nieoczekiwanych przejść i zwrotów.",
+    "W trakcie jej setów muzyka klubowa zamienia się w opowieść wysnutą z dźwięków, a DJ-ing w przestrzeń eksperymentu.",
+  ],
+  en: [
+    "She is an Italian, Stockholm-based DJ and producer, founder of Radio Internet Libero. She creates dense soundscapes filled with unexpected transitions and turns.",
+    "In her sets, club music unfolds into a story woven from sound, while DJing becomes a space for experimentation.",
   ],
 };
 export const ARTISTS: Artist[] = [
@@ -219,7 +240,29 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-5",
     description: SLUSARCZYK_BIO,
     instagram: "https://www.instagram.com/mimimimimimmimimm",
-    background: "var(--color-universal-brown)",
+    background: "var(--color-deep-forest)",
     text: "var(--color-periwinkle)",
+  },
+  {
+    id: "kolodziej",
+    name: "Zuzanna Kołodziej",
+    role: VISUAL_ARTIST,
+    photo: "festiwal_foto/artysci/kolodziej.jpg",
+    mask: "announcement-7",
+    description: KOLODZIEJ_BIO,
+    instagram: "https://www.instagram.com/vi.zuza",
+    background: "var(--color-secondary)",
+    text: "var(--color-deep-forest)",
+  },
+  {
+    id: "violante",
+    name: "Violante",
+    role: AMBIENT_DJ,
+    photo: "festiwal_foto/artysci/violante.jpg",
+    mask: "announcement-2",
+    description: VIOLANTE_BIO,
+    instagram: "https://www.instagram.com/violanteviolenta",
+    background: "var(--color-cream)",
+    text: "var(--color-true-black)",
   },
 ];
