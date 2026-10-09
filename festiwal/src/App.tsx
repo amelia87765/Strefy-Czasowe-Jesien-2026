@@ -354,16 +354,28 @@ export default function App() {
                 </a>
               </div>
             </div>
-            <div className="relative mt-[4.15rem] border-t border-[#2C1D12] pt-[4.15rem]">
-              <p className="font-classico text-[3.4rem] leading-[0.9]">{t.copyright}</p>
-              <a
-                href={asset(LINKS.terms)}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="absolute top-[4.15rem] right-0 font-classico text-[3.4rem] leading-[0.9]"
-              >
-                {t.terms}
-              </a>
+            <div className="mt-[4.15rem] border-t border-[#2C1D12] pt-[4.15rem]">
+              <div className="flex items-baseline justify-between gap-[2.4rem]">
+                <p className="font-classico text-[3.4rem] leading-[0.9]">{t.copyright}</p>
+                <div className="flex gap-x-[3.6rem]">
+                  <a
+                    className="font-classico text-[3.4rem] leading-[0.9]"
+                    href={asset(LINKS.terms)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {t.terms}
+                  </a>
+                  <a
+                    className="font-classico text-[3.4rem] leading-[0.9]"
+                    href={asset(LINKS.privacy)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {t.privacy}
+                  </a>
+                </div>
+              </div>
               <div className="mt-[3.2rem] flex items-start justify-between gap-[2.4rem]">
                 <p className="font-classico shrink-0 text-[3.3rem] leading-none">
                   <span className="whitespace-nowrap">{t.orgTitle}</span>
@@ -413,16 +425,17 @@ export default function App() {
               </a>
             </div>
 
-            <div className={`${M_TEXT} relative mt-[calc(40*var(--m))] text-periwinkle`}>
-              <p>{t.copyright}</p>
-              <a
-                href={asset(LINKS.terms)}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="absolute top-0 right-0 border-0 border-b-[0.7px] border-solid border-current pb-[calc(1.5*var(--m))]"
-              >
+            <div className="mt-[calc(28*var(--m))] flex flex-col items-start gap-[calc(10*var(--m))]">
+              <a className={M_LINK} href={asset(LINKS.terms)} target="_blank" rel="noreferrer noopener">
                 {t.terms}
               </a>
+              <a className={M_LINK} href={asset(LINKS.privacy)} target="_blank" rel="noreferrer noopener">
+                {t.privacy}
+              </a>
+            </div>
+
+            <div className={`${M_TEXT} mt-[calc(40*var(--m))] mb-[calc(28*var(--m))] text-periwinkle`}>
+              <p>{t.copyright}</p>
               <p className="mt-[calc(12*var(--m))] text-[calc(21.35*var(--m))] leading-none">
                 {t.orgTitle}
               </p>

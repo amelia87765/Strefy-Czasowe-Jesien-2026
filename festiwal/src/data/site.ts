@@ -7,6 +7,7 @@ export const LINKS = {
   facebook: "https://www.facebook.com/people/Strefy-Czasowe/61574732535976/",
   smoothSail: "https://www.instagram.com/smoothsail_pl",
   terms: "Regulamin-Strefy-Czasowe-24-pazdziernik-2026.pdf",
+  privacy: "politykaprywatnosci/",
 };
 
 export type Lang = "pl" | "en";
@@ -119,6 +120,7 @@ export const copy = {
     instagram: "Instagram",
     facebook: "Facebook",
     terms: "Regulamin",
+    privacy: "Polityka prywatności",
     copyright: "Ⓒ STREFY CZASOWE 2026",
     orgTitle: "Organizacja i Produkcja",
     orgName: "Smooth Sail",
@@ -151,7 +153,8 @@ export const copy = {
     email: "Email",
     instagram: "Instagram",
     facebook: "Facebook",
-    terms: "Regulamin",
+    terms: "Terms & Conditions",
+    privacy: "Privacy Policy",
     copyright: "Ⓒ STREFY CZASOWE 2026",
     orgTitle: "Organisation & Production",
     orgName: "Smooth Sail",
