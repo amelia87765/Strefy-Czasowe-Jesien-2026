@@ -10,6 +10,7 @@
     "lint": "oxlint",
     "media": "node scripts/media.mjs",
     "media:photos": "node scripts/media.mjs --photos",
+    "gallery": "node scripts/gallery.mjs",
     "masks": "node scripts/announcement-masks.mjs",
     "preview": "vite preview --port 4174"
   },

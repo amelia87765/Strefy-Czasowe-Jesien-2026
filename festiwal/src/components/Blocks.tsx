@@ -1,3 +1,4 @@
+import { Album } from "@/components/Album";
 import { FadeImg } from "@/components/FadeImg";
 import { GoingWidget } from "@/components/GoingWidget";
 import { ShopGallery } from "@/components/ShopGallery";
@@ -221,6 +222,8 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
       return <ShopGallery items={block.items} lang={lang} />;
     case "faq":
       return <Faq items={block.items} lang={lang} />;
+    case "album":
+      return <Album photos={block.photos} lang={lang} />;
   }
 }
 

@@ -1,29 +1,51 @@
 @import "tailwindcss";
 
-/* Kolory edycji. Zmiana tych dwóch wartości przestawia całą stronę.
+/* Paleta. Kolory edycji: zmiana primary/secondary przestawia całą stronę.
    Zima: #FF562C / #5C7FFF — Lato: #A4F782 / #FCA0EB */
+:root {
+  --palette-primary: #ff562c;
+  --palette-secondary: #5c7fff;
+  --palette-ground: #2c1d12; /*dark umber*/
+  --palette-cream: #efe6d9;
+  --palette-warm-taupe: #a99d88;
+  --palette-accent-pink: #fca0eb;
+  --palette-periwinkle: #98b5fc;
+  --palette-chartreuse: #ccc12c;
+  --palette-deep-plum: #2e202c;
+  --palette-deep-navy: #17212f;
+  --palette-amber-espresso: #3e2d14;
+  --palette-deep-forest: #172420;
+  --palette-universal-brown: #453b33;
+  --palette-true-black: #0d0b0a;
+  --palette-light-grey: #d3d3d3;
+  --palette-mocha: #6c665b;
+  --palette-sage-grey: #9ca3a0;
+}
+
+/* Kolory używane na stronie (klasy bg-*, text-*, var(--color-*)). W trybie wysokiego
+   kontrastu są podmieniane niżej, paleta zostaje bez zmian. */
 @theme {
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-classico: "URW Classico", Palatino, "Palatino Linotype", serif;
   --font-palladio: "URW Palladio", Palatino, "Palatino Linotype", serif;
   --font-hanken: "Hanken Grotesk", "Helvetica Neue", sans-serif;
-  --color-primary: #ff562c;
-  --color-secondary: #5c7fff;
-  --color-ground: #2c1d12; /*dark umber*/
-  --color-cream: #efe6d9;
-  --color-warm-taupe: #a99d88;
-  --color-accent-pink: #fca0eb;
-  --color-periwinkle: #98b5fc;
-  --color-chartreuse: #ccc12c;
-  --color-deep-plum: #2e202c;
-  --color-deep-navy: #17212f;
-  --color-amber-espresso: #3e2d14;
-  --color-deep-forest: #172420;
-  --color-universal-brown: #453b33;
-  --color-true-black: #0d0b0a;
-  --color-light-grey: #d3d3d3;
-  --color-mocha: #6c665b;
-  --color-sage-grey: #9ca3a0;
+  --color-primary: var(--palette-primary);
+  --color-secondary: var(--palette-secondary);
+  --color-ground: var(--palette-ground);
+  --color-cream: var(--palette-cream);
+  --color-warm-taupe: var(--palette-warm-taupe);
+  --color-accent-pink: var(--palette-accent-pink);
+  --color-periwinkle: var(--palette-periwinkle);
+  --color-chartreuse: var(--palette-chartreuse);
+  --color-deep-plum: var(--palette-deep-plum);
+  --color-deep-navy: var(--palette-deep-navy);
+  --color-amber-espresso: var(--palette-amber-espresso);
+  --color-deep-forest: var(--palette-deep-forest);
+  --color-universal-brown: var(--palette-universal-brown);
+  --color-true-black: var(--palette-true-black);
+  --color-light-grey: var(--palette-light-grey);
+  --color-mocha: var(--palette-mocha);
+  --color-sage-grey: var(--palette-sage-grey);
 }
 
 @font-face {
@@ -112,8 +134,8 @@ body {
   margin: 0;
   overflow-x: hidden;
   overflow-x: clip;
-  background: #2c1d12;
-  color: #efe6d9;
+  background: var(--color-ground);
+  color: var(--color-cream);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
@@ -133,4 +155,83 @@ i {
 ::selection {
   background: var(--color-primary);
   color: var(--color-ground);
+}
+
+/* Wysoki kontrast (przycisk z wiadrem farby albo systemowe „zwiększ kontrast”).
+   Każda para kolorów z palety to ciemny + jasny, więc ciemne → czerń, jasne → biel,
+   a kolor edycji → chartreuse. Wszystkie pary tekst/tło dają wtedy kontrast ≥ 11:1. */
+html[data-contrast="high"] {
+  --color-primary: var(--palette-chartreuse);
+  --color-secondary: #ffffff;
+  --color-cream: #ffffff;
+  --color-warm-taupe: #ffffff;
+  --color-accent-pink: #ffffff;
+  --color-periwinkle: #ffffff;
+  --color-chartreuse: #ffffff;
+  --color-light-grey: #ffffff;
+  --color-sage-grey: #ffffff;
+  --color-ground: #000000;
+  --color-deep-plum: #000000;
+  --color-deep-navy: #000000;
+  --color-amber-espresso: #000000;
+  --color-deep-forest: #000000;
+  --color-universal-brown: #000000;
+  --color-true-black: #000000;
+  --color-mocha: #000000;
+}
+
+/* Bąble ze zdjęciami (menu kształtów) zostają w oryginalnych kolorach. */
+html[data-contrast="high"] .contrast-keep {
+  --color-primary: var(--palette-primary);
+  --color-secondary: var(--palette-secondary);
+  --color-ground: var(--palette-ground);
+  --color-cream: var(--palette-cream);
+  --color-accent-pink: var(--palette-accent-pink);
+}
+
+/* Linie i przejścia kolorów w tle przecinają tekst. */
+html[data-contrast="high"] .line-field {
+  display: none;
+}
+html[data-contrast="high"] .contrast-flat {
+  background: var(--color-ground) !important;
+}
+
+/* Stopka ma jasne napisy na niebieskim; w kontraście: białe tło, czarny tekst i kreski. */
+html[data-contrast="high"] footer,
+html[data-contrast="high"] footer * {
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+html[data-contrast="high"] footer .bg-periwinkle {
+  background: #000000;
+}
+html[data-contrast="high"] footer a,
+html[data-contrast="high"] footer button {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* Przyciski PL/ENG i kontrastu na ciemnym tle dostają widoczną ramkę. */
+html[data-contrast="high"] .contrast-outline {
+  outline: 0.2rem solid currentColor;
+  outline-offset: -0.2rem;
+}
+html[data-contrast="high"] :focus-visible {
+  outline: 0.4rem solid var(--color-primary);
+  outline-offset: 0.4rem;
+}
+
+/* Bez rozmycia przy ładowaniu i bez powiększania miniatur. */
+html[data-contrast="high"] .blur-2xl {
+  filter: none;
+}
+html[data-contrast="high"] .group-hover\:scale-\[1\.04\] {
+  scale: none;
+}
+
+@media (forced-colors: active) {
+  .line-field {
+    display: none;
+  }
 }

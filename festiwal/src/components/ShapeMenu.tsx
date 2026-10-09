@@ -16,7 +16,7 @@ function TileLabel({ text, hover }: { text: string; hover: boolean }) {
   return (
     <span
       ref={ref}
-      className={`pointer-events-none absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center overflow-hidden text-center font-classico text-[3.2rem] leading-[1.1] text-[#EFE6D9] uppercase whitespace-nowrap drop-shadow-[0_0.2rem_1.2rem_rgba(0,0,0,0.55)] transition-opacity duration-300 ${
+      className={`pointer-events-none absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center overflow-hidden text-center font-classico text-[3.2rem] leading-[1.1] text-cream uppercase whitespace-nowrap drop-shadow-[0_0.2rem_1.2rem_rgba(0,0,0,0.55)] transition-opacity duration-300 ${
         hover ? 'opacity-100' : 'opacity-0'
       }`}
     >
@@ -172,7 +172,7 @@ export function ShapeMenu({
   lang: Lang
 }) {
   return (
-    <div className="flex flex-col gap-[8.8rem] px-[6.55rem] max-md:gap-[calc(16*var(--m))] max-md:px-[calc(16*var(--m))]">
+    <div className="contrast-keep flex flex-col gap-[8.8rem] px-[6.55rem] max-md:gap-[calc(16*var(--m))] max-md:px-[calc(16*var(--m))]">
       <Row
         items={row1}
         lang={lang}

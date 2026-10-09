@@ -6,7 +6,7 @@ export function LineField() {
       aria-hidden
       draggable={false}
       decoding="async"
-      className="pointer-events-none absolute inset-0 h-full w-full select-none"
+      className="line-field pointer-events-none absolute inset-0 h-full w-full select-none"
     />
   )
 }

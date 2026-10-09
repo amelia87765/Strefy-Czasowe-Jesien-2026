@@ -39,10 +39,10 @@ export function CalendarBar({ lang }: { lang: Lang }) {
                   className="calendar-edition-logo pointer-events-none h-[4.65rem] w-auto drop-shadow md:absolute md:bottom-[5.4rem] md:-translate-x-[4rem]"
                 />
               ) : null}
-              <span className="font-classico text-[4.18rem] leading-none text-[#EFE6D9] max-md:hidden">
+              <span className="font-classico text-[4.18rem] leading-none text-cream max-md:hidden">
                 {month[lang]}
               </span>
-              <span className="hidden font-classico text-[calc(14*var(--m))] leading-none text-[#EFE6D9] max-md:block">
+              <span className="hidden font-classico text-[calc(14*var(--m))] leading-none text-cream max-md:block">
                 {named ? month[lang] : '•'}
               </span>
             </span>

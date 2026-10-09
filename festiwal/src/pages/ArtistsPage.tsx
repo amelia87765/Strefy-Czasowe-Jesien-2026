@@ -1,5 +1,6 @@
 import { ArtistCard } from '@/components/ArtistCard'
 import { ArtistPhoto } from '@/components/ArtistPhoto'
+import { CORNER_TOGGLE, ContrastToggle } from '@/components/ContrastToggle'
 import { LineField } from '@/components/LineField'
 import { ARTISTS, artistsCopy, type Artist } from '@/data/artists'
 import { readLang } from '@/lib/lang'
@@ -93,7 +94,7 @@ export default function ArtistsPage() {
   return (
     <div className="relative min-h-svh overflow-x-clip text-secondary">
       <div
-        className="pointer-events-none absolute inset-0 min-h-svh"
+        className="contrast-flat pointer-events-none absolute inset-0 min-h-svh"
         style={{
           background:
             'linear-gradient(180deg, var(--color-ground) 60.1%, var(--color-primary) 100%)',
@@ -108,6 +109,7 @@ export default function ArtistsPage() {
       >
         STREFY CZASOWE
       </a>
+      <ContrastToggle lang={lang} className={CORNER_TOGGLE} />
 
       <div
         className={`relative min-h-svh transition-[filter] duration-700 ${ready ? 'blur-none' : 'blur-2xl'}`}

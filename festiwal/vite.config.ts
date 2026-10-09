@@ -32,6 +32,7 @@ export default defineConfig({
         sklep: fileURLToPath(new URL('./sklep/index.html', import.meta.url)),
         wolontariusze: fileURLToPath(new URL('./wolontariusze/index.html', import.meta.url)),
         faq: fileURLToPath(new URL('./faq/index.html', import.meta.url)),
+        galeria: fileURLToPath(new URL('./galeria/index.html', import.meta.url)),
       },
     },
   },

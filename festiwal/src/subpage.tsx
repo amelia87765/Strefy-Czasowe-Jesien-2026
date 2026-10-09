@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { Blocks } from './components/Blocks.tsx'
 import { SubPage } from './components/SubPage.tsx'
 import { FAQ_SECTIONS } from './data/faq.ts'
+import { GALLERY } from './data/gallery.generated.ts'
 import {
   ABOUT_SECTIONS,
   SHOP_SECTIONS,
@@ -19,6 +20,13 @@ const SECTIONS: Record<SubpageId, Section[]> = {
   sklep: SHOP_SECTIONS,
   wolontariusze: VOLUNTEERS_SECTIONS,
   faq: FAQ_SECTIONS,
+  galeria: [
+    [
+      GALLERY.length
+        ? { type: 'album', photos: GALLERY }
+        : { type: 'text', paragraphs: { pl: ['Zdjęcia już wkrótce.'], en: ['Photos coming soon.'] } },
+    ],
+  ],
 }
 
 const root = document.getElementById('root')

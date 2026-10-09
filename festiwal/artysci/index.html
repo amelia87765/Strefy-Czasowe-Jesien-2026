@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <script>
       document.documentElement.style.setProperty('--vw', window.innerWidth + 'px')
+      try {
+        var contrast = localStorage.getItem('strefy-contrast')
+        if (contrast === '1' || (contrast === null && matchMedia('(prefers-contrast: more)').matches))
+          document.documentElement.dataset.contrast = 'high'
+      } catch (e) {}
     </script>
     <title>ARTYŚCI — STREFY CZASOWE 2026 (-1)</title>
     <meta

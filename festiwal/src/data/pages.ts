@@ -1,6 +1,11 @@
 import { LINKS, type Lang } from "@/data/site";
 
-export type SubpageId = "o-festiwalu" | "sklep" | "wolontariusze" | "faq";
+export type SubpageId =
+  | "o-festiwalu"
+  | "sklep"
+  | "wolontariusze"
+  | "faq"
+  | "galeria";
 
 /** Kolory jednolitych podstron: tło i tekst (tytuł, kreski, treść). */
 export const SUBPAGE_COLORS: Record<
@@ -11,9 +16,22 @@ export const SUBPAGE_COLORS: Record<
     background: "var(--color-primary)",
     text: "var(--color-ground)",
   },
-  sklep: { background: "#98B5FC", text: "#2C1D12" },
-  wolontariusze: { background: "#453B33", text: "#D3D3D3" },
-  faq: { background: "#2E202C", text: "#EFE6D9" },
+  sklep: {
+    background: "var(--color-periwinkle)",
+    text: "var(--color-ground)",
+  },
+  wolontariusze: {
+    background: "var(--color-universal-brown)",
+    text: "var(--color-light-grey)",
+  },
+  faq: {
+    background: "var(--color-deep-plum)",
+    text: "var(--color-cream)",
+  },
+  galeria: {
+    background: "var(--color-deep-navy)",
+    text: "var(--color-cream)",
+  },
 };
 
 export type Text = Record<Lang, string>;
@@ -44,7 +62,12 @@ export type Block =
   /** `width` to szerokość elipsy w rem (1 rem = 10 px przy 1728 px), wysokość jest wspólna. */
   | { type: "photos"; photos: { src: string; width: number; alt: Text }[] }
   /** Pusty `href` wyświetla sam tekst bez linku. */
-  | { type: "links"; links: { label: Text; href: string }[] };
+  | { type: "links"; links: { label: Text; href: string }[] }
+  /** Siatka zdjęć z podglądem po kliknięciu. Dane z `npm run gallery`. */
+  | { type: "album"; photos: AlbumPhoto[] };
+
+/** `src` bez końcówki: pliki to `${src}-480.webp`, `${src}-960.webp`, `${src}-full.webp`. */
+export type AlbumPhoto = { src: string; width: number; height: number };
 
 export type GalleryItem = {
   id: string;

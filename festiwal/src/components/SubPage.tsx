@@ -1,3 +1,4 @@
+import { CORNER_TOGGLE, ContrastToggle } from '@/components/ContrastToggle'
 import { SUBPAGE_COLORS, type SubpageId } from '@/data/pages'
 import { TEXT_MENU, type Lang } from '@/data/site'
 import { readLang } from '@/lib/lang'
@@ -33,6 +34,7 @@ export function SubPage({ id, children }: Props) {
       >
         STREFY CZASOWE
       </a>
+      <ContrastToggle lang={lang} className={CORNER_TOGGLE} />
 
       <main
         className={`page-frame relative pt-[15.32rem] pb-[20rem] transition-[filter] duration-700 max-md:pt-[calc(56*var(--m))] ${

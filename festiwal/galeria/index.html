@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script>
+      document.documentElement.style.setProperty('--vw', window.innerWidth + 'px')
+      try {
+        var contrast = localStorage.getItem('strefy-contrast')
+        if (contrast === '1' || (contrast === null && matchMedia('(prefers-contrast: more)').matches))
+          document.documentElement.dataset.contrast = 'high'
+      } catch (e) {}
+    </script>
+    <title>GALERIA — STREFY CZASOWE 2026 (-1)</title>
+    <meta name="description" content="Strefy Czasowe — zdjęcia z poprzednich edycji festiwalu." />
+    <link rel="canonical" href="https://smoothsail.pl/strefyczasowe/galeria/" />
+    <link rel="image_src" href="https://smoothsail.pl/strefyczasowe/og-image.png?v=2" />
+    <meta name="robots" content="index, follow, noai, noimageai" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="STREFY CZASOWE 2026 (-1)" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:url" content="https://smoothsail.pl/strefyczasowe/galeria/" />
+    <meta property="og:title" content="GALERIA — STREFY CZASOWE 2026 (-1)" />
+    <meta property="og:description" content="Strefy Czasowe — zdjęcia z poprzednich edycji festiwalu." />
+    <meta property="og:image" content="https://smoothsail.pl/strefyczasowe/og-image.png?v=2" />
+    <meta property="og:image:secure_url" content="https://smoothsail.pl/strefyczasowe/og-image.png?v=2" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="2248" />
+    <meta property="og:image:height" content="1159" />
+    <meta property="og:image:alt" content="STREFY CZASOWE 2026 (-1)" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GALERIA — STREFY CZASOWE 2026 (-1)" />
+    <meta name="twitter:description" content="Strefy Czasowe — zdjęcia z poprzednich edycji festiwalu." />
+    <meta name="twitter:image" content="https://smoothsail.pl/strefyczasowe/og-image.png?v=2" />
+  </head>
+  <body data-page="galeria">
+    <div id="root"></div>
+    <script type="module" src="/src/subpage.tsx"></script>
+  </body>
+</html>

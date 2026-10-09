@@ -4,15 +4,19 @@ type Props = {
   src: string
   alt: string
   fit?: 'cover' | 'contain'
+  srcSet?: string
+  sizes?: string
 }
 
 /** Zdjęcie pojawia się dopiero po pełnym załadowaniu i zdekodowaniu. */
-export function FadeImg({ src, alt, fit = 'cover' }: Props) {
+export function FadeImg({ src, alt, fit = 'cover', srcSet, sizes }: Props) {
   const [shown, setShown] = useState(false)
 
   return (
     <img
       src={src}
+      srcSet={srcSet}
+      sizes={sizes}
       alt={alt}
       loading="lazy"
       decoding="async"

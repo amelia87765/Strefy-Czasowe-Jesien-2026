@@ -2,6 +2,7 @@ import { LineField } from '@/components/LineField'
 import { ShapeMenu } from '@/components/ShapeMenu'
 import { VideoPeek } from '@/components/VideoPeek'
 import { CalendarBar } from '@/components/CalendarBar'
+import { ContrastToggle } from '@/components/ContrastToggle'
 import {
   LINKS,
   SHAPE_ROW_1,
@@ -190,12 +191,12 @@ export default function App() {
 
   return (
     <div
-      className={`relative min-h-svh overflow-x-clip bg-ground text-[#EFE6D9] transition-[filter] duration-700 ${
+      className={`relative min-h-svh overflow-x-clip bg-ground text-cream transition-[filter] duration-700 ${
         ready ? 'blur-none' : 'blur-2xl'
       }`}
     >
       <div
-        className="pointer-events-none absolute inset-0"
+        className="contrast-flat pointer-events-none absolute inset-0"
         style={{
           background:
             'linear-gradient(180deg, var(--color-ground) 71.16%, var(--color-primary) 100%)',
@@ -230,9 +231,13 @@ export default function App() {
             <LangButton active={lang === 'pl'} onClick={() => setLang('pl')}>
               PL
             </LangButton>
+            <ContrastToggle
+              lang={lang}
+              className="h-[4.18rem] w-[4.18rem] rounded-[1.17rem] bg-amber-espresso text-warm-taupe aria-pressed:bg-warm-taupe aria-pressed:text-amber-espresso max-md:h-[calc(36*var(--m))] max-md:w-[calc(36*var(--m))] max-md:rounded-[calc(9*var(--m))]"
+            />
           </div>
           <h1
-            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left text-[23.4rem] leading-[0.9] text-[#EFE6D9] will-change-transform max-md:top-[calc(14*var(--m))] max-md:left-[calc(16*var(--m))] max-md:max-w-[calc(100%-32px)] max-md:text-[calc(42*var(--m))]"
+            className="font-classico pointer-events-none fixed top-[6.3rem] left-[calc(var(--gutter)+6.55rem)] z-20 max-w-[113rem] origin-top-left text-[23.4rem] leading-[0.9] text-cream will-change-transform max-md:top-[calc(14*var(--m))] max-md:left-[calc(16*var(--m))] max-md:max-w-[calc(100%-32px)] max-md:text-[calc(42*var(--m))]"
             style={{
               transform: compact ? `scale(${TITLE_SCALE})` : 'scale(1)',
               opacity: compact ? 0 : 1,
@@ -269,17 +274,17 @@ export default function App() {
               href={TICKETS_URL || undefined}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-primary px-[1.22rem] text-[2.14rem] leading-none text-[#17212F] max-md:h-[calc(42*var(--m))] max-md:min-w-0 max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:text-[calc(18*var(--m))]"
+              className="font-hanken inline-flex h-[4.18rem] min-w-[9.14rem] items-center justify-center rounded-[1.17rem] bg-primary px-[1.22rem] text-[2.14rem] leading-none text-deep-navy max-md:h-[calc(42*var(--m))] max-md:min-w-0 max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:text-[calc(18*var(--m))]"
             >
               {t.tickets}
             </a>
-            <div className="font-hanken inline-flex h-[4.18rem] min-w-0 items-center gap-[2.75rem] rounded-[1.17rem] bg-[#3E2D14] px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe max-md:h-auto max-md:min-h-[calc(42*var(--m))] max-md:flex-wrap max-md:gap-[calc(8*var(--m))] max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:py-[calc(10*var(--m))] max-md:text-[calc(18*var(--m))] max-md:text-cream">
+            <div className="font-hanken inline-flex h-[4.18rem] min-w-0 items-center gap-[2.75rem] rounded-[1.17rem] bg-amber-espresso px-[1.22rem] text-[2.14rem] leading-none text-warm-taupe max-md:h-auto max-md:min-h-[calc(42*var(--m))] max-md:flex-wrap max-md:gap-[calc(8*var(--m))] max-md:rounded-[calc(10*var(--m))] max-md:px-[calc(16*var(--m))] max-md:py-[calc(10*var(--m))] max-md:text-[calc(18*var(--m))] max-md:text-cream">
               <span>{t.date}</span>
               <span>{t.venue}</span>
             </div>
           </section>
 
-          <div className="mx-[6.55rem] mt-[2.4rem] border-t-2 border-[#EFE6D9] max-md:mx-[calc(16*var(--m))]" />
+          <div className="mx-[6.55rem] mt-[2.4rem] border-t-2 border-cream max-md:mx-[calc(16*var(--m))]" />
 
           <div className="mt-[12rem] max-md:mt-[calc(28*var(--m))]">
             <ShapeMenu row1={SHAPE_ROW_1} row2={SHAPE_ROW_2} lang={lang} />
@@ -330,7 +335,7 @@ export default function App() {
                   ) : null}
                   <button
                     type="button"
-                    className="font-classico border-0 bg-transparent p-0 text-[3.4rem] leading-[0.9] text-[#2C1D12]"
+                    className="font-classico border-0 bg-transparent p-0 text-[3.4rem] leading-[0.9] text-ground"
                     onClick={() => setEmailShown(true)}
                   >
                     {t.email}
@@ -354,7 +359,7 @@ export default function App() {
                 </a>
               </div>
             </div>
-            <div className="mt-[4.15rem] border-t border-[#2C1D12] pt-[4.15rem]">
+            <div className="mt-[4.15rem] border-t border-ground pt-[4.15rem]">
               <div className="flex items-baseline justify-between gap-[2.4rem]">
                 <p className="font-classico text-[3.4rem] leading-[0.9]">{t.copyright}</p>
                 <div className="flex gap-x-[3.6rem]">
@@ -482,7 +487,7 @@ function LangButton({
     <button
       type="button"
       onClick={onClick}
-      className={`font-hanken h-[4.18rem] min-w-[9.14rem] cursor-pointer rounded-[1.17rem] px-[1.2rem] text-[2.14rem] max-md:h-[calc(36*var(--m))] max-md:min-w-[calc(56*var(--m))] max-md:rounded-[calc(9*var(--m))] max-md:px-[calc(12*var(--m))] max-md:text-[calc(16*var(--m))] ${
+      className={`contrast-outline font-hanken h-[4.18rem] min-w-[9.14rem] cursor-pointer rounded-[1.17rem] px-[1.2rem] text-[2.14rem] max-md:h-[calc(36*var(--m))] max-md:min-w-[calc(56*var(--m))] max-md:rounded-[calc(9*var(--m))] max-md:px-[calc(12*var(--m))] max-md:text-[calc(16*var(--m))] ${
         active ? 'bg-warm-taupe text-amber-espresso' : 'bg-amber-espresso text-warm-taupe'
       }`}
     >

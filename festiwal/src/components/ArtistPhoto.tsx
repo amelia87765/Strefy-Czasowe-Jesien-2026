@@ -31,7 +31,7 @@ type ShapeProps = {
 export function ShapePhoto({ src, alt, mask, className, radius, fit }: ShapeProps) {
   return (
     <div
-      className={`relative shrink-0 overflow-hidden bg-[#46351C] ${className}`}
+      className={`relative shrink-0 overflow-hidden bg-amber-espresso ${className}`}
       style={shapeStyle(mask, radius)}
     >
       <FadeImg src={asset(src)} alt={alt} fit={fit} />

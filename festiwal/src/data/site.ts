@@ -83,7 +83,14 @@ export const SHAPE_ROW_2: ShapeItem[] = [
   },
 ];
 
-export const TEXT_MENU = [...SHAPE_ROW_1, ...SHAPE_ROW_2];
+export type MenuItem = Pick<ShapeItem, "id" | "href" | "label">;
+
+/** Menu tekstowe: kafelki kształtów plus pozycje, które nie mają kafelka. */
+export const TEXT_MENU: MenuItem[] = [
+  ...SHAPE_ROW_1,
+  ...SHAPE_ROW_2,
+  { id: "galeria", href: "galeria/", label: { pl: "GALERIA", en: "GALLERY" } },
+];
 
 export const MONTHS: { id: string; pl: string; en: string }[] = [
   { id: "wrz", pl: "WRZ", en: "SEP" },

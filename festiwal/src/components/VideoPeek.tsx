@@ -175,7 +175,7 @@ export function VideoPeek({
           <span>{caption}</span>
           <div
             ref={thumbRef}
-            className="relative w-[calc(140*var(--m))] aspect-video overflow-hidden rounded-[calc(8*var(--m))] bg-[#3E2D14]"
+            className="relative w-[calc(140*var(--m))] aspect-video overflow-hidden rounded-[calc(8*var(--m))] bg-amber-espresso"
           >
             {loopVideo}
           </div>
@@ -184,7 +184,7 @@ export function VideoPeek({
         <>
           <div
             ref={thumbRef}
-            className="relative h-[9.18rem] w-[14.2rem] shrink-0 cursor-pointer overflow-hidden rounded-[1.7rem] bg-[#3E2D14]"
+            className="relative h-[9.18rem] w-[14.2rem] shrink-0 cursor-pointer overflow-hidden rounded-[1.7rem] bg-amber-espresso"
             onMouseEnter={openFromThumb}
             onClick={openFromThumb}
           >
@@ -198,7 +198,7 @@ export function VideoPeek({
       {open && box
         ? createPortal(
             <div
-              className="fixed z-[400] overflow-hidden bg-[#3E2D14] shadow-[0_2.4rem_8rem_rgba(0,0,0,0.45)]"
+              className="fixed z-[400] overflow-hidden bg-amber-espresso shadow-[0_2.4rem_8rem_rgba(0,0,0,0.45)]"
               onPointerDown={() => {
                 const video = fullRef.current
                 if (video?.muted) playWithSound(video)
@@ -258,7 +258,7 @@ export function VideoPeek({
               {expanded ? (
                 <button
                   type="button"
-                  className="absolute top-[2rem] right-[2rem] z-[410] flex h-[4.8rem] w-[4.8rem] cursor-pointer items-center justify-center border-0 bg-transparent p-0 font-hanken text-[3.6rem] leading-none text-[#EFE6D9] drop-shadow-[0_0.2rem_1.2rem_rgba(0,0,0,0.65)]"
+                  className="absolute top-[2rem] right-[2rem] z-[410] flex h-[4.8rem] w-[4.8rem] cursor-pointer items-center justify-center border-0 bg-transparent p-0 font-hanken text-[3.6rem] leading-none text-cream drop-shadow-[0_0.2rem_1.2rem_rgba(0,0,0,0.65)]"
                   aria-label="Close"
                   onClick={() => closeRef.current()}
                 >
