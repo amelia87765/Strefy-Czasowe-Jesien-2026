@@ -162,22 +162,22 @@ i {
    a kolor edycji → chartreuse. Wszystkie pary tekst/tło dają wtedy kontrast ≥ 11:1. */
 html[data-contrast="high"] {
   --color-primary: var(--palette-chartreuse);
-  --color-secondary: #ffffff;
-  --color-cream: #ffffff;
-  --color-warm-taupe: #ffffff;
-  --color-accent-pink: #ffffff;
-  --color-periwinkle: #ffffff;
-  --color-chartreuse: #ffffff;
-  --color-light-grey: #ffffff;
-  --color-sage-grey: #ffffff;
-  --color-ground: #000000;
-  --color-deep-plum: #000000;
-  --color-deep-navy: #000000;
-  --color-amber-espresso: #000000;
-  --color-deep-forest: #000000;
-  --color-universal-brown: #000000;
-  --color-true-black: #000000;
-  --color-mocha: #000000;
+  --color-secondary: var(--palette-cream);
+  --color-cream: var(--palette-cream);
+  --color-warm-taupe: var(--palette-cream);
+  --color-accent-pink: var(--palette-cream);
+  --color-periwinkle: var(--palette-cream);
+  --color-chartreuse: var(--palette-cream);
+  --color-light-grey: var(--palette-cream);
+  --color-sage-grey: var(--palette-cream);
+  --color-ground: var(--palette-true-black);
+  --color-deep-plum: var(--palette-true-black);
+  --color-deep-navy: var(--palette-true-black);
+  --color-amber-espresso: var(--palette-true-black);
+  --color-deep-forest: var(--palette-true-black);
+  --color-universal-brown: var(--palette-true-black);
+  --color-true-black: var(--palette-true-black);
+  --color-mocha: var(--palette-true-black);
 }
 
 /* Bąble ze zdjęciami (menu kształtów) zostają w oryginalnych kolorach. */
@@ -200,11 +200,11 @@ html[data-contrast="high"] .contrast-flat {
 /* Stopka ma jasne napisy na niebieskim; w kontraście: białe tło, czarny tekst i kreski. */
 html[data-contrast="high"] footer,
 html[data-contrast="high"] footer * {
-  color: #000000 !important;
-  border-color: #000000 !important;
+  color: var(--palette-true-black) !important;
+  border-color: var(--palette-true-black) !important;
 }
 html[data-contrast="high"] footer .bg-periwinkle {
-  background: #000000;
+  background: var(--palette-true-black);
 }
 html[data-contrast="high"] footer a,
 html[data-contrast="high"] footer button {
