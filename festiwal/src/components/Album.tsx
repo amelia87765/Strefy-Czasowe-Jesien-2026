@@ -151,7 +151,7 @@ function Lightbox({
   if (shown === null) return null
   const photo = photos[shown]
   const arrow =
-    'absolute top-1/2 flex h-[6.4rem] w-[6.4rem] -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-0 bg-true-black/45 p-0 text-cream backdrop-blur-[1rem] transition-colors hover:bg-true-black/70 max-md:h-[calc(40*var(--m))] max-md:w-[calc(40*var(--m))]'
+    'absolute top-1/2 flex h-[6.4rem] w-[6.4rem] -translate-y-1/2 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-cream opacity-75 drop-shadow-[0_0_0.6rem_rgb(0_0_0/0.6)] transition-opacity hover:opacity-100 max-md:h-[calc(40*var(--m))] max-md:w-[calc(40*var(--m))]'
 
   return createPortal(
     <div
@@ -241,7 +241,7 @@ function Chevron({ direction }: { direction: 'left' | 'right' }) {
         d={direction === 'left' ? 'M15 4l-8 8 8 8' : 'M9 4l8 8-8 8'}
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="1.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

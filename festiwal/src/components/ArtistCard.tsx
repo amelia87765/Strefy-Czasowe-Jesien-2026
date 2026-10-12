@@ -27,7 +27,19 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
   closeRef.current = onClose
   const fitKey = `${current?.id ?? ''}-${lang}`
   const nameRef = useFitText<HTMLHeadingElement>(0.5, fitKey)
-  const descriptionRef = useFitText<HTMLDivElement>(0.55, fitKey)
+  const descriptionRef = useRef<HTMLDivElement>(null)
+  const [more, setMore] = useState(false)
+  const checkMore = () => {
+    const el = descriptionRef.current
+    setMore(!!el && el.scrollTop + el.clientHeight < el.scrollHeight - 2)
+  }
+
+  useLayoutEffect(() => {
+    checkMore()
+    void document.fonts.ready.then(checkMore)
+    window.addEventListener('resize', checkMore)
+    return () => window.removeEventListener('resize', checkMore)
+  }, [fitKey])
 
   useEffect(() => {
     if (artist) {
@@ -142,21 +154,29 @@ export function ArtistCard({ artist, lang, onClose }: Props) {
 
         <div className="absolute top-[6.5rem] right-[7.9rem] bottom-[10.8rem] left-[58.89rem] flex flex-col max-md:static max-md:mt-[calc(14*var(--m))] max-md:min-h-0 max-md:flex-1 max-md:w-full">
           <div
+            key={fitKey}
             ref={descriptionRef}
-            className="mb-[3rem] flex min-h-0 flex-1 flex-col gap-[0.9em] overflow-hidden font-classico text-[3.6rem] leading-[0.9] max-md:mb-[calc(14*var(--m))] max-md:text-[calc(17*var(--m))] max-md:leading-[1.05]"
+            onScroll={checkMore}
+            className={`artist-scroll ${more ? 'artist-scroll-more' : ''} mb-[3rem] flex min-h-0 flex-1 flex-col gap-[0.9em] overflow-y-auto overscroll-contain pr-[1.6rem] font-classico max-md:pr-[calc(6*var(--m))] text-[3.6rem] leading-[0.9] max-md:mb-[calc(14*var(--m))] max-md:text-[calc(17*var(--m))] max-md:leading-[1.05]`}
           >
             {current.description[lang].map((paragraph, index) => (
               <p key={index}>{fixOrphans(paragraph)}</p>
             ))}
           </div>
-          <a
-            href={current.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-[25.8rem] shrink-0 border-b border-current pb-[1.3rem] font-hanken text-[4rem] leading-[0.9] transition-opacity hover:opacity-70 max-md:w-auto max-md:pb-[calc(6*var(--m))] max-md:text-[calc(15*var(--m))]"
-          >
-            INSTAGRAM
-          </a>
+          <div className="flex shrink-0 gap-[3.2rem] max-md:gap-[calc(16*var(--m))]">
+            {[current.instagram, current.instagram2].filter(Boolean).map((href) => (
+              <a
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={href?.replace(/^https?:\/\/(www\.)?instagram\.com\//, '@').replace(/\/$/, '')}
+                className="w-[25.8rem] shrink-0 border-b border-current pb-[1.3rem] font-hanken text-[4rem] leading-[0.9] transition-opacity hover:opacity-70 max-md:w-auto max-md:pb-[calc(6*var(--m))] max-md:text-[calc(15*var(--m))]"
+              >
+                INSTAGRAM
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>

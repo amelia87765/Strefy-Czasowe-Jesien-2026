@@ -16,6 +16,7 @@
     "dev:internal": "npm run dev -w internal",
     "build:sociale": "npm run build -w sociale",
     "build:festiwal": "npm run build -w festiwal",
+    "gallery:festiwal": "npm run gallery -w festiwal",
     "build:internal": "npm run build -w internal",
     "export:sociale": "npm run export -w sociale",
     "export:festiwal": "npm run export -w festiwal",

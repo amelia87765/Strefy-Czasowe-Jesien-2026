@@ -157,6 +157,23 @@ i {
   color: var(--color-ground);
 }
 
+/* Długi opis artysty przewija się w karcie; cienki pasek w kolorze tekstu,
+   a dolna krawędź wygasa, dopóki niżej jest jeszcze tekst. */
+.artist-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 45%, transparent) transparent;
+}
+.artist-scroll::-webkit-scrollbar {
+  width: 0.4rem;
+}
+.artist-scroll::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background: color-mix(in srgb, currentColor 45%, transparent);
+}
+.artist-scroll-more {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5em), transparent);
+}
+
 /* Wysoki kontrast (przycisk z wiadrem farby albo systemowe „zwiększ kontrast”).
    Każda para kolorów z palety to ciemny + jasny, więc ciemne → czerń, jasne → biel,
    a kolor edycji → chartreuse. Wszystkie pary tekst/tło dają wtedy kontrast ≥ 11:1. */

@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, statSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import ffmpeg from 'ffmpeg-static'
@@ -35,9 +35,20 @@ const photos = PHOTO_DIRS.flatMap((dir) => {
     return []
   }
 })
+/**
+ * Gotowe zdjęcie przerabia się tylko, gdy go brakuje albo oryginał w `media/` jest nowszy.
+ * Ręcznie poprawione pliki w `public/festiwal_foto/` są nowsze od oryginału, więc zostają.
+ * `--force` przerabia wszystko od nowa.
+ */
+const force = process.argv.includes('--force')
+let skipped = 0
 for (const name of photos) {
   const file = path.basename(name).replace(PHOTO_EXT, '.jpg').toLowerCase()
   const target = path.join(out, path.dirname(name), file)
+  if (!force && existsSync(target) && statSync(target).mtimeMs >= statSync(path.join(src, name)).mtimeMs) {
+    skipped++
+    continue
+  }
   mkdirSync(path.dirname(target), { recursive: true })
   run([
     '-i',
@@ -50,6 +61,7 @@ for (const name of photos) {
   ])
   console.log(`${name} -> ${path.basename(target)} ${mb(target)}`)
 }
+if (skipped) console.log(`Pominięte (bez zmian lub poprawione ręcznie): ${skipped}. Wszystko od nowa: --force`)
 
 const source = path.join(src, VIDEO)
 if (process.argv.includes('--photos')) {

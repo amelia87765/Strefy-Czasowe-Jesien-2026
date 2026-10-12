@@ -25,6 +25,8 @@ export type Artist = {
   /** Każdy element to osobny akapit. */
   description: Record<Lang, string[]>;
   instagram: string;
+  /** Tylko dla duetów: drugi link, pokazywany obok pierwszego z tym samym podpisem. */
+  instagram2?: string;
   /** Tło podpisu i planszy. */
   background: string;
   /** Kolor tekstu podpisu i planszy. */
@@ -311,8 +313,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-6",
     description: PHAZ_BIO,
     instagram: "https://www.instagram.com/3phaz_",
-    background: "",
-    text: "",
+    background: "var(--color-primary)",
+    text: "var(--color-deep-navy)",
   },
   {
     id: "lds",
@@ -322,8 +324,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-2",
     description: LDS_BIO,
     instagram: "https://www.instagram.com/lds_luca",
-    background: "",
-    text: "",
+    background: "var(--color-periwinkle)",
+    text: "var(--color-deep-navy)",
   },
   {
     id: "irena",
@@ -333,8 +335,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-2",
     description: IRENA_BIO,
     instagram: "https://www.instagram.com/aleksandra__banas",
-    background: "",
-    text: "",
+    background: "var(--color-secondary)",
+    text: "var(--color-true-black)",
   },
   {
     id: "wkrsc",
@@ -344,8 +346,9 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-5",
     description: WKRSC_BIO,
     instagram: "https://www.instagram.com/wkrsc.live",
-    background: "",
-    text: "",
+    instagram2: "https://www.instagram.com/miile__p",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-light-grey)",
   },
   {
     id: "gosha",
@@ -355,8 +358,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-1",
     description: GOSHA_BIO,
     instagram: "https://www.instagram.com/goshasavage",
-    background: "",
-    text: "",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-light-grey)",
   },
   {
     id: "renia-maj",
@@ -443,8 +446,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-7",
     description: AE_BIO,
     instagram: "https://www.instagram.com/ae62___",
-    background: "",
-    text: "",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-cream)",
   },
   {
     id: "slusarczyk",
@@ -487,8 +490,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-1",
     description: CIEZAK_BIO,
     instagram: "https://www.instagram.com/malgorzata.ciezak",
-    background: "",
-    text: "",
+    background: "var(--color-primary)",
+    text: "var(--color-ground)",
   },
   {
     id: "sap",
@@ -498,8 +501,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-6",
     description: SAP_BIO,
     instagram: "https://www.instagram.com/martasap",
-    background: "",
-    text: "",
+    background: "var(--color-deep-forest)",
+    text: "var(--color-chartreuse)",
   },
   {
     id: "tosia",
@@ -509,8 +512,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-7",
     description: TOSIA_BIO,
     instagram: "https://www.instagram.com/7osi4",
-    background: "",
-    text: "",
+    background: "var(--color-ground)",
+    text: "var(--color-light-grey)",
   },
   {
     id: "maks",
@@ -520,8 +523,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-3",
     description: MAKS_BIO,
     instagram: "https://www.instagram.com/czlowiekpajak",
-    background: "",
-    text: "",
+    background: "var(--color-universal-brown)",
+    text: "var(--color-cream)",
   },
   {
     id: "irmina",
@@ -531,8 +534,8 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-6",
     description: IRMINA_BIO,
     instagram: "https://www.instagram.com/nippleinthebathtub",
-    background: "",
-    text: "",
+    background: "var(--color-sage-grey)",
+    text: "var(--color-true-black)",
   },
   {
     id: "euro",
@@ -542,7 +545,7 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-5",
     description: EURO_BIO,
     instagram: "https://www.instagram.com/euro_siec",
-    background: "",
-    text: "",
+    background: "var(--color-light-grey)",
+    text: "var(--color-ground)",
   },
 ];
