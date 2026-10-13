@@ -60,6 +60,11 @@ const LIVE_ACT = { pl: "Live Act", en: "Live Act" };
 const CONCERT = { pl: "Koncert", en: "Concert" };
 const MULTI_CENTER = { pl: "Centrum multimedialne", en: "Multimedia center" };
 const FILM = { pl: "Doświadczenie filmowe", en: "Film experience" };
+const AMB_CONCERT = { pl: "Koncert ambientowy", en: "Ambient concert" };
+const PRE_CONCERT = {
+  pl: "Koncert przedpremierowy",
+  en: "Pre-premiere concert",
+};
 const PHAZ_BIO = {
   pl: [
     "Inna strefa czasowa, inny rytm. Ciężkie bity, hipnotyczne perkusje i arabskie melodie zderzają się z techno, basem i połamanymi rytmami. 3Phaz przekuwa energię egipskiej muzyki ulicznej w bezkompromisową elektronikę. Eksportowy towar dźwiękowy prosto z Kairu — tym razem ląduje w Gdyni.",
@@ -304,6 +309,28 @@ const VIOLANTE_BIO = {
     "In her sets, club music unfolds into a story woven from sound, while DJing becomes a space for experimentation.",
   ],
 };
+const MATTIA_BIO = {
+  pl: [
+    "Jego live act ma w sobie coś z rytuału. Punktem wyjścia jest preparowana gitara elektryczna, na której artysta gra smyczkiem, elektrycznym sustainerem i przedmiotami codziennego użytku przykładanymi do przetwornika. Jej dźwięk rozciąga się w powolne drony, nakładane na syntezatorowe pady, spoken word i ciężki sub-bas. Głos poddany ekstremalnej modulacji stopniowo traci ludzkie brzmienie — czy traci też tożsamość?",
+    "Dźwięk splata się z obrazem, światłem i ruchem, a set staje się wspólnym doświadczeniem, pozwalającym na chwilę wejść w inną rzeczywistość. MATTIA tworzy tymczasowe światy, w których słuchanie staje się sposobem bycia razem.",
+  ],
+  en: [
+    "His live act has something of a ritual about it. The starting point is a prepared electric guitar, on which the artist plays with a pick, an electric sustainer, and everyday objects attached to the pickup. Its sound stretches into slow drones, layered over synthesizer pads, spoken word, and heavy sub-bass. The voice subjected to extreme modulation gradually loses its human timbre — does it also lose its identity?",
+    "The sound weaves with image, light, and movement, making the set a shared experience that allows a moment to enter another reality. MATTIA creates temporary worlds where listening becomes a way of being together.",
+  ],
+};
+const ZENSZEN_BIO = {
+  pl: [
+    "Duet gitarzysty i perkusisty. Ich brzmienie jest transowe, kinowe i ciemne — organiczne instrumenty ścierają się w nim z cyfrowym szumem i glitchem.",
+    "Adam Baran i Józef Biegański na festiwalu  przedpremierowo opowiedzą instrumentalne historie na lap steelu, gitarze elektrycznej, preparowanej perkusji i komputerze. Stawiają na minimalizm, a w ich muzyce słychać echa Nilsa Frahma, Daniela Lanoisa, Venetian Snares i Jana Banga",
+    "Nie wszystko co dobre rośnie w świetle.",
+  ],
+  en: [
+    "A duo of guitarist and drummer. Their sound is trance-like, cinematic and dark — organic instruments clash with digital noise and glitch.",
+    "Adam Baran and Józef Biegański will premiere instrumental stories at the festival on lap steel, electric guitar, prepared percussion and computer. They focus on minimalism, and their music echoes Nils Frahm, Daniel Lanois, Venetian Snares and Jan Bang.",
+    "Not everything that is good grows in the light.",
+  ],
+};
 export const ARTISTS: Artist[] = [
   {
     id: "phaz",
@@ -328,6 +355,18 @@ export const ARTISTS: Artist[] = [
     text: "var(--color-deep-navy)",
   },
   {
+    id: "zenszen",
+    name: "ŻEŃSZEŃ",
+    role: PRE_CONCERT,
+    photo: "festiwal_foto/artysci/zenszen.jpg",
+    mask: "announcement-5",
+    description: ZENSZEN_BIO,
+    instagram: "https://www.instagram.com/barana_dam",
+    instagram2: "https://www.instagram.com/jozef.bieganski",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-cream)",
+  },
+  {
     id: "irena",
     name: "Daria Irena x Aleksandra Banaś",
     role: FILM,
@@ -335,6 +374,7 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-2",
     description: IRENA_BIO,
     instagram: "https://www.instagram.com/aleksandra__banas",
+    instagram2: "https://www.instagram.com/darirena",
     background: "var(--color-secondary)",
     text: "var(--color-true-black)",
   },
@@ -350,7 +390,7 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-deep-plum)",
     text: "var(--color-light-grey)",
   },
-  {
+  /*{
     id: "gosha",
     name: "gosha savage x L A V E N",
     role: LIVE_ACT,
@@ -360,7 +400,7 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/goshasavage",
     background: "var(--color-deep-plum)",
     text: "var(--color-light-grey)",
-  },
+  },*/
   {
     id: "renia-maj",
     name: "Renia Maj",
@@ -459,6 +499,17 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/mimimimimimmimimm",
     background: "var(--color-deep-forest)",
     text: "var(--color-periwinkle)",
+  },
+  {
+    id: "mattia",
+    name: "Mattia",
+    role: AMB_CONCERT,
+    photo: "festiwal_foto/artysci/mattia.jpg",
+    mask: "announcement-5",
+    description: MATTIA_BIO,
+    instagram: "https://www.instagram.com/mattiaxspich",
+    background: "var(--color-mocha)",
+    text: "var(--color-light-grey)",
   },
   {
     id: "kolodziej",
