@@ -39,6 +39,7 @@ type PreviewStageProps = {
   linesPanY: number
   onLinesPan: (x: number, y: number) => void
   typeSizeFactor: number
+  nameLineHeight: number
   linesFile: string
   gradient: HTMLImageElement | null
 }
@@ -111,6 +112,7 @@ export function PreviewStage(props: PreviewStageProps) {
       linesPanX: props.linesPanX,
       linesPanY: props.linesPanY,
       typeSizeFactor: props.typeSizeFactor,
+      nameLineHeight: props.nameLineHeight,
       linesFile: props.linesFile,
       gradient: props.gradient,
     }).then(() => {
@@ -172,6 +174,7 @@ export function PreviewStage(props: PreviewStageProps) {
       linesPanX: props.linesPanX,
       linesPanY: props.linesPanY,
       typeSizeFactor: props.typeSizeFactor,
+      nameLineHeight: props.nameLineHeight,
       linesFile: props.linesFile,
       gradient: props.gradient,
     }).then(() => {

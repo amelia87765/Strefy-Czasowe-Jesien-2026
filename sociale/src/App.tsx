@@ -1,6 +1,7 @@
 import { ControlPanel } from '@/components/ControlPanel'
 import { PreviewStage } from '@/components/PreviewStage'
 import { palette, type ContentType, type Format, type Season, type TextAlign, type TextVAlign } from '@/data/brand'
+import { NAME_LINE_HEIGHT } from '@/data/layout'
 import { getGrid, type GridId } from '@/data/grids'
 import { artistShapeFiles, gradientUrl, gridShapeFiles, keepShape, linesShapeFiles } from '@/data/shapes'
 import { loadImage } from '@/lib/overlays'
@@ -42,6 +43,7 @@ function App() {
   const [linesPanX, setLinesPanX] = useState(0)
   const [linesPanY, setLinesPanY] = useState(0)
   const [typeSizeFactor, setTypeSizeFactor] = useState(1)
+  const [nameLineHeight, setNameLineHeight] = useState(NAME_LINE_HEIGHT)
   const [linesFile, setLinesFile] = useState('')
   const [gradientFile, setGradientFile] = useState('')
   const [gradient, setGradient] = useState<HTMLImageElement | null>(null)
@@ -141,6 +143,8 @@ function App() {
         onLinesColor={setLinesColor}
         typeSizeFactor={typeSizeFactor}
         onTypeSizeFactor={setTypeSizeFactor}
+        nameLineHeight={nameLineHeight}
+        onNameLineHeight={setNameLineHeight}
         linesFile={linesFileSafe}
         onLinesFile={setLinesFile}
         gradientFile={gradientFile}
@@ -198,6 +202,7 @@ function App() {
           setLinesPanY(y)
         }}
         typeSizeFactor={typeSizeFactor}
+        nameLineHeight={nameLineHeight}
         linesFile={linesFileSafe}
         gradient={gradient}
       />

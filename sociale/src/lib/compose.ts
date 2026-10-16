@@ -32,6 +32,7 @@ export type ComposeInput = {
   panY: number
   textShapeFile: string
   typeSizeFactor: number
+  nameLineHeight: number
   linesFile: string
   gradient: HTMLImageElement | null
 } & GridComposeFields
@@ -45,14 +46,14 @@ function drawName(
   ctx: CanvasRenderingContext2D,
   lines: string[],
   box: { x: number; y: number; width: number; height: number },
+  lineHeight: number,
 ) {
   setLetterSpacing(ctx, `${NAME_LETTER_SPACING}em`)
   let fontSize = NAME_FONT
-  const lineHeight = NAME_LINE_HEIGHT
   while (fontSize > 48) {
     ctx.font = `${fontSize}px ${CLASSICO}`
     const tooWide = lines.some((line) => measureWidth(ctx, line) > box.width)
-    const tooTall = lines.length * fontSize * lineHeight > box.height + 0.5
+    const tooTall = lines.length * fontSize * NAME_LINE_HEIGHT > box.height + 0.5
     if (!tooWide && !tooTall) break
     fontSize -= 1
   }
@@ -120,7 +121,12 @@ export async function compose(ctx: CanvasRenderingContext2D, input: ComposeInput
 
     if (name) {
       ctx.fillStyle = input.textColor
-      drawName(ctx, displayName.length > 0 ? displayName : [name], layout.name)
+      drawName(
+        ctx,
+        displayName.length > 0 ? displayName : [name],
+        layout.name,
+        input.nameLineHeight,
+      )
     }
 
     const role = input.description.trim().toUpperCase()

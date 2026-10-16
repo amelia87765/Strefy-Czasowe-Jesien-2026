@@ -29,6 +29,11 @@ import {
 } from '@/data/shapes'
 import { Children, useState, type ReactNode } from 'react'
 import { RichTextField } from '@/components/RichTextField'
+import {
+  NAME_LINE_HEIGHT,
+  NAME_LINE_HEIGHT_MAX,
+  NAME_LINE_HEIGHT_STEP,
+} from '@/data/layout'
 import { LARGE_SIZE_MIN_FACTOR, LARGE_SIZE_STEP } from '@/data/typography'
 import { contentContrastOk } from '@/lib/contrast'
 
@@ -83,6 +88,8 @@ type ControlPanelProps = {
   onLinesColor: (value: string) => void
   typeSizeFactor: number
   onTypeSizeFactor: (value: number) => void
+  nameLineHeight: number
+  onNameLineHeight: (value: number) => void
   linesFile: string
   onLinesFile: (value: string) => void
   gradientFile: string
@@ -375,6 +382,43 @@ export function ControlPanel(props: ControlPanelProps) {
               spellCheck={false}
             />
           </label>
+          <fieldset>
+            <legend className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-ink-muted uppercase">
+              Line height
+            </legend>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                className="min-h-9 rounded-full border border-line bg-white px-3 text-xs font-medium disabled:opacity-40"
+                disabled={props.nameLineHeight <= NAME_LINE_HEIGHT + 0.001}
+                onClick={() =>
+                  props.onNameLineHeight(
+                    Math.max(
+                      NAME_LINE_HEIGHT,
+                      Math.round((props.nameLineHeight - NAME_LINE_HEIGHT_STEP) * 100) / 100,
+                    ),
+                  )
+                }
+              >
+                −
+              </button>
+              <button
+                type="button"
+                className="min-h-9 rounded-full border border-line bg-white px-3 text-xs font-medium disabled:opacity-40"
+                disabled={props.nameLineHeight >= NAME_LINE_HEIGHT_MAX - 0.001}
+                onClick={() =>
+                  props.onNameLineHeight(
+                    Math.min(
+                      NAME_LINE_HEIGHT_MAX,
+                      Math.round((props.nameLineHeight + NAME_LINE_HEIGHT_STEP) * 100) / 100,
+                    ),
+                  )
+                }
+              >
+                +
+              </button>
+            </div>
+          </fieldset>
           <PhotoField
             label="Artist picture"
             hasPhoto={props.hasPhoto}

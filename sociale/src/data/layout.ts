@@ -4,6 +4,9 @@ export type Rect = { x: number; y: number; width: number; height: number }
 
 export const NAME_FONT = 140
 export const NAME_LINE_HEIGHT = 0.85
+/** Małe skoki; minus schodzi tylko do bieżącego minimum. */
+export const NAME_LINE_HEIGHT_STEP = 0.02
+export const NAME_LINE_HEIGHT_MAX = 1.05
 export const NAME_LETTER_SPACING = -0.01
 export const NAME_BOX_WIDTH = 927.04
 export const DESC_FONT = 50
