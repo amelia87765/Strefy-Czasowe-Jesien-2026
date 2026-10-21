@@ -19,17 +19,12 @@ export type Artist = {
   id: string;
   name: string;
   role: Record<Lang, string>;
-  /** Ścieżka względem `public/`, np. `festiwal_foto/artysci/renia-maj.jpg`. */
   photo: string;
   mask: ArtistMask;
-  /** Każdy element to osobny akapit. */
   description: Record<Lang, string[]>;
   instagram: string;
-  /** Tylko dla duetów: drugi link, pokazywany obok pierwszego z tym samym podpisem. */
   instagram2?: string;
-  /** Tło podpisu i planszy. */
   background: string;
-  /** Kolor tekstu podpisu i planszy. */
   text: string;
 };
 
@@ -64,6 +59,160 @@ const AMB_CONCERT = { pl: "Koncert ambientowy", en: "Ambient concert" };
 const PRE_CONCERT = {
   pl: "Koncert przedpremierowy",
   en: "Pre-premiere concert",
+};
+const VA_PERFO = {
+  pl: "Artysta wizualny / Performer",
+  en: "Visual artist / Performer",
+};
+const INTERACTIVE_INSTALLATION = {
+  pl: "Instalacja interaktywna",
+  en: "Interactive installation",
+};
+const PROJECT_AMBIENT = { pl: "Projekt ambientowy", en: "Ambient project" };
+const LIVE_AV_SHOW = { pl: "Live AV Show", en: "Live AV Show" };
+const KACZMARSKA_BIO = {
+  pl: [
+    "Na STREFACH CZASOWYCH Ania Kaczmarska stanie oko w oko z własnym cieniem.",
+    "Tekst do jej pracy rozsypuje się na kartce jak kroki na parkiecie: „Było”, „Jest”, „Będzie”, „Ja”, „Ty”. Ruch prowadzi tu przez wszystkie czasy naraz, a każde zatrzymanie ma swojego świadka.",
+    "Ania Kaczmarska to tancerka i choreografka z Trójmiasta, absolwentka programu tańca współczesnego MoDem Atelier w Scenario Pubblico na Sycylii. Specjalizuje się w projektach site-specific. W Katanii stworzyła solo „95131” o dzielnicy San Berillo, a w tym roku wyreżyserowała spektakl „Pożegnanie ze starym logo Żabki”.",
+    "Tej nocy jedna godzina wydarzy się dwa razy. Ciekawe, czy cień nadąży.",
+  ],
+  en: [
+    "At STREFY CZASOWE, Ania Kaczmarska will come face to face with her own shadow.",
+    "The text for her work scatters on the page like footsteps on the dance floor: „Was”, „Is”, „Will be”, „I”, „You”. The movement here leads through all times at once, and every pause has its witness.",
+    "Ania Kaczmarska is a dancer and choreographer from the Tri-City, a graduate of the contemporary dance program MoDem Atelier at Scenario Pubblico in Sicily. She specializes in site-specific projects. In Catania, she created the solo „95131” about the San Berillo district, and this year she directed the play „Farewell to the old Żabka logo”.",
+    "Tonight, one hour will happen twice. I wonder if the shadow will keep up.",
+  ],
+};
+const SUBBASICS_BIO = {
+  pl: [
+    "Dub techno, UK bass i dubstepowe korzenie. Na STREFACH CZASOWYCH zagra je Sub Basics, prosto z Wielkiej Brytanii.",
+    "Głęboki sub, który nie odpuszcza ani na takt, i groove, który gęstnieje z każdym przejściem. Kiedy rytm się przesuwa, parkiet idzie za nim — cały, naraz.",
+    "Na Spotify jego „Vapour” przekroczyło milion odtworzeń, a „Expansion” ma ich ponad 700 tysięcy. Od 2018 roku prowadzi własny label Temple of Sound.",
+    "W tę noc zegary cofną się o godzinę. Sub Basics dopilnuje, żeby żadna minuta się nie zmarnowała.",
+  ],
+  en: [
+    "Straight from the UK, Sub Basics brings dub techno, UK bass and dubstep roots to STREFY CZASOWE (TIME ZONES) in Gdynia, Poland. A conceptual festival unfolding around the seasonal clock change, STREFY CZASOWE combines music, visual art, performance and sensory experiences, creating a space for unexpected encounters between sound, image and the body.",
+    "Deep sub that doesn’t let up for a single bar, and a groove that thickens with every transition. When the rhythm shifts, the dancefloor moves with it — all of it, all at once.",
+    "On Spotify, his “Vapour” has passed a million plays, and “Expansion” has more than 700,000. Since 2018 he has been running his own label, Temple of Sound.",
+    "That night the clocks go back an hour. Sub Basics will make sure not a single minute goes to waste.",
+  ],
+};
+const TULIUSZ_BIO = {
+  pl: [
+    "Na STREFACH CZASOWYCH Tuliluliuwu pokaże performans „Jak to jest być nietoperzem?”. Tytuł pożycza pytanie z eseju Thomasa Nagela.",
+    "Zwykle publiczność staje w kręgu wokół osoby performującej. Tu krąg się rozpadnie, a kolejne osoby trafią do środka. Jak u nietoperzy, grupa rozproszy się i zbierze na nowo, trochę inna niż przed chwilą.",
+    "Tuliluliuwu, czyli Tuliusz Kierznowski to twórca wizualny i drag thing z Gdańska, studiuje grafikę na gdańskiej ASP. Prowadzi drag bingo show i współtworzy queerowe wydarzenia z House of Rdza. Jak mówi o sobie, robi rzeczy ładne, brzydkie i dziwne.",
+    "Nietoperz odpowie nam na 40 kHz. Nie usłyszymy tego, ale poczujemy ciepło.",
+  ],
+  en: [
+    "At STREFY CZASOWE, Tuliluliuwu will present the performance „What is it like to be a bat?”. The title borrows a question from Thomas Nagel’s essay.",
+    "Usually, the audience stands in a circle around the performer. Here, the circle will break apart, and individuals will enter the center. Like bats, the group will disperse and gather again, slightly different than before.",
+    "Tuliluliuwu, or Tuliusz Kierznowski, is a visual creator and drag thing from Gdańsk, studying graphic design at the Gdańsk Academy of Fine Arts. He hosts a drag bingo show and co-creates queer events with House of Rdza. As he describes himself, he makes things that are beautiful, ugly, and strange.",
+    "The bat will respond to us at 40 kHz. We won’t hear it, but we’ll feel the warmth.",
+  ],
+};
+const ORZECHOWSKA_BIO = {
+  pl: [
+    "Instalacja Patrycji Orzechowskiej wplącze się w przestrzeń nadchodzących STREF CZASOWYCH. Na festiwalu zaprezentuje pracę, która w próbie odzyskania witalności nieożywionej materii, przyjmuje żywą, organiczną formę.",
+    "Patrycja Orzechowska to artystka wizualna i autorka książek artystycznych związana z Gdańskiem. Jest absolwentką Akademii Sztuk Pięknych w Gdańsku oraz Interdyscyplinarnych Studiów Doktoranckich Uniwersytetu Artystycznego w Poznaniu. Pracuje z ceramiką, instalacją, obiektem, fotografią, kolażem, grafiką użytkową i zbieractwem. Najbardziej lubi płodozmian.",
+  ],
+  en: [
+    "Patrycja Orzechowska’s installation will weave itself into the space of the upcoming STREFY CZASOWE. At the festival, she will present a work that, in an attempt to restore vitality to inanimate matter, takes on a living, organic form.",
+    "Patrycja Orzechowska is a visual artist and author of artist books associated with Gdańsk. She is a graduate of the Academy of Fine Arts in Gdańsk and the Interdisciplinary Doctoral Studies at the University of the Arts in Poznań. She works with ceramics, installation, object, photography, collage, graphic design and collecting. She likes crop rotation the most.",
+  ],
+};
+const KONIARSKA_BIO = {
+  pl: [
+    "Na STREFACH CZASOWYCH Marta Maria Koniarska pokaże obrazy olejne i haft o tym, czego szukamy, choć nie umiemy tego złapać.",
+    "Obrazy „Zupa Nic”, „kwiaty paproci” i „Stan skupienia” pytają, czy istnieją przepisy na szczęście — i czy poznamy, że już do niego doszliśmy. W hafcie „: P” wyszyte narządy układają się w mapę, przez którą ciało próbuje mówić na zewnątrz.",
+    "Marta Maria Koniarska to artystka wizualna i kuratorka, absolwentka ASP w Gdańsku. Współtworzy niezależną galerię Wolne Pokoje i część wizualną festiwalu Spokój, a w gdyńskich Przystaniach Sąsiedzkich prowadzi warsztaty plastyczne dla kilku pokoleń naraz.",
+    "Kwiat paproci podobno zakwita w najkrótszą noc roku. My poszukamy go w tę, która potrwa godzinę dłużej.",
+  ],
+  en: [
+    "At STREFY CZASOWE, Marta Maria Koniarska will present oil paintings and embroidery about what we seek, even though we cannot grasp it.",
+    "The paintings „Zupa Nic”, „kwiaty paproci” and „Stan skupienia” ask whether there are recipes for happiness — and whether we will recognize that we have already reached it. In the embroidery „: P”, the stitched organs form a map through which the body tries to speak outward.",
+    "Marta Maria Koniarska is a visual artist and curator, a graduate of the Academy of Fine Arts in Gdańsk. She co-creates the independent gallery Wolne Pokoje and the visual part of the Spokój festival, and conducts art workshops for multiple generations at the Gdynia Przystanie Sąsiedzkie.",
+    "The fern flower is said to bloom on the shortest night of the year. We will search for it on the one that lasts an hour longer.",
+  ],
+};
+const WIKA_BIO = {
+  pl: [
+    "Wika Wieczorek wyświetla na ścianie zdjęcia w kolorach gęstych jak syrop i stawia przed nimi swojego młodszego brata. W filmie „It’s Just a Dream” chłopiec przechodzi ze świata do świata jak z pokoju do pokoju. Każdy daje mu nowe zadanie, a każda pobudka okazuje się kolejnym piętrem snu.",
+    "Wika jest fotografką i filmowczynią z Trójmiasta, związaną z gdańską ASP. Sen to jej stały temat. Jej modowe edytoriale publikowały K MAG, Adore Magazine i YAP Magazine. Współtworzy też grupę artystyczną Euro-sieć, który na STREFACH postawi instalację inspirowaną kafejkami internetowymi.",
+  ],
+  en: [
+    "Wika Wieczorek displays photographs on the wall in thick colors like syrup and places her younger brother in front of them. In the film „It’s Just a Dream”, the boy moves from world to world like from room to room. Each gives him a new task, and each awakening proves to be another floor of the dream.",
+    "Wika is a photographer and filmmaker from the Tri-City, connected to the Gdańsk ASP. Dreams are her constant theme. Her fashion editorials have been published in K MAG, Adore Magazine and YAP Magazine. She also co-creates the artistic group Euro-sieć, which will install a piece inspired by internet memes at STREFY CZASOWE.",
+  ],
+};
+const ALLG_BIO = {
+  pl: [
+    "Znana z basowych brzmień ALLG po raz pierwszy wpuści publiczność do swojego krajobrazu ambientu — na STREFACH CZASOWYCH.",
+    "DJ-ka, współzałożycielka kolektywu POISE i kuratorka sceny Leśnej na festiwalu Spokój. W swoich setach nie przywiązuje się do podziałów gatunkowych — szuka eksperymentalnych szczelin i kiełkujących z nich nowych form wyrazu. Napędzają ją emocje, ciekawość i chęć zaskoczenia — szczególnie samej siebie.",
+  ],
+  en: [
+    "Known for her bass-heavy sound, ALLG will for the first time invite the audience into her ambient landscape — at STREFY CZASOWE.",
+    "DJ, co-founder of the POISE collective and curator of the Forest stage at the Spokój festival. In her sets, she does not adhere to genre divisions — she seeks experimental gaps and the new forms of expression that sprout from them. She is driven by emotions, curiosity, and a desire to surprise — especially herself.",
+  ],
+};
+const KULCZYNSKA_BIO = {
+  pl: [
+    "Dominika Kulczyńska — artystka wizualna, ceramiczka i edukatorka —  eksploruje te organiczne przemiany, poszukuje nowych sposobów wykorzystania ceramiki jako medium wypowiedzi artystycznej. Pracuje z surową gliną, gruzem ceramicznym i odpadami geologicznymi, badając twórczy potencjał materii i procesów zachodzących na jej marginesach.",
+    "W pracy „Szacunek do błota”, rozwijanej od 2022 roku, niewypalona glina trafia pod szklaną kopułę. W odpowiednich warunkach obrasta pleśnią i glonami, a na jej powierzchni kiełkują rośliny. Materia, często traktowana jako niepotrzebny urobek lub przeszkoda, staje się obiektem obserwacji, podatnym na przemiany i zdolnym tworzyć warunki dla rozwoju życia.",
+    "Czy coś musi być żywe, żeby zasługiwało na naszą troskę?",
+  ],
+  en: [
+    "Dominika Kulczyńska — visual artist, ceramicist and educator — explores these organic transformations, seeking new ways to use ceramics as a medium of artistic expression. She works with raw clay, ceramic rubble and geological waste, investigating the creative potential of matter and the processes occurring at its margins.",
+    "In the work „Respect for Mud”, developed since 2022, unfired clay is placed under a glass dome. Under the right conditions, it becomes overgrown with mold and algae, and plants sprout on its surface. Matter, often treated as unnecessary debris or an obstacle, becomes an object of observation, susceptible to transformation and capable of creating conditions for the development of life.",
+    "Does something have to be alive to deserve our care?",
+  ],
+};
+const ERNEST_BIO = {
+  pl: [
+    "Na STREFACH CZASOWYCH Ernest Borowski pokaże performans „To be porous / For monsters” — dziwny rytuał-zabawę o pożądaniu, które niczego nie chce posiadać.",
+    "Ściana dźwięku, trzaski noise’u i ciało, które przyciąga i opiera się spojrzeniu naraz. Gest, głos i obecność zmieniają tu znaczenie, a granica między tym, co pociągające, i tym, co obce, robi się porowata.",
+    "W Strefie Podziemia zostaną po nim animacje „Embodied fantasy” i „Medytacja Chaosu” oraz kamień-maska z cyklu „Praktyki oduczania”.",
+    "Ernest Borowski to queerowy artysta interdyscyplinarny i researcher, który pracuje na styku nowych mediów, dźwięku, performansu i spekulatywnej narracji. Pokazywał prace m.in. w Muzeum Sztuki Nowoczesnej w Warszawie, w berlińskim Silent Green i na festiwalu Unsound.",
+    "Słowo „monstrum” pochodzi od łacińskiego monere, czyli „ostrzegać”. Uważajcie się za ostrzeżonych.",
+  ],
+  en: [
+    "At STREFY CZASOWE, Ernest Borowski will present the performance „To be porous / For monsters” — a strange ritual-play about desire that wants to possess nothing.",
+    "A wall of sound, noise crackles, and a body that attracts and resists the gaze at once. Gesture, voice, and presence change meaning here, and the boundary between what is alluring and what is alien becomes porous.",
+    "In the Underground Zone, he will leave behind the animations „Embodied fantasy” and „Meditation of Chaos”, as well as a stone-mask from the series „Practices of unlearning”.",
+    "Ernest Borowski is a queer interdisciplinary artist and researcher working at the intersection of new media, sound, performance, and speculative narrative. He has exhibited works at the Museum of Modern Art in Warsaw, Berlin's Silent Green, and the Unsound festival.",
+    "The word „monstrum” comes from the Latin monere, meaning „to warn”. Consider yourselves warned.",
+  ],
+};
+const NINA_BIO = {
+  pl: [
+    "NINA EBA to solowy projekt Ukrainki Aliny Volkovej. Ucho nastroiły jej lata za konsoletą w basowych klubach Kijowa.",
+    "Po pełnoskalowej inwazji rosji znalazła bezpieczne miejsce w Grazu, w Austrii. Nie mając nic do stracenia, wyszła zza konsolety i zaczęła pisać własne piosenki. Tak powstał debiut „MORPHO”: o locie, pęknięciu i powrocie do sił.",
+    "Z Grazu rusza w Europę z audiowizualnymi koncertami, szerokimi jak kino, ale skrojonymi pod klub. Czułość zderza się w nich z uderzeniem, nostalgia z pędem.",
+    "Sama mówi o dobrowolnym podglądactwie: wpuszcza nas do swojego kokonu.",
+  ],
+  en: [
+    "NINA EBA is the solo project of Ukrainian Alina Volkova. Her ear was tuned by years behind the console in bass-heavy clubs in Kyiv.",
+    "After the full-scale invasion of russia, she found a safe place in Graz, Austria. With nothing to lose, she stepped out from behind the console and began writing her own songs. This is how her debut „MORPHO” was born: about flight, fracture, and regaining strength.",
+    "From Graz, she is touring Europe with audiovisual concerts, as wide as cinema but tailored for the club. Sensitivity collides with impact, nostalgia with momentum.",
+    "She speaks of voluntary voyeurism: she lets us into her cocoon.",
+  ],
+};
+const LAURA_BIO = {
+  pl: [
+    "Na STREFACH CZASOWYCH Laura Adel pokaże COALESCE — interaktywną instalację, w której to ciało i ruch rzeźbią ulotne obrazy.",
+    "Co zostaje z ruchu, który trwa mgnienie oka? Obiektyw wychwytuje sylwetkę przechodzącej osoby, a różnice między kolejnymi chwilami zapisują się w abstrakcyjnych, monochromatycznych formach. Powstają rzeźby z czasu. Znikają, zanim zdążymy się im przyjrzeć, ustępując miejsca nowym.",
+    "Interaktywna instalacja, w której ruchy ciała tworzy abstrakcyjne formy.",
+    "Laura Adel tworzy abstrakcyjne wideo i instalacje inspirowane zjawiskami natury. Na co dzień pracuje w Ars Electronica Solutions w Linzu przy projektach dla immersyjnej przestrzeni Deep Space. Swoje prace pokazywała m.in. na Ars Electronica Festival i Biennale Sztuki Mediów WRO.",
+    "Tej nocy nikt nie przejdzie niezauważony.",
+  ],
+  en: [
+    "At STREFY CZASOWE, Laura Adel will present COALESCE — an interactive installation where the body and movement sculpt ephemeral images.",
+    "What remains of a movement that lasts the blink of an eye? The lens captures the silhouette of a passing person, and the differences between successive moments are recorded in abstract, monochromatic forms. Sculptures of time emerge. They vanish before we can examine them, making way for new ones.",
+    "An interactive installation where body movements create abstract forms.",
+    "Laura Adel creates abstract video and installations inspired by natural phenomena. She works daily at Ars Electronica Solutions in Linz on projects for the immersive Deep Space environment. Her works have been exhibited at Ars Electronica Festival and WRO Media Art Biennale, among others.",
+    "Tonight, no one will go unnoticed.",
+  ],
 };
 const PHAZ_BIO = {
   pl: [
@@ -331,7 +480,32 @@ const ZENSZEN_BIO = {
     "Not everything that is good grows in the light.",
   ],
 };
+const CHATKA_BIO = {
+  pl: [
+    "Przez dekadę występował na żywo w kostiumie goryla. Na STREFACH CZASOWYCH Ebo zaprosi nas do swojej chatki.",
+    "Chatka Ebo to jego nowy, ambientowy projekt. Kompozycje składa i gra na żywo na Elektronie Digitakt, przeplatając je improwizacjami na syntezatorze modularnym.",
+    "Ebo to artysta dźwiękowy i producent, twórca projektów Ebola Ape i Octopush, członek kolektywów Moth i Sonic Tramp. Współpracował m.in. z południowoafrykańskim raperem i producentem Boolzem i amerykańskim raperem Lil Davidem.",
+    "Wpadnijcie do chatki, kiedy na parkiecie zrobi się za ciasno.",
+  ],
+  en: [
+    "For a decade he performed live in a gorilla costume. At STREFY CZASOWE, Ebo will invite us to his hut.",
+    "Ebo' Hut is his new ambient project. He composes and plays live on the Elektron Digitakt, interweaving it with improvisations on a modular synthesizer.",
+    "Ebo is a sound artist and producer, creator of the Ebola Ape and Octopush projects, and a member of the Moth and Sonic Tramp collectives. He has collaborated with South African rapper and producer Boolz and American rapper Lil David.",
+    "Come to the hut when the dance floor gets too crowded.",
+  ],
+};
 export const ARTISTS: Artist[] = [
+  {
+    id: "subbasics",
+    name: "Sub Basics",
+    role: DJ,
+    photo: "festiwal_foto/artysci/subbasics.jpg",
+    mask: "announcement-5",
+    description: SUBBASICS_BIO,
+    instagram: "https://www.instagram.com/subbasics",
+    background: "var(--color-periwinkle)",
+    text: "var(--color-true-black)",
+  },
   {
     id: "phaz",
     name: "3Phaz",
@@ -353,6 +527,17 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/lds_luca",
     background: "var(--color-periwinkle)",
     text: "var(--color-deep-navy)",
+  },
+  {
+    id: "ninaeba",
+    name: "Nina Eba",
+    role: LIVE_AV_SHOW,
+    photo: "festiwal_foto/artysci/ninaeba.jpg",
+    mask: "announcement-6",
+    description: NINA_BIO,
+    instagram: "https://www.instagram.com/ninaebamusic",
+    background: "var(--color-deep-navy)",
+    text: "var(--color-cream)",
   },
   {
     id: "zenszen",
@@ -390,7 +575,7 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-deep-plum)",
     text: "var(--color-light-grey)",
   },
-  /*{
+  {
     id: "gosha",
     name: "gosha savage x L A V E N",
     role: LIVE_ACT,
@@ -398,9 +583,32 @@ export const ARTISTS: Artist[] = [
     mask: "announcement-1",
     description: GOSHA_BIO,
     instagram: "https://www.instagram.com/goshasavage",
-    background: "var(--color-deep-plum)",
-    text: "var(--color-light-grey)",
-  },*/
+    instagram2: "https://www.instagram.com/lvnlvnlvnlvnlvn",
+    background: "var(--color-deep-navy)",
+    text: "var(--color-cream)",
+  },
+  {
+    id: "orzechowska",
+    name: "Patrycja Orzechowska",
+    role: VISUAL_ARTIST,
+    photo: "festiwal_foto/artysci/orzechowska.jpg",
+    mask: "announcement-2",
+    description: ORZECHOWSKA_BIO,
+    instagram: "https://www.instagram.com/p.a.t.r.y.c.j.a.orzechowska",
+    background: "var(--color-cream)",
+    text: "var(--color-universal-brown)",
+  },
+  {
+    id: "leon",
+    name: "Krzysztof Leon Dziemaszkiewicz",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/leon.jpg",
+    mask: "announcement-1",
+    description: LEON_BIO,
+    instagram: "https://www.instagram.com/leondziemaszkiewicz",
+    background: "var(--color-chartreuse)",
+    text: "var(--color-deep-navy)",
+  },
   {
     id: "renia-maj",
     name: "Renia Maj",
@@ -433,17 +641,6 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/oska.zuk",
     background: "var(--color-amber-espresso)",
     text: "var(--color-warm-taupe)",
-  },
-  {
-    id: "leon",
-    name: "Krzysztof Leon Dziemaszkiewicz",
-    role: PERFORMER,
-    photo: "festiwal_foto/artysci/leon.jpg",
-    mask: "announcement-1",
-    description: LEON_BIO,
-    instagram: "https://www.instagram.com/leondziemaszkiewicz",
-    background: "var(--color-chartreuse)",
-    text: "var(--color-deep-navy)",
   },
   {
     id: "paulina-mirowska",
@@ -501,6 +698,17 @@ export const ARTISTS: Artist[] = [
     text: "var(--color-periwinkle)",
   },
   {
+    id: "ernest",
+    name: "Ernest Borowski",
+    role: VA_PERFO,
+    photo: "festiwal_foto/artysci/ernest.jpg",
+    mask: "announcement-2",
+    description: ERNEST_BIO,
+    instagram: "https://www.instagram.com/bakblivv",
+    background: "var(--color-ground)",
+    text: "var(--color-primary)",
+  },
+  {
     id: "mattia",
     name: "Mattia",
     role: AMB_CONCERT,
@@ -532,6 +740,28 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/violanteviolenta",
     background: "var(--color-cream)",
     text: "var(--color-true-black)",
+  },
+  {
+    id: "tuliusz",
+    name: "Tuliluliuwu",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/tuliusz.jpg",
+    mask: "announcement-2",
+    description: TULIUSZ_BIO,
+    instagram: "https://www.instagram.com/tuliusz_",
+    background: "var(--color-primary)",
+    text: "var(--color-true-black)",
+  },
+  {
+    id: "allg",
+    name: "ALLG",
+    role: AMBIENT_DJ,
+    photo: "festiwal_foto/artysci/allg.jpg",
+    mask: "announcement-2",
+    description: ALLG_BIO,
+    instagram: "https://www.instagram.com/itsaaallg",
+    background: "var(--color-deep-navy)",
+    text: "var(--color-light-grey)",
   },
   {
     id: "ciezak",
@@ -567,6 +797,17 @@ export const ARTISTS: Artist[] = [
     text: "var(--color-light-grey)",
   },
   {
+    id: "wika",
+    name: "Wika Wieczorek",
+    role: VISUAL_ARTIST,
+    photo: "festiwal_foto/artysci/wika.jpg",
+    mask: "announcement-6",
+    description: WIKA_BIO,
+    instagram: "https://www.instagram.com/wieczorek.wika",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-cream)",
+  },
+  {
     id: "maks",
     name: "Maksio Stopa",
     role: PERFORMER,
@@ -576,6 +817,61 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/czlowiekpajak",
     background: "var(--color-universal-brown)",
     text: "var(--color-cream)",
+  },
+  {
+    id: "kulczynska",
+    name: "Dominika Kulczyńska",
+    role: VISUAL_ARTIST,
+    photo: "festiwal_foto/artysci/kulczynska.jpg",
+    mask: "announcement-3",
+    description: KULCZYNSKA_BIO,
+    instagram: "https://www.instagram.com/dominikakulczynska",
+    background: "var(--color-deep-forest)",
+    text: "var(--color-cream)",
+  },
+  {
+    id: "kaczmarska",
+    name: "Ania Kaczmarska",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/kaczmarska.jpg",
+    mask: "announcement-7",
+    description: KACZMARSKA_BIO,
+    instagram: "https://www.instagram.com/owsi.anka",
+    background: "var(--color-deep-navy)",
+    text: "var(--color-periwinkle)",
+  },
+  {
+    id: "chatka",
+    name: "Chatka Ebo",
+    role: PROJECT_AMBIENT,
+    photo: "festiwal_foto/artysci/chatka.jpg",
+    mask: "announcement-6",
+    description: CHATKA_BIO,
+    instagram: "https://www.instagram.com/chatka_ebo",
+    background: "var(--color-cream)",
+    text: "var(--color-deep-plum)",
+  },
+  {
+    id: "koniarska",
+    name: "Marta Koniarska",
+    role: VISUAL_ARTIST,
+    photo: "festiwal_foto/artysci/koniarska.jpg",
+    mask: "announcement-1",
+    description: KONIARSKA_BIO,
+    instagram: "https://www.instagram.com/qniec",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-periwinkle)",
+  },
+  {
+    id: "adel",
+    name: "Laura Adel",
+    role: INTERACTIVE_INSTALLATION,
+    photo: "festiwal_foto/artysci/laura.jpg",
+    mask: "announcement-2",
+    description: LAURA_BIO,
+    instagram: "https://www.instagram.com/lauhra_adel",
+    background: "var(--color-light-grey)",
+    text: "var(--color-true-black)",
   },
   {
     id: "irmina",

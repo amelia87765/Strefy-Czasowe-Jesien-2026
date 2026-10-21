@@ -61,10 +61,11 @@ function drawName(
   ctx.textAlign = 'center'
   ctx.textBaseline = 'bottom'
   const step = fontSize * lineHeight
-  let y = box.y + box.height
-  for (let i = lines.length - 1; i >= 0; i -= 1) {
-    ctx.fillText(lines[i] ?? '', box.x + box.width / 2, y)
-    y -= step
+  const baseStep = fontSize * NAME_LINE_HEIGHT
+  const firstLineY =
+    box.y + box.height - (lines.length - 1) * (baseStep + (step - baseStep) / 2)
+  for (let i = 0; i < lines.length; i += 1) {
+    ctx.fillText(lines[i] ?? '', box.x + box.width / 2, firstLineY + i * step)
   }
   setLetterSpacing(ctx, '0px')
 }

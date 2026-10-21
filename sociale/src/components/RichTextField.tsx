@@ -1,10 +1,34 @@
 import { selectionHasMark, toggleTextMark, type TextMark } from '@/lib/textMarks'
+import { normalizeBrandTerms } from '@/lib/brandTerms'
 import { useEffect, useRef, useState } from 'react'
 
 type RichTextFieldProps = {
   value: string
   onChange: (html: string) => void
   mode: 'small' | 'large'
+}
+
+function getTextOffset(
+  root: HTMLDivElement,
+  nodes: { node: Text; start: number; end: number }[],
+  target: Node,
+  offset: number,
+): number {
+  const textNode = nodes.find(({ node }) => node === target)
+  if (textNode) return textNode.start + offset
+
+  const range = document.createRange()
+  range.selectNodeContents(root)
+  range.setEnd(target, offset)
+  return range.toString().length
+}
+
+function getTextPosition(
+  nodes: { node: Text; start: number; end: number }[],
+  position: number,
+): { node: Text; offset: number } | null {
+  const textNode = nodes.find(({ start, end }) => position >= start && position <= end)
+  return textNode ? { node: textNode.node, offset: position - textNode.start } : null
 }
 
 function MarkButton({
@@ -71,6 +95,73 @@ export function RichTextField({ value, onChange, mode }: RichTextFieldProps) {
     refreshMarks()
   }
 
+  const normalizeLargeText = (root: HTMLDivElement) => {
+    if (mode !== 'large') return
+
+    const textNodes: { node: Text; start: number; end: number }[] = []
+    const selection = window.getSelection()
+    const selectionPoints =
+      selection?.anchorNode && selection.focusNode
+        ? {
+            anchorNode: selection.anchorNode,
+            anchorOffset: selection.anchorOffset,
+            focusNode: selection.focusNode,
+            focusOffset: selection.focusOffset,
+            collapsed: selection.isCollapsed,
+          }
+        : null
+    let text = ''
+    const appendBoundary = () => {
+      if (text && !text.endsWith('\n')) text += '\n'
+    }
+    const collect = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const value = node.textContent ?? ''
+        textNodes.push({ node: node as Text, start: text.length, end: text.length + value.length })
+        text += value
+        return
+      }
+      if (!(node instanceof HTMLElement)) return
+      if (node.tagName === 'BR') {
+        text += '\n'
+        return
+      }
+
+      const isBlock = node !== root && (node.tagName === 'DIV' || node.tagName === 'P')
+      if (isBlock) appendBoundary()
+      for (const child of Array.from(node.childNodes)) collect(child)
+      if (isBlock) appendBoundary()
+    }
+    collect(root)
+
+    const selectionOffsets =
+      selectionPoints && selection
+        ? {
+            anchor: getTextOffset(root, textNodes, selectionPoints.anchorNode, selectionPoints.anchorOffset),
+            focus: getTextOffset(root, textNodes, selectionPoints.focusNode, selectionPoints.focusOffset),
+            collapsed: selectionPoints.collapsed,
+          }
+        : null
+    const normalized = normalizeBrandTerms(text)
+    if (normalized.length !== text.length || normalized === text) return
+    for (const { node, start, end } of textNodes) {
+      node.data = normalized.slice(start, end)
+    }
+
+    if (selection && selectionOffsets) {
+      const anchor = getTextPosition(textNodes, selectionOffsets.anchor)
+      const focus = getTextPosition(textNodes, selectionOffsets.focus)
+      if (anchor && focus) {
+        const range = document.createRange()
+        range.setStart(anchor.node, anchor.offset)
+        range.setEnd(focus.node, focus.offset)
+        selection.removeAllRanges()
+        selection.addRange(range)
+        if (selectionOffsets.collapsed) selection.collapse(anchor.node, anchor.offset)
+      }
+    }
+  }
+
   return (
     <div className="block text-xs">
       <span className="mb-1.5 block font-semibold tracking-[0.14em] text-ink-muted uppercase">
@@ -115,7 +206,17 @@ export function RichTextField({ value, onChange, mode }: RichTextFieldProps) {
         aria-multiline="true"
         spellCheck
         suppressContentEditableWarning
-        onInput={(event) => onChange(event.currentTarget.innerHTML)}
+        onInput={(event) => {
+          const inputEvent = event.nativeEvent
+          if (
+            inputEvent instanceof InputEvent &&
+            inputEvent.inputType === 'insertText' &&
+            inputEvent.data === ' '
+          ) {
+            normalizeLargeText(event.currentTarget)
+          }
+          onChange(event.currentTarget.innerHTML)
+        }}
         onKeyDown={(event) => {
           if (event.key !== 'Enter') return
           event.preventDefault()
