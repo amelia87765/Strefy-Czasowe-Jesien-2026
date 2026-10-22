@@ -1,24 +1,30 @@
 import { canvasFont, faceFor, scaledSize, TYPE, type TextKind, type TextRole } from '@/data/typography'
 import { glueUnits, type WrapMode } from '@/lib/textLayout'
 
-export type RichRun = { text: string; role: TextRole }
+export type RichRun = { text: string; role: TextRole; sizeFactor: number }
 
-type LineAtom = { text: string; role: TextRole; size: number }
+type LineAtom = { text: string; role: TextRole; size: number; sizeFactor: number }
 
 export function parseRichText(html: string, kind: TextKind): RichRun[] {
   if (!html.trim()) return []
   const doc = new DOMParser().parseFromString(`<div>${html}</div>`, 'text/html')
   const root = doc.body.firstElementChild
-  if (!root) return [{ text: html, role: 'regular' }]
+  if (!root) return [{ text: html, role: 'regular', sizeFactor: 1 }]
   const runs: RichRun[] = []
-  for (const child of Array.from(root.childNodes)) walk(child, 'regular', kind, runs)
+  for (const child of Array.from(root.childNodes)) walk(child, 'regular', 1, kind, runs)
   return mergeRuns(runs)
 }
 
-function walk(node: Node, role: TextRole, kind: TextKind, runs: RichRun[]) {
+function readSizeFactor(node: HTMLElement): number {
+  const raw = node.getAttribute('data-size')
+  const value = raw ? Number(raw) : 1
+  return Number.isFinite(value) && value > 0 ? value : 1
+}
+
+function walk(node: Node, role: TextRole, sizeFactor: number, kind: TextKind, runs: RichRun[]) {
   if (node.nodeType === Node.TEXT_NODE) {
     const text = node.textContent ?? ''
-    if (text) runs.push({ text, role })
+    if (text) runs.push({ text, role, sizeFactor })
     return
   }
   if (!(node instanceof HTMLElement)) return
@@ -26,23 +32,25 @@ function walk(node: Node, role: TextRole, kind: TextKind, runs: RichRun[]) {
   if (tag === 'BR') {
     const parent = node.parentElement
     const onlyBreak = parent && (parent.tagName === 'DIV' || parent.tagName === 'P') && parent.childNodes.length === 1
-    if (!onlyBreak) runs.push({ text: '\n', role })
+    if (!onlyBreak) runs.push({ text: '\n', role, sizeFactor })
     return
   }
-  let next = role
-  if (kind === 'large' && (tag === 'EM' || tag === 'I')) next = 'italic'
-  if (kind === 'small' && (tag === 'STRONG' || tag === 'B')) next = 'bold'
-  if (kind === 'small' && tag === 'SPAN' && node.hasAttribute('data-h3')) next = 'h3'
+  let nextRole = role
+  let nextSize = sizeFactor
+  if (kind === 'large' && (tag === 'EM' || tag === 'I')) nextRole = 'italic'
+  if (kind === 'small' && (tag === 'STRONG' || tag === 'B')) nextRole = 'bold'
+  if (kind === 'small' && tag === 'SPAN' && node.hasAttribute('data-h3')) nextRole = 'h3'
+  if (node.hasAttribute('data-size')) nextSize *= readSizeFactor(node)
   const block = tag === 'DIV' || tag === 'P'
-  for (const child of Array.from(node.childNodes)) walk(child, next, kind, runs)
-  if (block) runs.push({ text: '\n', role: next })
+  for (const child of Array.from(node.childNodes)) walk(child, nextRole, nextSize, kind, runs)
+  if (block) runs.push({ text: '\n', role: nextRole, sizeFactor: nextSize })
 }
 
 function mergeRuns(runs: RichRun[]): RichRun[] {
   const out: RichRun[] = []
   for (const run of runs) {
     const last = out[out.length - 1]
-    if (last && last.role === run.role) last.text += run.text
+    if (last && last.role === run.role && Math.abs(last.sizeFactor - run.sizeFactor) < 0.001) last.text += run.text
     else out.push({ ...run })
   }
   while (out.length > 0 && out[out.length - 1]?.text === '\n') out.pop()
@@ -53,13 +61,30 @@ function roleSize(kind: TextKind, role: TextRole, scale: number): number {
   return scaledSize(faceFor(kind, role), scale)
 }
 
-function setFace(ctx: CanvasRenderingContext2D, kind: TextKind, role: TextRole, scale: number) {
-  const face = faceFor(kind, role)
-  ctx.font = canvasFont(face, roleSize(kind, role, scale))
+function atomScale(scale: number, sizeFactor: number) {
+  return scale * sizeFactor
 }
 
-function measureRun(ctx: CanvasRenderingContext2D, kind: TextKind, role: TextRole, text: string, scale: number) {
-  setFace(ctx, kind, role, scale)
+function setFace(
+  ctx: CanvasRenderingContext2D,
+  kind: TextKind,
+  role: TextRole,
+  scale: number,
+  sizeFactor = 1,
+) {
+  const face = faceFor(kind, role)
+  ctx.font = canvasFont(face, roleSize(kind, role, atomScale(scale, sizeFactor)))
+}
+
+function measureRun(
+  ctx: CanvasRenderingContext2D,
+  kind: TextKind,
+  role: TextRole,
+  text: string,
+  scale: number,
+  sizeFactor = 1,
+) {
+  setFace(ctx, kind, role, scale, sizeFactor)
   return ctx.measureText(text).width
 }
 
@@ -68,22 +93,24 @@ function paragraphs(runs: RichRun[]): RichRun[][] {
   for (const run of runs) {
     const parts = run.text.split('\n')
     parts.forEach((part, index) => {
-      if (part) groups[groups.length - 1]?.push({ text: part, role: run.role })
+      if (part) groups[groups.length - 1]?.push({ text: part, role: run.role, sizeFactor: run.sizeFactor })
       if (index < parts.length - 1) groups.push([])
     })
   }
   return groups
 }
 
-function wordGroups(runs: RichRun[]): { word: string; atoms: { text: string; role: TextRole }[] }[] {
-  const atoms: { text: string; role: TextRole }[] = []
+type RunAtom = { text: string; role: TextRole; sizeFactor: number }
+
+function wordGroups(runs: RichRun[]): { word: string; atoms: RunAtom[] }[] {
+  const atoms: RunAtom[] = []
   for (const run of runs) {
     for (const bit of run.text.split(/(\s+)/)) {
-      if (bit) atoms.push({ text: bit, role: run.role })
+      if (bit) atoms.push({ text: bit, role: run.role, sizeFactor: run.sizeFactor })
     }
   }
-  const groups: { word: string; atoms: { text: string; role: TextRole }[] }[] = []
-  let current: { text: string; role: TextRole }[] = []
+  const groups: { word: string; atoms: RunAtom[] }[] = []
+  let current: RunAtom[] = []
   const flush = () => {
     if (current.length === 0) return
     groups.push({ word: current.map((atom) => atom.text).join(''), atoms: current })
@@ -112,16 +139,20 @@ function wrapParagraph(
     mode,
   )
   let cursor = 0
-  const units: { text: string; role: TextRole }[][] = []
+  const units: RunAtom[][] = []
   for (const unit of glued) {
     const need = unit.split(/\s+/).filter(Boolean).length
-    const slice: { text: string; role: TextRole }[] = []
+    const slice: RunAtom[] = []
     for (let offset = 0; offset < need; offset += 1) {
       const group = groups[cursor + offset]
       if (!group) continue
       if (slice.length > 0) {
-        const spaceRole = slice[slice.length - 1]?.role ?? 'regular'
-        slice.push({ text: ' ', role: spaceRole })
+        const prev = slice[slice.length - 1]
+        slice.push({
+          text: ' ',
+          role: prev?.role ?? 'regular',
+          sizeFactor: prev?.sizeFactor ?? 1,
+        })
       }
       slice.push(...group.atoms)
     }
@@ -144,19 +175,37 @@ function wrapParagraph(
     if (!unit || unit.length === 0) continue
     const atoms: LineAtom[] = []
     if (current.length > 0) {
-      const spaceRole = current[current.length - 1]?.role ?? 'regular'
-      atoms.push({ text: ' ', role: spaceRole, size: roleSize(kind, spaceRole, scale) })
+      const prev = current[current.length - 1]
+      const spaceRole = prev?.role ?? 'regular'
+      const spaceFactor = prev?.sizeFactor ?? 1
+      atoms.push({
+        text: ' ',
+        role: spaceRole,
+        size: roleSize(kind, spaceRole, atomScale(scale, spaceFactor)),
+        sizeFactor: spaceFactor,
+      })
     }
     for (const part of unit) {
-      atoms.push({ text: part.text, role: part.role, size: roleSize(kind, part.role, scale) })
+      atoms.push({
+        text: part.text,
+        role: part.role,
+        size: roleSize(kind, part.role, atomScale(scale, part.sizeFactor)),
+        sizeFactor: part.sizeFactor,
+      })
     }
-    const extra = atoms.reduce((sum, atom) => sum + measureRun(ctx, kind, atom.role, atom.text, scale), 0)
+    const extra = atoms.reduce(
+      (sum, atom) => sum + measureRun(ctx, kind, atom.role, atom.text, scale, atom.sizeFactor),
+      0,
+    )
     if (current.length > 0 && width + extra > maxWidth + 0.5) {
       flush()
       const start = atoms[0]?.text === ' ' ? 1 : 0
       const wrapped = atoms.slice(start)
       current = wrapped
-      width = wrapped.reduce((sum, atom) => sum + measureRun(ctx, kind, atom.role, atom.text, scale), 0)
+      width = wrapped.reduce(
+        (sum, atom) => sum + measureRun(ctx, kind, atom.role, atom.text, scale, atom.sizeFactor),
+        0,
+      )
     } else {
       current.push(...atoms)
       width += extra
@@ -197,7 +246,7 @@ function blockHeight(kind: TextKind, lines: LineAtom[][], scale: number): number
 }
 
 function lineWidth(ctx: CanvasRenderingContext2D, kind: TextKind, line: LineAtom[], scale: number): number {
-  return line.reduce((sum, atom) => sum + measureRun(ctx, kind, atom.role, atom.text, scale), 0)
+  return line.reduce((sum, atom) => sum + measureRun(ctx, kind, atom.role, atom.text, scale, atom.sizeFactor), 0)
 }
 
 export function fitRichText(
@@ -264,9 +313,9 @@ export function drawRichText(
       align === 'left' ? box.x : align === 'right' ? box.x + box.width - width : box.x + (box.width - width) / 2
     const baseline = y + maxSize * 0.82
     for (const atom of line) {
-      setFace(ctx, kind, atom.role, scale)
+      setFace(ctx, kind, atom.role, scale, atom.sizeFactor)
       ctx.fillText(atom.text, x, baseline)
-      x += measureRun(ctx, kind, atom.role, atom.text, scale)
+      x += measureRun(ctx, kind, atom.role, atom.text, scale, atom.sizeFactor)
     }
     y += height
   }

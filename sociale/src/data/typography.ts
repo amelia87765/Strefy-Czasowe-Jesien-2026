@@ -40,7 +40,7 @@ export function faceFor(kind: TextKind, role: TextRole): TypeFace {
 }
 
 export function scaledSize(face: TypeFace, scale: number): number {
-  return Math.min(face.max, Math.max(face.min, face.max * scale))
+  return Math.max(face.min, face.max * scale)
 }
 
 export function canvasFont(face: TypeFace, size: number): string {

@@ -1,4 +1,15 @@
-import { selectionHasMark, toggleTextMark, type TextMark } from '@/lib/textMarks'
+import { LARGE_SIZE_MIN_FACTOR, LARGE_SIZE_STEP } from '@/data/typography'
+import {
+  adjustSelectionSize,
+  LOCAL_SIZE_MAX,
+  LOCAL_SIZE_MIN,
+  LOCAL_SIZE_STEP,
+  selectionHasMark,
+  selectionInEditor,
+  selectionSizeFactor,
+  toggleTextMark,
+  type TextMark,
+} from '@/lib/textMarks'
 import { normalizeBrandTerms } from '@/lib/brandTerms'
 import { useEffect, useRef, useState } from 'react'
 
@@ -6,6 +17,8 @@ type RichTextFieldProps = {
   value: string
   onChange: (html: string) => void
   mode: 'small' | 'large'
+  typeSizeFactor?: number
+  onTypeSizeFactor?: (value: number) => void
 }
 
 function getTextOffset(
@@ -60,11 +73,19 @@ function MarkButton({
   )
 }
 
-export function RichTextField({ value, onChange, mode }: RichTextFieldProps) {
+export function RichTextField({
+  value,
+  onChange,
+  mode,
+  typeSizeFactor = 1,
+  onTypeSizeFactor,
+}: RichTextFieldProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [italicOn, setItalicOn] = useState(false)
   const [boldOn, setBoldOn] = useState(false)
   const [h3On, setH3On] = useState(false)
+  const [hasSelection, setHasSelection] = useState(false)
+  const [localSize, setLocalSize] = useState(1)
 
   useEffect(() => {
     const el = ref.current
@@ -79,6 +100,10 @@ export function RichTextField({ value, onChange, mode }: RichTextFieldProps) {
     setItalicOn(selectionHasMark(el, 'italic'))
     setBoldOn(selectionHasMark(el, 'bold'))
     setH3On(selectionHasMark(el, 'h3'))
+    const range = selectionInEditor(el)
+    const selected = !!range && !range.collapsed
+    setHasSelection(selected)
+    setLocalSize(selected ? (selectionSizeFactor(el) ?? 1) : 1)
   }
 
   useEffect(() => {
@@ -234,9 +259,57 @@ export function RichTextField({ value, onChange, mode }: RichTextFieldProps) {
           document.execCommand('insertText', false, text)
         }}
       />
+      {mode === 'large' && onTypeSizeFactor ? (
+        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            title={hasSelection ? 'Smaller selected text' : 'Smaller whole text'}
+            className="min-h-9 rounded-full border border-line bg-white px-3 text-xs font-medium disabled:opacity-40"
+            disabled={
+              hasSelection
+                ? localSize <= LOCAL_SIZE_MIN + 0.001
+                : typeSizeFactor <= LARGE_SIZE_MIN_FACTOR + 0.001
+            }
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => {
+              const el = ref.current
+              if (!el) return
+              el.focus()
+              if (adjustSelectionSize(el, -LOCAL_SIZE_STEP)) {
+                onChange(el.innerHTML)
+                refreshMarks()
+                return
+              }
+              onTypeSizeFactor(Math.max(LARGE_SIZE_MIN_FACTOR, typeSizeFactor - LARGE_SIZE_STEP))
+            }}
+          >
+            A−
+          </button>
+          <button
+            type="button"
+            title={hasSelection ? 'Larger selected text' : 'Larger whole text'}
+            className="min-h-9 rounded-full border border-line bg-white px-3 text-xs font-medium disabled:opacity-40"
+            disabled={hasSelection ? localSize >= LOCAL_SIZE_MAX - 0.001 : typeSizeFactor >= 1}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => {
+              const el = ref.current
+              if (!el) return
+              el.focus()
+              if (adjustSelectionSize(el, LOCAL_SIZE_STEP)) {
+                onChange(el.innerHTML)
+                refreshMarks()
+                return
+              }
+              onTypeSizeFactor(Math.min(1, typeSizeFactor + LARGE_SIZE_STEP))
+            }}
+          >
+            A+
+          </button>
+        </div>
+      ) : null}
       <p className="mt-1.5 text-[11px] leading-relaxed text-ink-muted">
         {mode === 'large'
-          ? 'Select words, then Italic. Click Italic again to undo.'
+          ? 'Select words, then Italic or A+/A−. Click Italic again to undo. With no selection, size changes the whole text.'
           : 'Select words, then Bold or H3. Click the same button again to undo.'}
       </p>
     </div>

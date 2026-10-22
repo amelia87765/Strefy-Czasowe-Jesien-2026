@@ -34,7 +34,6 @@ import {
   NAME_LINE_HEIGHT_MAX,
   NAME_LINE_HEIGHT_STEP,
 } from '@/data/layout'
-import { LARGE_SIZE_MIN_FACTOR, LARGE_SIZE_STEP } from '@/data/typography'
 import { contentContrastOk } from '@/lib/contrast'
 
 type ControlPanelProps = {
@@ -567,37 +566,9 @@ export function ControlPanel(props: ControlPanelProps) {
             value={props.bodyText}
             onChange={props.onBodyText}
             mode={props.contentType === 'large' ? 'large' : 'small'}
+            typeSizeFactor={props.typeSizeFactor}
+            onTypeSizeFactor={props.onTypeSizeFactor}
           />
-          {props.contentType === 'large' ? (
-            <fieldset>
-              <legend className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-ink-muted uppercase">
-                Size
-              </legend>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <button
-                  type="button"
-                  className="min-h-9 rounded-full border border-line bg-white px-3 text-xs font-medium disabled:opacity-40"
-                  disabled={props.typeSizeFactor <= LARGE_SIZE_MIN_FACTOR + 0.001}
-                  onClick={() =>
-                    props.onTypeSizeFactor(Math.max(LARGE_SIZE_MIN_FACTOR, props.typeSizeFactor - LARGE_SIZE_STEP))
-                  }
-                >
-                  A−
-                </button>
-                <button
-                  type="button"
-                  className="min-h-9 rounded-full border border-line bg-white px-3 text-xs font-medium disabled:opacity-40"
-                  disabled={props.typeSizeFactor >= 1}
-                  onClick={() => props.onTypeSizeFactor(Math.min(1, props.typeSizeFactor + LARGE_SIZE_STEP))}
-                >
-                  A+
-                </button>
-                <span className="text-[11px] text-ink-muted">
-                  {props.typeSizeFactor >= 1 ? 'Fits frame' : `${Math.round(props.typeSizeFactor * 100)}% of fit`}
-                </span>
-              </div>
-            </fieldset>
-          ) : null}
           <Segmented
             label="Align horizontal"
             value={props.textAlign}
