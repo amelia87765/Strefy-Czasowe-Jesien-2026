@@ -147,6 +147,68 @@ function Faq({
   );
 }
 
+function Facts({
+  items,
+  lang,
+}: {
+  items: { label: Text; value: Text }[];
+  lang: Lang;
+}) {
+  return (
+    <dl className="flex flex-nowrap max-md:flex-col max-md:gap-y-[4rem]">
+      {items.map((item, index) => (
+        <div
+          key={index}
+          className={`flex min-w-0 flex-col gap-[1.6rem] md:pr-[5rem] ${
+            index > 0 ? "md:border-l-[0.2rem] md:border-current md:pl-[5rem]" : ""
+          } max-md:flex-row max-md:items-baseline max-md:justify-between max-md:gap-[4rem]`}
+        >
+          <dt className="font-hanken text-[calc(2.4rem*var(--type))] leading-none uppercase">
+            {item.label[lang]}
+          </dt>
+          <dd className="font-classico text-[calc(10rem*var(--type))] leading-[0.9] whitespace-nowrap">
+            {item.value[lang]}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function CopyCode({ code, label, lang }: { code: string; label: Text; lang: Lang }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+  return (
+    <div className="flex flex-col items-start gap-[1.6rem]">
+      <span className="font-hanken text-[calc(2.4rem*var(--type))] leading-none uppercase">
+        {label[lang]}
+      </span>
+      <button
+        type="button"
+        onClick={copy}
+        className="flex max-w-full cursor-pointer items-baseline gap-[4rem] rounded-full border-[0.2rem] border-current bg-transparent px-[5rem] py-[2.6rem] text-inherit transition-opacity hover:opacity-70 max-md:flex-col max-md:items-start max-md:gap-[1.2rem] max-md:rounded-[4.4rem]"
+      >
+        <span className="font-classico text-[calc(8.2rem*var(--type))] leading-[0.9] tracking-[0.02em] break-all">
+          {code}
+        </span>
+        <span aria-live="polite" className="font-hanken text-[calc(2.4rem*var(--type))] leading-none uppercase">
+          {copied
+            ? lang === "pl" ? "Skopiowano" : "Copied"
+            : lang === "pl" ? "Kopiuj" : "Copy"}
+        </span>
+      </button>
+    </div>
+  );
+}
+
 function BlockView({ block, lang }: { block: Block; lang: Lang }) {
   switch (block.type) {
     case "heading":
@@ -154,13 +216,23 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
         <FitLine
           as="h2"
           text={block.text[lang]}
-          className="font-classico text-[calc(12.8rem*var(--type))] leading-[0.9]"
+          className="-mb-[0.15em] pb-[0.15em] font-classico text-[calc(12.8rem*var(--type))] leading-[0.9]"
         />
       );
     case "text":
       return (
-        <Paragraphs items={block.paragraphs[lang]} nowrap={block.nowrap} />
+        <Paragraphs
+          items={block.paragraphs[lang]}
+          nowrap={block.nowrap}
+          textClassName={
+            block.textSize === "small" ? "text-[calc(3.2rem*var(--type))]" : undefined
+          }
+        />
       );
+    case "facts":
+      return <Facts items={block.items} lang={lang} />;
+    case "code":
+      return <CopyCode code={block.code} label={block.label} lang={lang} />;
     case "statement":
       return (
         <p className="max-w-[128.4rem] font-classico text-[calc(10rem*var(--type))] leading-none">
@@ -187,7 +259,7 @@ function BlockView({ block, lang }: { block: Block; lang: Lang }) {
           {block.links.map((link, index) => (
             <a
               key={index}
-              href={link.href || undefined}
+              href={(typeof link.href === "string" ? link.href : link.href[lang]) || undefined}
               target="_blank"
               rel="noopener noreferrer"
               className="border-b border-current pb-[0.9rem] transition-opacity hover:opacity-70"

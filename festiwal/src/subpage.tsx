@@ -8,6 +8,7 @@ import {
   ABOUT_SECTIONS,
   SHOP_SECTIONS,
   SUBPAGE_COLORS,
+  TRAVEL_SECTIONS,
   VOLUNTEERS_SECTIONS,
   type Section,
   type SubpageId,
@@ -27,6 +28,7 @@ const SECTIONS: Record<SubpageId, Section[]> = {
         : { type: 'text', paragraphs: { pl: ['Zdjęcia już wkrótce.'], en: ['Photos coming soon.'] } },
     ],
   ],
+  dojazd: TRAVEL_SECTIONS,
 }
 
 const root = document.getElementById('root')

@@ -90,6 +90,7 @@ export const TEXT_MENU: MenuItem[] = [
   ...SHAPE_ROW_1,
   ...SHAPE_ROW_2,
   { id: "galeria", href: "galeria/", label: { pl: "GALERIA", en: "GALLERY" } },
+  { id: "dojazd", href: "dojazd/", label: { pl: "DOJAZD I POBYT", en: "TRAVEL & STAY" } },
 ];
 
 export const MONTHS: { id: string; pl: string; en: string }[] = [

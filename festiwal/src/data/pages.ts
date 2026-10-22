@@ -5,7 +5,8 @@ export type SubpageId =
   | "sklep"
   | "wolontariusze"
   | "faq"
-  | "galeria";
+  | "galeria"
+  | "dojazd";
 
 /** Kolory jednolitych podstron: tło i tekst (tytuł, kreski, treść). */
 export const SUBPAGE_COLORS: Record<
@@ -32,6 +33,10 @@ export const SUBPAGE_COLORS: Record<
     background: "var(--color-deep-navy)",
     text: "var(--color-cream)",
   },
+  dojazd: {
+    background: "var(--color-deep-forest)",
+    text: "var(--color-chartreuse)",
+  },
 };
 
 export type Text = Record<Lang, string>;
@@ -43,7 +48,13 @@ export type Text = Record<Lang, string>;
  */
 export type Block =
   | { type: "heading"; text: Text }
-  | { type: "text"; paragraphs: Record<Lang, string[]>; nowrap?: number[] }
+  | {
+      type: "text";
+      paragraphs: Record<Lang, string[]>;
+      nowrap?: number[];
+      /** `small` na drobny druk, np. warunki rabatu. */
+      textSize?: "small";
+    }
   /**
    * Wpinka (iframe), np. widget sprzedaży Going. `height` w rem.
    * Pusty `src` pokazuje przycisk do strony biletów.
@@ -61,8 +72,12 @@ export type Block =
   | { type: "statement"; text: Text }
   /** `width` to szerokość elipsy w rem (1 rem = 10 px przy 1728 px), wysokość jest wspólna. */
   | { type: "photos"; photos: { src: string; width: number; alt: Text }[] }
-  /** Pusty `href` wyświetla sam tekst bez linku. */
-  | { type: "links"; links: { label: Text; href: string }[] }
+  /** Pusty `href` wyświetla sam tekst bez linku. `href` może mieć osobny adres dla PL i ENG. */
+  | { type: "links"; links: { label: Text; href: string | Text }[] }
+  /** Rzędy „etykieta — duża wartość”, np. godziny albo rabaty. */
+  | { type: "facts"; items: { label: Text; value: Text }[] }
+  /** Kod do skopiowania jednym kliknięciem. */
+  | { type: "code"; code: string; label: Text }
   /** Siatka zdjęć z podglądem po kliknięciu. Dane z `npm run gallery`. */
   | { type: "album"; photos: AlbumPhoto[] };
 
@@ -281,6 +296,95 @@ export const VOLUNTEERS_SECTIONS: Section[] = [
           "STREFY CZASOWE are created together. We value the space for shared experience of art — open and attentive. We are looking for people who want to collaborate with us to create the next edition of the festival.\nDo you want to join the production team?\nContact us or fill out the [form](https://docs.google.com/forms/d/e/1FAIpQLSe-zYxx5DaCgpR-jVlfGddWpz84_0pOWB_R1X5fzcSQqGLPmw/viewform).",
         ],
       },
+    },
+  ],
+];
+
+const SVERA_MAP =
+  "https://www.google.com/maps/search/?api=1&query=SVERA%2C+plac+Konstytucji+2%2C+Gdynia";
+const MERCURE = {
+  pl: "https://all.accor.com/hotel/3417/index.pl.shtml",
+  en: "https://all.accor.com/hotel/3417/index.en.shtml",
+};
+
+export const TRAVEL_SECTIONS: Section[] = [
+  [
+    {
+      type: "facts",
+      items: [
+        { label: { pl: "Data", en: "Date" }, value: { pl: "24.10.2026", en: "24.10.2026" } },
+        { label: { pl: "Otwarcie bramek", en: "Gates open" }, value: { pl: "18:45", en: "18:45" } },
+        { label: { pl: "Start", en: "Start" }, value: { pl: "19:00", en: "19:00" } },
+      ],
+    },
+  ],
+  [
+    { type: "heading", text: { pl: "Dojazd", en: "Getting here" } },
+    {
+      type: "text",
+      paragraphs: {
+        pl: [
+          "SVERA, plac Konstytucji 2, Gdynia.",
+          "Klub stoi przy samym dworcu Gdynia Główna — wysiadasz z pociągu i jesteś na miejscu. SKM, PKM, pociągi dalekobieżne, autobusy i trolejbusy zatrzymują się tuż obok.",
+        ],
+        en: [
+          "SVERA, plac Konstytucji 2, Gdynia.",
+          "The club is right next to Gdynia Główna, the main railway station — step off the train and you are there. SKM, PKM, long-distance trains, buses and trolleybuses all stop next door.",
+        ],
+      },
+    },
+    {
+      type: "links",
+      links: [{ label: { pl: "Pokaż na mapie", en: "Show on the map" }, href: SVERA_MAP }],
+    },
+    {
+      type: "text",
+      paragraphs: {
+        pl: [
+          "Wracasz nocą? Pamiętaj, że tej nocy zegary cofają się o godzinę, z 3:00 na 2:00. Przed powrotem sprawdź nocny rozkład SKM.",
+        ],
+        en: [
+          "Heading home at night? Remember that the clocks go back an hour that night, from 3:00 to 2:00. Check the night SKM timetable before you leave.",
+        ],
+      },
+    },
+  ],
+  [
+    { type: "heading", text: { pl: "Nocleg", en: "Where to stay" } },
+    {
+      type: "text",
+      paragraphs: {
+        pl: [
+          "Przyjeżdżasz z daleka? Współpracujemy z hotelem *Mercure Gdynia Centrum* przy ul. Armii Krajowej 22, w centrum miasta, blisko morza i kilkanaście minut spacerem od SVERY.",
+        ],
+        en: [
+          "Coming from further away? We are partnering with *Mercure Gdynia Centrum* at ul. Armii Krajowej 22, in the city centre, close to the sea and a short walk from SVERA.",
+        ],
+      },
+    },
+    { type: "code", code: "TIMEZONES2026", label: { pl: "Kod rabatowy", en: "Discount code" } },
+    {
+      type: "facts",
+      items: [
+        { label: { pl: "Jedna noc", en: "One night" }, value: { pl: "−15%", en: "−15%" } },
+        { label: { pl: "Dwie noce", en: "Two nights" }, value: { pl: "−20%", en: "−20%" } },
+      ],
+    },
+    {
+      type: "text",
+      textSize: "small",
+      paragraphs: {
+        pl: [
+          "Rabat od elastycznej stawki dnia, na pobyty w terminie 23–25 października 2026, w zależności od dostępności. Podaj kod przy rezerwacji.",
+        ],
+        en: [
+          "Discount off the flexible daily rate, for stays between 23 and 25 October 2026, subject to availability. Quote the code when booking.",
+        ],
+      },
+    },
+    {
+      type: "links",
+      links: [{ label: { pl: "Strona hotelu", en: "Hotel website" }, href: MERCURE }],
     },
   ],
 ];

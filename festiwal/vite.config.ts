@@ -33,6 +33,7 @@ export default defineConfig({
         wolontariusze: fileURLToPath(new URL('./wolontariusze/index.html', import.meta.url)),
         faq: fileURLToPath(new URL('./faq/index.html', import.meta.url)),
         galeria: fileURLToPath(new URL('./galeria/index.html', import.meta.url)),
+        dojazd: fileURLToPath(new URL('./dojazd/index.html', import.meta.url)),
       },
     },
   },
