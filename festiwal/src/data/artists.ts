@@ -70,7 +70,7 @@ const INTERACTIVE_INSTALLATION = {
 };
 const PROJECT_AMBIENT = { pl: "Projekt ambientowy", en: "Ambient project" };
 const LIVE_AV_SHOW = { pl: "Live AV Show", en: "Live AV Show" };
-const KACZMARSKA_BIO = {
+/*const KACZMARSKA_BIO = {
   pl: [
     "Na STREFACH CZASOWYCH Ania Kaczmarska stanie oko w oko z własnym cieniem.",
     "Tekst do jej pracy rozsypuje się na kartce jak kroki na parkiecie: „Było”, „Jest”, „Będzie”, „Ja”, „Ty”. Ruch prowadzi tu przez wszystkie czasy naraz, a każde zatrzymanie ma swojego świadka.",
@@ -83,7 +83,7 @@ const KACZMARSKA_BIO = {
     "Ania Kaczmarska is a dancer and choreographer from the Tri-City, a graduate of the contemporary dance program MoDem Atelier at Scenario Pubblico in Sicily. She specializes in site-specific projects. In Catania, she created the solo „95131” about the San Berillo district, and this year she directed the play „Farewell to the old Żabka logo”.",
     "Tonight, one hour will happen twice. I wonder if the shadow will keep up.",
   ],
-};
+};*/
 const SUBBASICS_BIO = {
   pl: [
     "Dub techno, UK bass i dubstepowe korzenie. Na STREFACH CZASOWYCH zagra je Sub Basics, prosto z Wielkiej Brytanii.",
@@ -122,7 +122,7 @@ const ORZECHOWSKA_BIO = {
     "Patrycja Orzechowska is a visual artist and author of artist books associated with Gdańsk. She is a graduate of the Academy of Fine Arts in Gdańsk and the Interdisciplinary Doctoral Studies at the University of the Arts in Poznań. She works with ceramics, installation, object, photography, collage, graphic design and collecting. She likes crop rotation the most.",
   ],
 };
-const KONIARSKA_BIO = {
+/*const KONIARSKA_BIO = {
   pl: [
     "Na STREFACH CZASOWYCH Marta Maria Koniarska pokaże obrazy olejne i haft o tym, czego szukamy, choć nie umiemy tego złapać.",
     "Obrazy „Zupa Nic”, „kwiaty paproci” i „Stan skupienia” pytają, czy istnieją przepisy na szczęście — i czy poznamy, że już do niego doszliśmy. W hafcie „: P” wyszyte narządy układają się w mapę, przez którą ciało próbuje mówić na zewnątrz.",
@@ -135,7 +135,7 @@ const KONIARSKA_BIO = {
     "Marta Maria Koniarska is a visual artist and curator, a graduate of the Academy of Fine Arts in Gdańsk. She co-creates the independent gallery Wolne Pokoje and the visual part of the Spokój festival, and conducts art workshops for multiple generations at the Gdynia Przystanie Sąsiedzkie.",
     "The fern flower is said to bloom on the shortest night of the year. We will search for it on the one that lasts an hour longer.",
   ],
-};
+};*/
 const WIKA_BIO = {
   pl: [
     "Wika Wieczorek wyświetla na ścianie zdjęcia w kolorach gęstych jak syrop i stawia przed nimi swojego młodszego brata. W filmie „It’s Just a Dream” chłopiec przechodzi ze świata do świata jak z pokoju do pokoju. Każdy daje mu nowe zadanie, a każda pobudka okazuje się kolejnym piętrem snu.",
@@ -829,7 +829,7 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-deep-forest)",
     text: "var(--color-cream)",
   },
-  {
+  /*{
     id: "kaczmarska",
     name: "Ania Kaczmarska",
     role: PERFORMER,
@@ -839,7 +839,7 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/owsi.anka",
     background: "var(--color-deep-navy)",
     text: "var(--color-periwinkle)",
-  },
+  },*/
   {
     id: "chatka",
     name: "Chatka Ebo",
@@ -851,7 +851,7 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-cream)",
     text: "var(--color-deep-plum)",
   },
-  {
+  /*{
     id: "koniarska",
     name: "Marta Koniarska",
     role: VISUAL_ARTIST,
@@ -861,7 +861,7 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/qniec",
     background: "var(--color-deep-plum)",
     text: "var(--color-periwinkle)",
-  },
+  },*/
   {
     id: "adel",
     name: "Laura Adel",
