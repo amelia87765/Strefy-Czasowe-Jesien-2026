@@ -264,7 +264,7 @@ export default function App() {
               {change.to === 'winter' ? t.winterLeft : t.summerLeft}
               {lang === 'en' ? <br /> : ' '}
               {left.days} {t.days} {left.hours}{' '}
-              {t.hours} {left.seconds} {t.seconds}
+              {t.hours} {left.minutes} {t.minutes} {left.seconds} {t.seconds}
             </p>
             <VideoPeek caption={t.previous} onOpenChange={setVideoOpen} className="max-md:hidden" />
           </section>

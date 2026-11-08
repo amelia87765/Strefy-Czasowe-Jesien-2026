@@ -54,9 +54,9 @@ Podstrona to lista sekcji oddzielonych kreską, a sekcja to lista klocków: `hea
 
 Zasady:
 
-- Zdjęcia: `.jpg`, `.jpeg`, `.png` lub `.webp`; wynik zawsze `.jpg`, dłuższy bok 1600 px.
+- Zdjęcia: `.jpg`, `.jpeg`, `.png`, `.webp`, `.tif` lub `.tiff`; wynik zawsze `.jpg`, dłuższy bok 1600 px.
 - **Nazwy plików bez spacji i polskich znaków** (`renia-maj.jpg`). Skrypt zapisuje wynik małymi literami (`ZUK.JPG` → `zuk.jpg`), więc w kodzie zawsze wpisuj małe litery — serwer rozróżnia wielkość liter.
-- Skrypt przetwarza wszystkie pliki z `media/` za każdym razem i nadpisuje wyniki — to bezpieczne.
+- Skrypt przetwarza nowe lub zmienione pliki z `media/`; `--force` wymusza ponowne przetworzenie wszystkich zdjęć.
 - Po zmianie zdjęć uruchom `npm run media:photos -w festiwal`, po zmianie filmu `npm run media -w festiwal`.
 - Nowy podfolder na zdjęcia dopisz do `PHOTO_DIRS` w `scripts/media.mjs`.
 - ffmpeg instaluje się razem z `npm install`, nie trzeba go instalować osobno.

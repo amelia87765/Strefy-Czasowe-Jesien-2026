@@ -23,7 +23,7 @@ function mb(file) {
 }
 
 const PHOTO_DIRS = ['', 'artysci', 'o-festiwalu', 'sklep']
-const PHOTO_EXT = /\.(jpe?g|png|webp)$/i
+const PHOTO_EXT = /\.(jpe?g|png|webp|tiff?)$/i
 
 const photos = PHOTO_DIRS.flatMap((dir) => {
   const from = path.join(src, dir)

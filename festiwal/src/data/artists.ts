@@ -70,6 +70,10 @@ const INTERACTIVE_INSTALLATION = {
 };
 const PROJECT_AMBIENT = { pl: "Projekt ambientowy", en: "Ambient project" };
 const LIVE_AV_SHOW = { pl: "Live AV Show", en: "Live AV Show" };
+const SOUND_DESIGNER = {
+  pl: "Sound designerka",
+  en: "Sound designer",
+};
 const KACZMARSKA_BIO = {
   pl: [
     "Na STREFACH CZASOWYCH Ania Kaczmarska stanie oko w oko z własnym cieniem.",
@@ -155,6 +159,24 @@ const ALLG_BIO = {
     "Known for her bass-heavy sound, ALLG will for the first time invite the audience into her ambient landscape — at STREFY CZASOWE.",
     "DJ, co-founder of the POISE collective and curator of the Forest stage at the Spokój festival. In her sets, she does not adhere to genre divisions — she seeks experimental gaps and the new forms of expression that sprout from them. She is driven by emotions, curiosity, and a desire to surprise — especially herself.",
   ],
+};
+const DZIADUL_BIO = {
+  pl: [
+    "Siostry, które współpracowały ze sobą na długo, zanim to zauważyły. Ich duet powstał w Wejherowie 18 grudnia 2003 roku.",
+    "Na STREFACH CZASOWYCH pokażą performans o bliskości, która parzy, mrozi i koi.",
+    "Gorąca woda. Letnia. Lód. Wrzątek. Każda część ma swoją temperaturę, a dwa ciała raz szukają siebie, raz uciekają na przeciwne krańce sali. siostry. Dziadul to duet Liv i Natalii Dziadul. Zastanawiają się nad tożsamością, współpamięcią i siecią relacji, która je łączy.",
+    "Tej nocy sprawdzimy, ile stopni ma bliskość. Według nich — 36,6.",
+  ],
+  en: [""],
+};
+const DARYA_BIO = {
+  pl: [
+    "Artystka dźwiękowa. Łączy syntezę analogową, nagrania terenowe i własny głos, szukając miejsca, w którym szum otoczenia spotyka elektryczne napięcie.",
+    "Na STREFACH CZASOWYCH Darya Smolina będzie wszędzie tam, gdzie prace zaczną brzmieć.",
+    "Przygotowała warstwy dźwiękowe do wybranych prac festiwalu, które przedłużają je i poszerzają to, co widzimy. Stworzyła tło muzyczne do performansu Tuliluliuwu, a podczas performansu Oski Żuk zagra na żywo, analogowo.",
+    "W swoich pejzażach dźwiękowych zestawia organiczne odgłosy otoczenia z ekspresją głosu i szuka nieoczywistych faktur brzmienia.",
+  ],
+  en: [""],
 };
 const KULCZYNSKA_BIO = {
   pl: [
@@ -504,7 +526,7 @@ const HISTERY_BIO = {
     "Three dancers, choreographers and performers. Body is not for them an expression, but a voice.",
     "Instead of suppressing vibrations, they catch them. Breath, diaphragm and gesture lead their own stories here, and error ceases to be a stumble and becomes a form.",
     "HISTERY is created by Klaudia Janus, founder of the Gdynia Space for Dance Tiyo-way, Róża Kołoda, co-founder of the Theatre Generations, and Tatiana Dziewanowska, dance pedagogue and author of the site-specific action.",
-  ]
+  ],
 };
 const EXE_BIO = {
   pl: [
@@ -518,7 +540,29 @@ const EXE_BIO = {
     "EXE is a representative of the Tri-City underground and co-founder of STREFY CZASOWYCH. He debuted at the now-defunct club Ziemia we Wrzeszcu, and then played at venues such as the Teatr Wybrzeże, Jasna 1, Crackhouse and Schronie, as well as festivals such as Biedowo and Spokój Festiwaql. He is behind the initiative 22myjnia22, which supports events and audio-visual spaces in the Tri-City and beyond. In his sets, he controls the percussion, deep bass and unexpected rhythm, which build tension and put the dance floor into an euphoric state.",
     "Their paths crossed at 100CZNI in 2025, where they played the same night after the Paradie Równości.",
     "At STREFY CZASOWE, for the first time, they will stand together behind the decks in a back-to-back set, which will be danceable, colorful and magical.",
-  ]
+  ],
+};
+const KINAS_BIO = {
+  pl: [
+    "Performerka, czasem aktorka i uważna obserwatorka życiowego nonsensu. Najlepiej czuje się tam, gdzie logika ma wolne.",
+    "W „Mów mi czule” towarzyszy pracom Basi Ślusarczyk. Szept do ucha to gest zarezerwowany dla bliskości albo sekretów — tutaj ucho staje się konfesjonałem, który bezpowrotnie wchłania cudze tajemnice.",
+    "Przy filmie Wiki Wieczorek „It’s Just a Dream” sprawdzi, gdzie kończy się słyszenie, a zaczyna słuchanie, w świecie, w którym nadmiar komunikatów rzadko zbliża nas do kogokolwiek.",
+  ],
+  en: [""],
+};
+const ROGALA_BIO = {
+  pl: [
+    "Na STREFACH CZASOWYCH Maja Rogala pokaże performans, w którym czas zwalnia jak lodowiec zapadający w zimowy sen.",
+    "Punktem wyjścia jest piżama zaprojektowana przez Mona Renę Górską — pikowana, w bielach i szarościach, rzeźbiona jak lód. Z jej faktury rodzi się ruch. Ciało zwalnia, zastyga i stopniowo rozpuszcza się w przestrzeni, gdzieś między czuwaniem a snem. Maja porusza się wśród architektury i prac innych artystów i sama staje się żywym elementem wystawy.",
+    "Jest tancerką i performerką, pracuje na styku teatru tańca, improwizacji kontaktowej i działań performatywnych. Uczyła się m.in. w Caro Dance i na warsztatach Batsheva Dance Company, a jako movement director pracuje przy teledyskach.",
+  ],
+  en: [""],
+};
+const MONA_BIO = {
+  pl: [
+    "Mona Rena Górska jest filozofką, która łączy performans sportowy i codzienności istnienia. Art and Sport meeting is here. Wspina się, tańczy z drzewami, morzami, skałami, lodowcami, każdą materią otwartą na oddech. Na codzień prowadzi studio tekstylno-performatywne MONA RENA projektując ubrania somatyczne, kostiumy, rzeźby tekstylne. Jest tutaj miękko. Jej motto brzmi: Wear Your Next Movement.",
+  ],
+  en: ["Mona"],
 };
 export const ARTISTS: Artist[] = [
   {
@@ -576,6 +620,18 @@ export const ARTISTS: Artist[] = [
     instagram2: "https://www.instagram.com/jozef.bieganski",
     background: "var(--color-deep-plum)",
     text: "var(--color-cream)",
+  },
+  {
+    id: "dziadul",
+    name: "Siostry Dziadul",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/dziadul.jpg",
+    mask: "announcement-2",
+    description: DZIADUL_BIO,
+    instagram: "https://www.instagram.com/natalia_dziadul",
+    instagram2: "https://www.instagram.com/liv_dziadul",
+    background: "var(--color-ground)",
+    text: "var(--color-periwinkle)",
   },
   {
     id: "irena",
@@ -671,7 +727,7 @@ export const ARTISTS: Artist[] = [
   {
     id: "exe",
     name: "AVTOMAT b2b .EXE",
-    role: PERFORMER,
+    role: DJ,
     photo: "festiwal_foto/artysci/exe.jpg",
     mask: "announcement-6",
     description: EXE_BIO,
@@ -690,6 +746,17 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/mirowska.p",
     background: "var(--color-periwinkle)",
     text: "var(--color-ground)",
+  },
+  {
+    id: "rogala",
+    name: "Maja Rogala",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/rogala.jpg",
+    mask: "announcement-2",
+    description: ROGALA_BIO,
+    instagram: "https://www.instagram.com/jemrogale",
+    background: "var(--color-deep-forest)",
+    text: "var(--color-cream)",
   },
   {
     id: "div4",
@@ -745,6 +812,17 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/bakblivv",
     background: "var(--color-ground)",
     text: "var(--color-primary)",
+  },
+  {
+    id: "kinas",
+    name: "Ewa Kinas",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/kinas.jpg",
+    mask: "announcement-2",
+    description: KINAS_BIO,
+    instagram: "https://www.instagram.com/kinasuwka",
+    background: "var(--color-periwinkle)",
+    text: "var(--color-deep-navy)",
   },
   {
     id: "mattia",
@@ -901,6 +979,17 @@ export const ARTISTS: Artist[] = [
     text: "var(--color-periwinkle)",
   },
   {
+    id: "darya",
+    name: "Darya Smolina",
+    role: SOUND_DESIGNER,
+    photo: "festiwal_foto/artysci/darya.jpg",
+    mask: "announcement-7",
+    description: DARYA_BIO,
+    instagram: "https://www.instagram.com/daryakatze",
+    background: "var(--color-deep-navy)",
+    text: "var(--color-cream)",
+  },
+  {
     id: "adel",
     name: "Laura Adel",
     role: INTERACTIVE_INSTALLATION,
@@ -933,7 +1022,18 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-light-grey)",
     text: "var(--color-ground)",
   },
-    {
+  {
+    id: "mona",
+    name: "Mona Rena Górska",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/mona.jpg",
+    mask: "announcement-7",
+    description: MONA_BIO,
+    instagram: "https://www.instagram.com/monarena_studio",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-periwinkle)",
+  },
+  {
     id: "histery",
     name: "Histery",
     role: PERFORMER,

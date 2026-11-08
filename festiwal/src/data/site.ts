@@ -141,6 +141,7 @@ export const copy = {
     summerLeft: "Do zmiany czasu na letni pozostało",
     days: "dni",
     hours: "godzin",
+    minutes: "minut",
     seconds: "sekund",
   },
   en: {
@@ -175,6 +176,7 @@ export const copy = {
     summerLeft: "Until the switch to summer time",
     days: "days",
     hours: "hours",
+    minutes: "minutes",
     seconds: "seconds",
   },
 } as const;
