@@ -70,7 +70,7 @@ const INTERACTIVE_INSTALLATION = {
 };
 const PROJECT_AMBIENT = { pl: "Projekt ambientowy", en: "Ambient project" };
 const LIVE_AV_SHOW = { pl: "Live AV Show", en: "Live AV Show" };
-/*const KACZMARSKA_BIO = {
+const KACZMARSKA_BIO = {
   pl: [
     "Na STREFACH CZASOWYCH Ania Kaczmarska stanie oko w oko z własnym cieniem.",
     "Tekst do jej pracy rozsypuje się na kartce jak kroki na parkiecie: „Było”, „Jest”, „Będzie”, „Ja”, „Ty”. Ruch prowadzi tu przez wszystkie czasy naraz, a każde zatrzymanie ma swojego świadka.",
@@ -83,7 +83,7 @@ const LIVE_AV_SHOW = { pl: "Live AV Show", en: "Live AV Show" };
     "Ania Kaczmarska is a dancer and choreographer from the Tri-City, a graduate of the contemporary dance program MoDem Atelier at Scenario Pubblico in Sicily. She specializes in site-specific projects. In Catania, she created the solo „95131” about the San Berillo district, and this year she directed the play „Farewell to the old Żabka logo”.",
     "Tonight, one hour will happen twice. I wonder if the shadow will keep up.",
   ],
-};*/
+};
 const SUBBASICS_BIO = {
   pl: [
     "Dub techno, UK bass i dubstepowe korzenie. Na STREFACH CZASOWYCH zagra je Sub Basics, prosto z Wielkiej Brytanii.",
@@ -122,7 +122,7 @@ const ORZECHOWSKA_BIO = {
     "Patrycja Orzechowska is a visual artist and author of artist books associated with Gdańsk. She is a graduate of the Academy of Fine Arts in Gdańsk and the Interdisciplinary Doctoral Studies at the University of the Arts in Poznań. She works with ceramics, installation, object, photography, collage, graphic design and collecting. She likes crop rotation the most.",
   ],
 };
-/*const KONIARSKA_BIO = {
+const KONIARSKA_BIO = {
   pl: [
     "Na STREFACH CZASOWYCH Marta Maria Koniarska pokaże obrazy olejne i haft o tym, czego szukamy, choć nie umiemy tego złapać.",
     "Obrazy „Zupa Nic”, „kwiaty paproci” i „Stan skupienia” pytają, czy istnieją przepisy na szczęście — i czy poznamy, że już do niego doszliśmy. W hafcie „: P” wyszyte narządy układają się w mapę, przez którą ciało próbuje mówić na zewnątrz.",
@@ -135,7 +135,7 @@ const ORZECHOWSKA_BIO = {
     "Marta Maria Koniarska is a visual artist and curator, a graduate of the Academy of Fine Arts in Gdańsk. She co-creates the independent gallery Wolne Pokoje and the visual part of the Spokój festival, and conducts art workshops for multiple generations at the Gdynia Przystanie Sąsiedzkie.",
     "The fern flower is said to bloom on the shortest night of the year. We will search for it on the one that lasts an hour longer.",
   ],
-};*/
+};
 const WIKA_BIO = {
   pl: [
     "Wika Wieczorek wyświetla na ścianie zdjęcia w kolorach gęstych jak syrop i stawia przed nimi swojego młodszego brata. W filmie „It’s Just a Dream” chłopiec przechodzi ze świata do świata jak z pokoju do pokoju. Każdy daje mu nowe zadanie, a każda pobudka okazuje się kolejnym piętrem snu.",
@@ -494,6 +494,32 @@ const CHATKA_BIO = {
     "Come to the hut when the dance floor gets too crowded.",
   ],
 };
+const HISTERY_BIO = {
+  pl: [
+    "Trzy tancerki, choreografki i performerki. Ciało nie jest dla nich objawem, tylko głosem.",
+    "Zamiast tłumić drgania, łapią je. Oddech, przepona i gest prowadzą tu własne opowieści, a błąd przestaje być wpadką i staje się formą.",
+    "HISTERY tworzą Klaudia Janus, założycielka gdyńskiej Przestrzeni Tańca Tiyo-way, Róża Kołoda, współzałożycielka Teatru Generacja, i Tatiana Dziewanowska, pedagożka tańca i autorka akcji site-specific.",
+  ],
+  en: [
+    "Three dancers, choreographers and performers. Body is not for them an expression, but a voice.",
+    "Instead of suppressing vibrations, they catch them. Breath, diaphragm and gesture lead their own stories here, and error ceases to be a stumble and becomes a form.",
+    "HISTERY is created by Klaudia Janus, founder of the Gdynia Space for Dance Tiyo-way, Róża Kołoda, co-founder of the Theatre Generations, and Tatiana Dziewanowska, dance pedagogue and author of the site-specific action.",
+  ]
+};
+const EXE_BIO = {
+  pl: [
+    "AVTOMAT to warszawska osoba DJ-ska, producencka i organizatorska z 20-letnim stażem na scenie queerowej. Prezentowała swoją muzykę m.in. na Unsoundzie, CTM, Open'erze i w Berghain. Współtworzy kolektyw Ciężki Brokat i reprezentuje Polskę w Keychange, międzynarodowym programie na rzecz równości płci w branży muzycznej.",
+    ".EXE to przedstawiciel trójmiejskiego undergroundu i współtwórca STREF CZASOWYCH. Debiutował w nieistniejącym już klubie Ziemia we Wrzeszcu, a potem grał w m.in. Teatrze Wybrzeże, klubie Jasna 1, Crackhouse i Schronie oraz na festiwalach takich jak Biedowo czy Spokój Festiwaql. Stoi za inicjatywą 22myjnia22, z którą wspiera wydarzenia i przestrzenie audiowizualne w Trójmieście i nie tylko. W jego setach rządzi perkusja, głęboki bas i nieoczywisty rytm, które budują napięcie i wprowadzają parkiet w euforyczny stan.",
+    "Ich drogi przecięły się na 100CZNI w 2025, gdzie grali tej samej nocy po Paradzie Równości.",
+    "Na STREFACH CZASOWYCH po raz pierwszy staną razem za deckami w secie back to back, który będzie taneczny, kolorowy i magiczny.",
+  ],
+  en: [
+    "AVTOMAT is a Warsaw-based DJ, producer and organizer with over 20 years of experience on the queer scene. She has presented her music at Unsound, CTM, Open'er and Berghain. She co-founded the Heavy Brokat collective and represents Poland in Keychange, an international program for gender equality in the music industry.",
+    "EXE is a representative of the Tri-City underground and co-founder of STREFY CZASOWYCH. He debuted at the now-defunct club Ziemia we Wrzeszcu, and then played at venues such as the Teatr Wybrzeże, Jasna 1, Crackhouse and Schronie, as well as festivals such as Biedowo and Spokój Festiwaql. He is behind the initiative 22myjnia22, which supports events and audio-visual spaces in the Tri-City and beyond. In his sets, he controls the percussion, deep bass and unexpected rhythm, which build tension and put the dance floor into an euphoric state.",
+    "Their paths crossed at 100CZNI in 2025, where they played the same night after the Paradie Równości.",
+    "At STREFY CZASOWE, for the first time, they will stand together behind the decks in a back-to-back set, which will be danceable, colorful and magical.",
+  ]
+};
 export const ARTISTS: Artist[] = [
   {
     id: "subbasics",
@@ -641,6 +667,18 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/oska.zuk",
     background: "var(--color-amber-espresso)",
     text: "var(--color-warm-taupe)",
+  },
+  {
+    id: "exe",
+    name: "AVTOMAT b2b .EXE",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/exe.jpg",
+    mask: "announcement-6",
+    description: EXE_BIO,
+    instagram: "https://www.instagram.com/avtomatmusic",
+    instagram2: "https://www.instagram.com/cencelek",
+    background: "var(--color-chartreuse)",
+    text: "var(--color-deep-plum)",
   },
   {
     id: "paulina-mirowska",
@@ -829,7 +867,7 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-deep-forest)",
     text: "var(--color-cream)",
   },
-  /*{
+  {
     id: "kaczmarska",
     name: "Ania Kaczmarska",
     role: PERFORMER,
@@ -839,7 +877,7 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/owsi.anka",
     background: "var(--color-deep-navy)",
     text: "var(--color-periwinkle)",
-  },*/
+  },
   {
     id: "chatka",
     name: "Chatka Ebo",
@@ -851,7 +889,7 @@ export const ARTISTS: Artist[] = [
     background: "var(--color-cream)",
     text: "var(--color-deep-plum)",
   },
-  /*{
+  {
     id: "koniarska",
     name: "Marta Koniarska",
     role: VISUAL_ARTIST,
@@ -861,7 +899,7 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/qniec",
     background: "var(--color-deep-plum)",
     text: "var(--color-periwinkle)",
-  },*/
+  },
   {
     id: "adel",
     name: "Laura Adel",
@@ -894,5 +932,16 @@ export const ARTISTS: Artist[] = [
     instagram: "https://www.instagram.com/euro_siec",
     background: "var(--color-light-grey)",
     text: "var(--color-ground)",
+  },
+    {
+    id: "histery",
+    name: "Histery",
+    role: PERFORMER,
+    photo: "festiwal_foto/artysci/histery.jpg",
+    mask: "announcement-7",
+    description: HISTERY_BIO,
+    instagram: "https://www.instagram.com/histeryperform",
+    background: "var(--color-deep-plum)",
+    text: "var(--color-primary)",
   },
 ];
